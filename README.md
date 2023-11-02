@@ -43,34 +43,6 @@ Our goal is to create a web-based system for a fictional airline company, servin
 
 Please note that project requirements may evolve during development in consultation with course instructors.
 
-## Deliverables
-
-### Design Phase (50 marks)
-
-In this phase, we'll submit a Design Document that includes:
-
-**Part One – System Analysis:**
-- System's description.
-- System's Use-case diagram.
-- System's Scenarios for each Use-Case.
-- System's Conceptual Model.
-
-**Part Two – Domain Diagrams:**
-- System's architecture and diagrams.
-- Sequence diagrams, state transition diagrams, and domain class diagrams.
-
-**Part Three – System's Detailed Design-Class Diagram:**
-- Final detailed design class diagram.
-
-**Part Four – High-Level System's Architecture:**
-- Package Diagram.
-- Deployment Diagram.
-
-## Getting Started
-
-1. Clone this repository to your local machine.
-2. Review the project documentation in the "docs" folder for detailed information on the design and architecture.
-3. Explore the code in the "src" folder to understand the project structure.
 
 
 
