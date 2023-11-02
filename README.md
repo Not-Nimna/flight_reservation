@@ -6,6 +6,15 @@ Welcome to the Flight Reservation Web Application project repository for ENSF 48
 
 This project is a part of our course where we practice the complete process of designing and developing a software project using a systematic design methodology. We focus on system-level design and architecture in an "Active Learning" approach, combining theoretical concepts with practical techniques.
 
+
+## Members
+
+Gabriel Craiovan
+Marshal Kalynchuk
+Aditya Prasad
+Nimna Wijedasa
+
+
 ## Project Description
 
 ### Flight Reservation Web Application
@@ -64,17 +73,9 @@ In this phase, we'll submit a Design Document that includes:
 2. Review the project documentation in the "docs" folder for detailed information on the design and architecture.
 3. Explore the code in the "src" folder to understand the project structure.
 
-## Contributing
 
-Please follow our [Contribution Guidelines](CONTRIBUTING.md) if you'd like to contribute to this project.
 
-## License
 
-This project is licensed under the [MIT License](LICENSE).
-
-## Acknowledgments
-
-We would like to thank our instructors and fellow students for their support and collaboration on this project.
 
 ---
 
