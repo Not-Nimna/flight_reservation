@@ -6,13 +6,13 @@ Welcome to the Flight Reservation Web Application project repository for ENSF 48
 
 This project is a part of our course where we practice the complete process of designing and developing a software project using a systematic design methodology. We focus on system-level design and architecture in an "Active Learning" approach, combining theoretical concepts with practical techniques.
 
-
 ## Members
 
-Gabriel Craiovan
-Marshal Kalynchuk
-Aditya Prasad
-Nimna Wijedasa
+- Gabriel Craiovan
+- Marshal Kalynchuk
+- Aditya Prasad
+- Nimna Wijedasa
+
 
 
 ## Project Description
