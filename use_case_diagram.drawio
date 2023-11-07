@@ -1,9 +1,60 @@
-<mxfile host="app.diagrams.net" modified="2023-11-07T20:25:03.955Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36" version="22.0.8" etag="hbT_hE5rMUggbkTmBhKk" type="github">
+<mxfile host="app.diagrams.net" modified="2023-11-07T20:35:45.867Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36" etag="SswKQFueiVpNp5euGoSa" version="22.0.8" type="github">
   <diagram name="Page-1" id="FHeXdVnF2KFSFIz_zdh1">
-    <mxGraphModel>
+    <mxGraphModel dx="1224" dy="837" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="58QsCrq3JdvMu9l15S69-6" value="Browse flights" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-7" value="Select Flight" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="80" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-9" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="280" y="240" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-16" value="Registered User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="280" y="410" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-17" value="Unregistered User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="280" y="560" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-18" value="Agent" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="280" y="90" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-22" value="Select Seat" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="160" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-23" value="Select insurance" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="240" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-24" value="Make Payment" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="320" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-26" value="Receive Ticket" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="400" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-27" value="Receive Receipt" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="480" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-28" value="Cancel Payment" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="560" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-29" value="Browse Aircrafts" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="640" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-30" value="Modify Aircrafts" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="720" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-31" value="Modify Destinations" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="800" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-32" value="Modify Flights" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="480" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="58QsCrq3JdvMu9l15S69-34" value="Browse Users" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="150" width="120" height="80" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
