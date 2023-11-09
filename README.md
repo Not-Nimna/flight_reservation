@@ -12,6 +12,10 @@ This project is a part of our course where we practice the complete process of d
 - Aditya Prasad
 - Nimna Wijedasa
 
+  ## Design Document
+  https://docs.google.com/document/d/1aqiqTYuhoN7X7pPzrA-zHYCESZ965fSZQfaac81gqOQ/edit?usp=sharing
+  
+
 
 
 ## Project Description
