@@ -1,13 +1,13 @@
 /**
  * Enum definition for user types within the application.
  * 
+ * This enum represents different types of users like User, Agent, and Admin.
+ * Each user type is associated with an integer value for database storage.
+ *
  * @author Marshal Kalynchuk
  * @ucid 30153895
  * @date Nov 24, 2023
- * This enum represents different types of users like User, Agent, and Admin.
- * Each user type is associated with an integer value for database storage.
  */
-
 
 package ca.ucalgary.ensf480.flightapp.model;
 

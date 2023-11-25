@@ -15,7 +15,6 @@
 package ca.ucalgary.ensf480.flightapp.model;
 
 import jakarta.persistence.*;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;

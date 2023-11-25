@@ -12,10 +12,28 @@
 
 package ca.ucalgary.ensf480.flightapp.model;
 
-
 public enum FlightStatus {
-    ON_TIME,
-    DELAYED,
-    CANCELLED,
-    BOARDING
+    ON_TIME(0),
+    DELAYED(1),
+    CANCELLED(2),
+    BOARDING(3);
+
+    private final int value;
+
+    FlightStatus(int value) {
+      this.value = value;
+    }
+
+    public int getValue() {
+      return value;
+    }
+
+    public static FlightStatus fromValue(int value) {
+      for (FlightStatus type : FlightStatus.values()) {
+          if (type.getValue() == value) {
+              return type;
+          }
+      }
+      throw new IllegalArgumentException("Unknown FlightStatus value: " + value);
+  }
 }

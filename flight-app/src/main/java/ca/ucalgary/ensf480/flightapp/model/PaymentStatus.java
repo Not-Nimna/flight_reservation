@@ -11,22 +11,30 @@
  * @date Nov 24, 2023
  */
 
-
 package ca.ucalgary.ensf480.flightapp.model;
 
-/**
- * Enumeration for the status of a payment.
- *
- * Defines the different possible states for a payment transaction, such as SUCCESS, FAILED, 
- * PENDING, etc.
- *
- * @author Marshal Kalynchuk
- * @ucid 30153895
- * @date Nov 24, 2023
- */
 public enum PaymentStatus {
-    SUCCESS,
-    FAILED,
-    PENDING,
-    REFUNDED
+    SUCCESS(0),
+    FAILED(1),
+    PENDING(2),
+    REFUNDED(3);
+
+    private final int value;
+
+    PaymentStatus(int value) {
+      this.value = value;
+    }
+
+    public int getValue() {
+      return value;
+    }
+
+    public static PaymentStatus fromValue(int value) {
+      for (PaymentStatus type : PaymentStatus.values()) {
+          if (type.getValue() == value) {
+              return type;
+          }
+      }
+      throw new IllegalArgumentException("Unknown PaymentStatus value: " + value);
+  }
 }
