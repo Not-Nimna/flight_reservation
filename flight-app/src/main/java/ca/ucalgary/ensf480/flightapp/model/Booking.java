@@ -105,4 +105,7 @@ public class Booking {
     public void setPayment(Payment payment) {
         this.payment = payment;
     }
+
+    public void setUser(Flight orElse) {
+    }
 }

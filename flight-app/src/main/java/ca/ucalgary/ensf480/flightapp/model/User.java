@@ -90,4 +90,8 @@ public class User {
     public boolean isUser() {
         return this.userType == UserType.USER;
     }
+
+    public User orElseThrow(Object object) {
+      return null;
+    }
 }
