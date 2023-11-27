@@ -13,6 +13,9 @@
 
 package ca.ucalgary.ensf480.flightapp.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -29,18 +32,39 @@ public class Aircraft {
     @Column(nullable = false)
     private String model; // The model of the aircraft, e.g., Boeing 737.
 
-    @Column(nullable = false)
-    private int totalSeats; // The total number of seats available in the aircraft.
+    @OneToMany(mappedBy = "aircraft", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Seat> seats = new HashSet<>(); // A set of seats in the aircraft.
+
 
     // Constructors, getters, and setters
 
     public Aircraft() {
     }
 
-    public Aircraft(String code, String model, int totalSeats) {
+    public Aircraft(String code, String model, int economyRows, int seatsPerRow) {
         this.code = code;
         this.model = model;
-        this.totalSeats = totalSeats;
+        initializeSeats(economyRows, seatsPerRow);
+    }
+
+    // Method to initialize seats
+    private void initializeSeats(int economyRows, int seatsPerRow) {
+        // Create economy seats
+        for (int row = 1; row <= economyRows; row++) {
+            for (int seatNum = 1; seatNum <= seatsPerRow; seatNum++) {
+                String seatRow = String.valueOf(row);
+                String seatColumn = getSeatColumn(seatNum);
+                this.addSeat(new Seat(seatRow, seatColumn, SeatClass.ECONOMY, this));
+            }
+        }
+
+    }
+    
+
+    // Helper method to determine the seat column based on seat number
+    private String getSeatColumn(int seatNum) {
+        // This is a basic example. Adjust the logic based on your seat layout.
+        return Character.toString((char) ('A' + seatNum - 1));
     }
 
     // Standard getters and setters
@@ -69,12 +93,18 @@ public class Aircraft {
         this.model = model;
     }
 
-    public int getTotalSeats() {
-        return totalSeats;
+    public Set<Seat> getSeats() {
+        return seats;
     }
 
-    public void setTotalSeats(int totalSeats) {
-        this.totalSeats = totalSeats;
+    public void setSeats(Set<Seat> seats) {
+        this.seats = seats;
     }
 
+    // Method to add a seat to the aircraft
+    public void addSeat(Seat seat) {
+        seats.add(seat);
+        seat.setAircraft(this);
+    }
+    
 }

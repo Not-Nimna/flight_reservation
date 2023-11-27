@@ -1,0 +1,8 @@
+Run these commmands to set up the database on your system.
+
+mysql -u root -p
+CREATE DATABASE `flight-app`;
+CREATE USER 'flight-app'@'localhost' IDENTIFIED BY 'flight-app';
+GRANT ALL PRIVILEGES ON `flight-app`.* TO 'flight-app'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;

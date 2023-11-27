@@ -13,8 +13,13 @@
 package ca.ucalgary.ensf480.flightapp.controller;
 
 import ca.ucalgary.ensf480.flightapp.model.Booking;
+import ca.ucalgary.ensf480.flightapp.model.SeatBookingDTO;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
+import ca.ucalgary.ensf480.flightapp.model.PaymentDetails;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,29 +38,51 @@ public class BookingController {
     }
 
     // Endpoint to create a new booking
-    @PostMapping
-    public ResponseEntity<Booking> createBooking(@RequestBody BookingRequest bookingRequest) {
+    @PostMapping("/{bookingId}")
+    public ResponseEntity<Booking> makeBooking(@PathVariable Long bookingId, @RequestBody BookingRequest bookingRequest) {
         Long userId = authenticationService.getCurrentUser() != null ? authenticationService.getCurrentUser().getId() : null;
-        Booking booking = bookingService.createBooking(bookingRequest.getFlightId(), bookingRequest.getSeatId(), userId);
+        Booking booking = bookingService.makeBooking(bookingId, userId, bookingRequest.getCustomerEmail(), bookingRequest.getPaymentDetails());
         return booking != null ? ResponseEntity.ok(booking) : ResponseEntity.badRequest().build();
     }
 
+
     // Endpoint to cancel a booking
-    @DeleteMapping
-    public ResponseEntity<Void> cancelBooking(@RequestParam String cancellationCode) {
-        boolean cancelled = bookingService.cancelBooking(cancellationCode);
-        return cancelled ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    @DeleteMapping("/{cancellationCode}")
+    public ResponseEntity<Void> cancelBooking(@PathVariable String cancellationCode) {
+        boolean success = bookingService.cancelBooking(cancellationCode);
+        return success ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
-    // Inner class for booking request
-    private static class BookingRequest {
-        private Long flightId;
-        private Long seatId;
-
-        // Getters and setters
-        public Long getFlightId() { return flightId; }
-        public void setFlightId(Long flightId) { this.flightId = flightId; }
-        public Long getSeatId() { return seatId; }
-        public void setSeatId(Long seatId) { this.seatId = seatId; }
+    // GET endpoint to retrieve seat map for a flight
+    @GetMapping("/flight/{flightId}/seats")
+    public ResponseEntity<List<SeatBookingDTO>> getSeatMap(@PathVariable Long flightId) {
+        List<SeatBookingDTO> seatMap = bookingService.getSeatMap(flightId);
+        return ResponseEntity.ok(seatMap);
     }
+
+    // Inner class for booking request data
+    public static class BookingRequest {
+        private String customerEmail;
+        private PaymentDetails paymentDetails;
+    
+        // Standard getters and setters
+    
+        public String getCustomerEmail() {
+            return customerEmail;
+        }
+    
+        public void setCustomerEmail(String customerEmail) {
+            this.customerEmail = customerEmail;
+        }
+    
+        public PaymentDetails getPaymentDetails() {
+            return paymentDetails;
+        }
+    
+        public void setPaymentDetails(PaymentDetails paymentDetails) {
+            this.paymentDetails = paymentDetails;
+        }
+    }
+    
+    
 }

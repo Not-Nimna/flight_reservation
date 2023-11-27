@@ -12,7 +12,6 @@
 
 
 package ca.ucalgary.ensf480.flightapp.model;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -26,12 +25,15 @@ public class Seat {
     @Column(nullable = false)
     private String seatNumber; // A unique identifier for the seat within an aircraft, e.g., "12A".
 
+    @Column(nullable = false)
+    private String seatRow;
+
+    @Column(nullable = false)
+    private String seatColumn;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SeatClass seatClass; // Class of the seat (ECONOMY, BUSINESS, etc.)
-
-    @Column(nullable = false)
-    private boolean isBooked; // Indicates if the seat is currently booked.
 
     @ManyToOne
     @JoinColumn(name = "aircraft_id", nullable = false)
@@ -42,10 +44,11 @@ public class Seat {
     public Seat() {
     }
 
-    public Seat(String seatNumber, SeatClass seatClass, Aircraft aircraft) {
-        this.seatNumber = seatNumber;
+    public Seat(String seatRow, String seatColumn, SeatClass seatClass, Aircraft aircraft) {
+        this.seatRow = seatRow;
+        this.seatColumn = seatColumn;
+        this.seatNumber = seatRow + seatColumn;
         this.seatClass = seatClass;
-        this.isBooked = false; // initially, the seat is not booked
         this.aircraft = aircraft;
     }
 
@@ -73,14 +76,6 @@ public class Seat {
 
     public void setSeatClass(SeatClass seatClass) {
         this.seatClass = seatClass;
-    }
-
-    public boolean isBooked() {
-        return isBooked;
-    }
-
-    public void setBooked(boolean isBooked) {
-        this.isBooked = isBooked;
     }
 
     public Aircraft getAircraft() {

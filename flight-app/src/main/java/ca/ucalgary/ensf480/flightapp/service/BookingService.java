@@ -13,70 +13,95 @@
 
 package ca.ucalgary.ensf480.flightapp.service;
 
+import ca.ucalgary.ensf480.flightapp.model.SeatBookingDTO;
+
 import ca.ucalgary.ensf480.flightapp.model.Booking;
-import ca.ucalgary.ensf480.flightapp.model.Flight;
-import ca.ucalgary.ensf480.flightapp.model.Seat;
+import ca.ucalgary.ensf480.flightapp.model.Customer;
+
+import ca.ucalgary.ensf480.flightapp.model.Payment;
+import ca.ucalgary.ensf480.flightapp.model.PaymentDetails;
+
 import ca.ucalgary.ensf480.flightapp.repository.BookingRepository;
-import ca.ucalgary.ensf480.flightapp.repository.FlightRepository;
-import ca.ucalgary.ensf480.flightapp.repository.SeatRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
 
     private final BookingRepository bookingRepository;
-    private final FlightRepository flightRepository;
-    private final SeatRepository seatRepository;
+    private final CustomerService customerService;
+    private final PaymentService paymentService;
+
     private final UserService userService;
 
     @Autowired
-    public BookingService(BookingRepository bookingRepository, FlightRepository flightRepository, SeatRepository seatRepository, UserService userService) {
+    public BookingService(BookingRepository bookingRepository, CustomerService customerService, PaymentService paymentService, UserService userService) {
         this.bookingRepository = bookingRepository;
-        this.flightRepository = flightRepository;
-        this.seatRepository = seatRepository;
+        this.customerService = customerService;
+        this.paymentService = paymentService;
         this.userService = userService;
     }
 
-    public Booking createBooking(Long flightId, Long seatId, Long userId) {
-        Optional<Flight> flight = flightRepository.findById(flightId);
-        Optional<Seat> seat = seatRepository.findById(seatId);
+    public Booking makeBooking(Long bookingId, Long userId, String customerEmail, PaymentDetails paymentDetails) {
+        Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
 
-        if (flight.isPresent() && seat.isPresent() && !seat.get().isBooked()) {
-            Booking booking = new Booking();
-            booking.setFlight(flight.get());
-            booking.setSeat(seat.get());
-            // Set the user if userId is not null, assuming you have a method to fetch the user by ID
-            booking.setUser(userService.findById(userId).orElse(null));
-            booking.setCancellationCode(generateCancellationCode());
-            seat.get().setBooked(true);
-            seatRepository.save(seat.get()); // Update the seat as booked
+        if (optionalBooking.isPresent()) {
+            Booking booking = optionalBooking.get();
 
-            return bookingRepository.save(booking);
+            if (!booking.isBooked()) {
+                Customer customer = customerService.createOrUpdateCustomer(customerEmail, userId);
+                Payment payment = paymentService.createPayment(paymentDetails, booking.getPrice());
+
+                booking.setCustomer(customer);
+                booking.setPayment(payment);
+                booking.setUser(userId != null ? userService.findById(userId).orElse(null) : null);
+                booking.setBooked(true);
+
+                return bookingRepository.save(booking);
+            }
         }
-        return null; // Return null if the flight or seat is not available, or if the seat is already booked
+        return null;
     }
 
+
+
     public boolean cancelBooking(String cancellationCode) {
-        Optional<Booking> booking = bookingRepository.findByCancellationCode(cancellationCode);
-        if (booking.isPresent()) {
-            // Set the seat as not booked
-            Seat seat = booking.get().getSeat();
-            seat.setBooked(false);
-            seatRepository.save(seat);
-            
-            bookingRepository.delete(booking.get());
-            return true;
+        Optional<Booking> optionalBooking = bookingRepository.findByCancellationCode(cancellationCode);
+
+        if (optionalBooking.isPresent()) {
+            Booking booking = optionalBooking.get();
+
+            if (booking.isBooked()) {
+                booking.setBooked(false);
+                bookingRepository.save(booking);
+
+                return true;
+            }
         }
         return false;
     }
 
-    private String generateCancellationCode() {
-        // Generate a unique cancellation code
-        // For simplicity, using current timestamp. could probably be better
-        return String.valueOf(System.currentTimeMillis());
+    public List<SeatBookingDTO> getSeatMap(Long flightId) {
+        List<Booking> bookings = bookingRepository.findByFlightId(flightId);
+
+        return bookings.stream()
+                       .map(booking -> new SeatBookingDTO(booking.getSeat(), booking.isBooked()))
+                       .collect(Collectors.toList());
     }
+
+
+
+
+
+
+    
+
 
 }

@@ -35,6 +35,14 @@ public class Payment {
     @Column(nullable = false)
     private PaymentStatus status; // The status of the payment (e.g., SUCCESS, FAILED)
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer; // The customer who made the payment
+
+    @Column(nullable = false)
+    private LocalDateTime paymentTime; // The time of the payment
+
+
     @OneToOne
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking; // The booking associated with this payment
@@ -92,4 +100,15 @@ public class Payment {
     public void setBooking(Booking booking) {
         this.booking = booking;
     }
+
+    // TODO:
+    public void setPaymentTime(LocalDateTime now) {
+    }
+
+    public void setPaymentMethod(Object paymentMethod) {
+    }
+
+    public Payment orElse(Object object) {
+        return null;
+      }
 }
