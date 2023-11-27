@@ -11,7 +11,7 @@ const Login = () => {
   const handleLogin = () => {
     if (username !== "" && password !== "") {
       setLoggedIn(true);
-      navigate("/booking");
+      navigate("/BrowsePassengers");
     } else {
       alert("Please enter both username and password");
     }
