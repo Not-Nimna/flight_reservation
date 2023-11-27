@@ -14,12 +14,14 @@
 
 package ca.ucalgary.ensf480.flightapp.model;
 
+import ca.ucalgary.ensf480.flightapp.model.Booking;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.print.attribute.standard.Destination;
+import java.util.UUID;
 
 @Entity
 @Table(name = "flights")
@@ -78,6 +80,35 @@ public class Flight {
         this.arrivalDestination = arrivalDestination;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
+        this.status = FlightStatus.ON_TIME;
+        initializeBookings();
+    }
+
+    // Method to initialize bookings for each seat in the aircraft
+    private void initializeBookings() {
+        if (this.aircraft != null && this.aircraft.getSeats() != null) {
+            this.aircraft.getSeats().forEach(seat -> {
+                BigDecimal price = determinePriceForSeat(seat); // Implement this method based on your pricing logic
+                Booking booking = new Booking(this, seat, price, null);
+                booking.setCancellationCode(UUID.randomUUID().toString()); // Generate unique cancellation code
+                this.bookings.add(booking);
+            });
+        }
+    }
+
+    private BigDecimal determinePriceForSeat(Seat seat) {
+        // Example pricing logic based on seat class. In more advanced scenarios,
+        // price would probably be determined each passing day.
+        switch (seat.getSeatClass()) {
+            case ECONOMY:
+                return new BigDecimal("100.00");
+            case BUSINESS:
+                return new BigDecimal("200.00");
+            case FIRST_CLASS:
+                return new BigDecimal("400.00");
+            default:
+                return new BigDecimal("100.00");
+        }
     }
 
     // Standard getters and setters

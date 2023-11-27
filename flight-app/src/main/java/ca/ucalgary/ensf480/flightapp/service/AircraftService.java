@@ -34,13 +34,14 @@ public class AircraftService {
         return aircraftRepository.save(aircraft);
     }
 
+    // Needs to be changed
     public Optional<Aircraft> updateAircraft(Long id, Aircraft aircraftDetails) {
         return aircraftRepository.findById(id)
             .map(aircraft -> {
                 // Map the updated details to the existing aircraft entity
                 aircraft.setCode(aircraftDetails.getCode());
                 aircraft.setModel(aircraftDetails.getModel());
-                aircraft.setTotalSeats(aircraftDetails.getTotalSeats());
+                // aircraft.setTotalSeats(aircraftDetails.getTotalSeats());
                 return aircraftRepository.save(aircraft);
             });
     }

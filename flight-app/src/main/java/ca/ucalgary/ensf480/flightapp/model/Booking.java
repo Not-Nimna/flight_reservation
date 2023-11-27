@@ -11,10 +11,11 @@
  * @date Nov 24, 2023
  */
 
-
 package ca.ucalgary.ensf480.flightapp.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -28,6 +29,12 @@ public class Booking {
     @Column(nullable = false, unique = true)
     private String cancellationCode; // Unique cancellation code for each booking
 
+    @Column(nullable = false)
+    private BigDecimal price; // The price of the booking
+
+    @Column(nullable = false)
+    private Boolean isBooked;
+    
     @ManyToOne
     @JoinColumn(name = "flight_id", nullable = false)
     private Flight flight; // The flight associated with this booking
@@ -37,11 +44,17 @@ public class Booking {
     private Seat seat; // The seat associated with this booking
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer; // The customer who made the booking
+    @JoinColumn(name = "user_id", nullable = true)
+    private User user; // Optionally, the user associated with this booking
 
-    @OneToOne(mappedBy = "booking")
-    private Payment payment; // The payment associated with this booking
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = true) // Nullable for advance booking creation
+    private Customer customer; // The customer who made the booking, if any
+
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_id", nullable = true) // Nullable for advance booking creation
+    private Payment payment; // The payment associated with this booking, if any
+
 
     // Constructors, getters, and setters
 
@@ -49,11 +62,18 @@ public class Booking {
         this.cancellationCode = UUID.randomUUID().toString(); // Generate a unique cancellation code
     }
 
-    public Booking(Flight flight, Seat seat, Customer customer) {
+    public Booking(Flight flight, Seat seat, BigDecimal price, User user) {
         this();
+        this.isBooked = false;
         this.flight = flight;
         this.seat = seat;
-        this.customer = customer;
+        this.price = price;
+        this.user = user;
+        generateCancellationCode();
+    }
+
+    public void generateCancellationCode() {
+        this.cancellationCode = String.valueOf(UUID.randomUUID());
     }
 
     // Standard getters and setters
@@ -65,6 +85,15 @@ public class Booking {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Boolean isBooked() {
+        return isBooked;
+    }
+
+    public void setBooked(Boolean booked) {
+        this.isBooked = booked;
+    }
+    
 
     public String getCancellationCode() {
         return cancellationCode;
@@ -90,22 +119,25 @@ public class Booking {
         this.seat = seat;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public User getUser() {
+        return user;
     }
 
-    public Payment getPayment() {
-        return payment;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setPayment(Payment payment) {
-        this.payment = payment;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
-    public void setUser(Flight orElse) {
+    public void setCustomer(Customer customer2) {
+    }
+
+    public void setPayment(Payment payment2) {
     }
 }

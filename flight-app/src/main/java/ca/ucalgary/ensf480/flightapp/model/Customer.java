@@ -14,6 +14,7 @@ package ca.ucalgary.ensf480.flightapp.model;
 
 import jakarta.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,10 +34,12 @@ public class Customer {
     @Column(nullable = true)
     private String contactNumber;
 
-    // Optional: Reference to a User entity, if you have one for registered users
-    // @OneToOne
-    // @JoinColumn(name = "user_id")
-    // private User user;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = true) // Foreign key in 'customers' table
+    private User user;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Payment> payments; // List of payments made by the customer
 
     @OneToMany(mappedBy = "customer")
     private Set<Booking> bookings = new HashSet<>(); // Bookings made by this customer
@@ -94,13 +97,18 @@ public class Customer {
         this.bookings = bookings;
     }
 
-    // If you have a User entity
-    // public User getUser() {
-    //     return user;
-    // }
+    public User getUser() {
+        return user;
+    }
 
-    // public void setUser(User user) {
-    //     this.user = user;
-    // }
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Customer orElse(Object object) {
+        return null;
+      }
+
+
 }
 

@@ -91,7 +91,7 @@ public class User {
         return this.userType == UserType.USER;
     }
 
-    public User orElseThrow(Object object) {
+    public User orElse(Object object) {
       return null;
     }
 }

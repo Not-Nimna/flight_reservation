@@ -1,5 +1,6 @@
 package ca.ucalgary.ensf480.flightapp.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,7 @@ import ca.ucalgary.ensf480.flightapp.model.Booking;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
   Optional<Booking> findByCancellationCode(String cancellationCode);
+
+  List<Booking> findByFlightId(Long flightId);
 
 }
