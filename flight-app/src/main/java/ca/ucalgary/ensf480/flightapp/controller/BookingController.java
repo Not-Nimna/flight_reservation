@@ -12,13 +12,13 @@
 
 package ca.ucalgary.ensf480.flightapp.controller;
 
-import ca.ucalgary.ensf480.flightapp.DTO.SeatBookingDTO;
+
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 import ca.ucalgary.ensf480.flightapp.model.PaymentDetails;
 
-import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

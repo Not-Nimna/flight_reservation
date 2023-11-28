@@ -1,17 +1,13 @@
 package ca.ucalgary.ensf480.flightapp.service;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import org.springframework.stereotype.Service;
 
 import ca.ucalgary.ensf480.flightapp.model.Customer;
-import ca.ucalgary.ensf480.flightapp.model.Payment;
-import ca.ucalgary.ensf480.flightapp.model.PaymentDetails;
-import ca.ucalgary.ensf480.flightapp.model.User;
+
 import ca.ucalgary.ensf480.flightapp.repository.CustomerRepository;
 
 @Service
