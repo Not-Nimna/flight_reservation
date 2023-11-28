@@ -11,7 +11,20 @@ const Login = () => {
   const handleLogin = () => {
     if (username !== "" && password !== "") {
       setLoggedIn(true);
-      navigate("/BrowsePassengers");
+      const name = username;
+      const address = password;
+      const student = { name, address };
+      console.log(student);
+      fetch("http://localhost:8080/student/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(student),
+      }).then((json) => {
+        navigate("/booking");
+        console.log(json);
+      });
     } else {
       alert("Please enter both username and password");
     }
