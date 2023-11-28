@@ -30,7 +30,6 @@ public class FlightService {
                 .collect(Collectors.toList());
     }
 
-
     public List<Flight> searchFlights(String query) {
         return null; // Replace with actual search logic
     }

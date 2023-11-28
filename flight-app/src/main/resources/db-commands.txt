@@ -6,3 +6,7 @@ CREATE USER 'flight-app'@'localhost' IDENTIFIED BY 'flight-app';
 GRANT ALL PRIVILEGES ON `flight-app`.* TO 'flight-app'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
+
+
+To run ther server run: 
+./mvnw spring-boot:run
