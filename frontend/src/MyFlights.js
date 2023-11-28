@@ -1,33 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "bulma/css/bulma.min.css";
 
 const MyFlights = () => {
-  // Dummy flight data
-  const [flights, setFlights] = useState([
-    {
-      id: 1,
-      airline: "Airline 1",
-      origin: "Origin 1",
-      destination: "Destination 1",
-      departureTime: "10:00 AM",
-    },
-    {
-      id: 2,
-      airline: "Airline 2",
-      origin: "Origin 2",
-      destination: "Destination 2",
-      departureTime: "11:00 AM",
-    },
-    // Add more flight objects as needed
-  ]);
+  const [student, setStudent] = useState([]);
+  const [flights, setFlights] = useState([]);
 
   const handleCancel = (flightId) => {
-    // Logic to cancel the flight (remove from the list)
-    setFlights((prevFlights) =>
-      prevFlights.filter((flight) => flight.id !== flightId)
-    );
+    // Make a DELETE request to cancel the flight
+    fetch(`http://localhost:8080/student/delete/${flightId}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data); // Log the response from the server
+
+        // If the flight was deleted successfully, update the state
+        if (data.startsWith("Student with ID")) {
+          setFlights((prevFlights) =>
+            prevFlights.filter((flight) => flight.id !== flightId)
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Error canceling flight:", error);
+      });
   };
+
+  useEffect(() => {
+    fetch("http://localhost:8080/student/getAll")
+      .then((response) => response.json())
+      .then((data) => {
+        setStudent(data);
+
+        // Replace the dummy flight data with the fetched student data
+        setFlights(
+          data.map((student) => ({
+            id: student.id,
+            airline: student.name,
+            origin: student.address,
+            destination: "", // Set appropriate value or leave it empty based on your requirements
+            departureTime: "", // Set appropriate value or leave it empty based on your requirements
+          }))
+        );
+      });
+  }, []);
 
   return (
     <div className="section">
