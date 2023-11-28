@@ -45,7 +45,6 @@ public class BookingController {
         return booking != null ? ResponseEntity.ok(booking) : ResponseEntity.badRequest().build();
     }
 
-
     // Endpoint to cancel a booking
     @DeleteMapping("/{cancellationCode}")
     public ResponseEntity<Void> cancelBooking(@PathVariable String cancellationCode) {
