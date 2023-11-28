@@ -35,7 +35,7 @@ public class Flight {
     @JoinColumn(name = "aircraft_id", nullable = false)
     private Aircraft aircraft;
 
-    @OneToMany(mappedBy = "flight")
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
     private Set<Booking> bookings = new HashSet<>();
 
     @ManyToMany

@@ -91,16 +91,8 @@ public class BookingService {
         List<Booking> bookings = bookingRepository.findByFlightId(flightId);
 
         return bookings.stream()
-                       .map(booking -> new SeatBookingDTO(booking.getSeat(), booking.isBooked()))
-                       .collect(Collectors.toList());
+            .map(booking -> new SeatBookingDTO(booking.getSeat(), booking.isBooked()))
+            .collect(Collectors.toList());
     }
-
-
-
-
-
-
-    
-
 
 }

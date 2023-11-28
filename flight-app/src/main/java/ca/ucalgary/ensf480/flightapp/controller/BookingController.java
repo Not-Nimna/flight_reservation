@@ -25,7 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/bookings")
+@RequestMapping("/api/flight/{flightId}/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
@@ -51,13 +51,6 @@ public class BookingController {
     public ResponseEntity<Void> cancelBooking(@PathVariable String cancellationCode) {
         boolean success = bookingService.cancelBooking(cancellationCode);
         return success ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
-    }
-
-    // GET endpoint to retrieve seat map for a flight
-    @GetMapping("/flight/{flightId}/seats")
-    public ResponseEntity<List<SeatBookingDTO>> getSeatMap(@PathVariable Long flightId) {
-        List<SeatBookingDTO> seatMap = bookingService.getSeatMap(flightId);
-        return ResponseEntity.ok(seatMap);
     }
 
     // Inner class for booking request data
