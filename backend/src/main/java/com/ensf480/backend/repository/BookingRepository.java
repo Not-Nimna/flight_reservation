@@ -1,0 +1,18 @@
+package com.ensf480.backend.repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import ca.ucalgary.ensf480.flightapp.model.Booking;
+
+@Repository
+public interface BookingRepository extends JpaRepository<Booking, Long> {
+
+  Optional<Booking> findByCancellationCode(String cancellationCode);
+
+  List<Booking> findByFlightId(Long flightId);
+
+}
