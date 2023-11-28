@@ -1,4 +1,6 @@
-package ca.ucalgary.ensf480.flightapp.model;
+package ca.ucalgary.ensf480.flightapp.DTO;
+
+import ca.ucalgary.ensf480.flightapp.model.Seat;
 
 public class SeatBookingDTO {
     private final String seatNumber;

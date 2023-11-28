@@ -13,8 +13,7 @@
 
 package ca.ucalgary.ensf480.flightapp.service;
 
-import ca.ucalgary.ensf480.flightapp.model.SeatBookingDTO;
-
+import ca.ucalgary.ensf480.flightapp.DTO.SeatBookingDTO;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.model.Customer;
 
@@ -92,16 +91,8 @@ public class BookingService {
         List<Booking> bookings = bookingRepository.findByFlightId(flightId);
 
         return bookings.stream()
-                       .map(booking -> new SeatBookingDTO(booking.getSeat(), booking.isBooked()))
-                       .collect(Collectors.toList());
+            .map(booking -> new SeatBookingDTO(booking.getSeat(), booking.isBooked()))
+            .collect(Collectors.toList());
     }
-
-
-
-
-
-
-    
-
 
 }
