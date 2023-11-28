@@ -12,10 +12,13 @@
 
 
 package ca.ucalgary.ensf480.flightapp.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "seats")
+@JsonIgnoreProperties("aircraft")
 public class Seat {
 
     @Id

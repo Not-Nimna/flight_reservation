@@ -13,8 +13,7 @@
 
 package ca.ucalgary.ensf480.flightapp.service;
 
-import ca.ucalgary.ensf480.flightapp.model.SeatBookingDTO;
-
+import ca.ucalgary.ensf480.flightapp.DTO.SeatBookingDTO;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.model.Customer;
 

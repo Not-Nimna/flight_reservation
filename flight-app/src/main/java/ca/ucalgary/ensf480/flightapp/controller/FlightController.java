@@ -12,6 +12,7 @@
 
 package ca.ucalgary.ensf480.flightapp.controller;
 
+import ca.ucalgary.ensf480.flightapp.DTO.FlightDTO;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
 import ca.ucalgary.ensf480.flightapp.service.FlightService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
@@ -36,9 +37,11 @@ public class FlightController {
 
     // Get all flights - accessible to all users
     @GetMapping
-    public ResponseEntity<List<Flight>> getAllFlights() {
-        return ResponseEntity.ok(flightService.getAllFlights());
+    public ResponseEntity<List<FlightDTO>> getAllFlights() {
+        List<FlightDTO> flights = flightService.getAllFlights();
+        return ResponseEntity.ok(flights);
     }
+    
 
     // Get a single flight by ID - accessible to all users
     @GetMapping("/{id}")
