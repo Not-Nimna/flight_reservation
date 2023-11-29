@@ -24,6 +24,10 @@ import java.util.UUID;
 @Table(name = "flights")
 public class Flight {
 
+    @OneToOne
+    @JoinColumn(name = "promo_id")
+    private Promo promo;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -70,7 +74,7 @@ public class Flight {
     public Flight() {
     }
 
-    public Flight(String flightNumber, Aircraft aircraft, Destination departureDestination, Destination arrivalDestination, LocalDateTime departureTime, LocalDateTime arrivalTime) {
+    public Flight(String flightNumber, Aircraft aircraft, Destination departureDestination, Destination arrivalDestination, LocalDateTime departureTime, LocalDateTime arrivalTime, Promo promo) {
         this.flightNumber = flightNumber;
         this.aircraft = aircraft;
         this.departureDestination = departureDestination;
@@ -78,6 +82,7 @@ public class Flight {
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.status = FlightStatus.ON_TIME;
+        this.promo = promo;
         initializeBookings();
     }
 
@@ -85,11 +90,35 @@ public class Flight {
     private void initializeBookings() {
         if (this.aircraft != null && this.aircraft.getSeats() != null) {
             this.aircraft.getSeats().forEach(seat -> {
-                BigDecimal price = determinePriceForSeat(seat); // Implement this method based on your pricing logic
+                BigDecimal price;
+                if (promo != null) {
+                    price = determinePriceForSeatPromo(seat, promo); // Assign the price inside the if branch
+                } else {
+                    price = determinePriceForSeat(seat); // Assign the price inside the else branch
+                }
                 Booking booking = new Booking(this, seat, price, null);
                 booking.setCancellationCode(UUID.randomUUID().toString()); // Generate unique cancellation code
                 this.bookings.add(booking);
             });
+        }
+    }
+    private BigDecimal determinePriceForSeatPromo(Seat seat, Promo promo) {
+        // Example pricing logic based on seat class. In more advanced scenarios,
+        // price would probably be determined each passing day.
+        double discount = promo.getDiscount();
+        double economy = 100.00;
+        double business = 200.00;
+        double first = 400.00;
+        double defaultPrice = 100.00;
+        switch (seat.getSeatClass()) {
+            case ECONOMY:
+                return new BigDecimal(String.format("%.2f", economy - (economy * discount)));
+            case BUSINESS:
+                return new BigDecimal(String.format("%.2f", business - (business * discount)));
+            case FIRST_CLASS:
+                return new BigDecimal(String.format("%.2f", first - (first * discount)));
+            default:
+                return new BigDecimal(String.format("%.2f", defaultPrice - (defaultPrice * discount)));
         }
     }
 

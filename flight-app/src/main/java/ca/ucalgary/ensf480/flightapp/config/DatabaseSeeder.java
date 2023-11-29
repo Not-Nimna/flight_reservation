@@ -25,6 +25,9 @@ public class DatabaseSeeder {
     @Autowired
     private AircraftRepository aircraftRepository;
 
+    @Autowired
+    private PromoRepository promoRepository;
+
 
     @PostConstruct
     public void seedDatabase() {
@@ -72,13 +75,17 @@ public class DatabaseSeeder {
         LocalDateTime departure5 = LocalDateTime.of(2023, 12, 5, 20, 30);
         LocalDateTime arrival5 = LocalDateTime.of(2023, 12, 5, 23, 45);
 
+        // Create promo
+        Promo promo = new Promo("PROMO", 0.5);
+        promoRepository.save(promo);
+
         ArrayList<Flight> flights = new ArrayList<Flight>();
         // Add flights to the flights array
-        flights.add(new Flight("F001", aircrafts.get(0), destinations.get(0), destinations.get(5), departure1, arrival1));
-        flights.add(new Flight("F002", aircrafts.get(1), destinations.get(1), destinations.get(6), departure2, arrival2));
-        flights.add(new Flight("F003", aircrafts.get(2), destinations.get(2), destinations.get(7), departure3, arrival3));
-        flights.add(new Flight("F004", aircrafts.get(3), destinations.get(3), destinations.get(8), departure4, arrival4));
-        flights.add(new Flight("F005", aircrafts.get(4), destinations.get(4), destinations.get(9), departure5, arrival5));
+        flights.add(new Flight("F001", aircrafts.get(0), destinations.get(0), destinations.get(5), departure1, arrival1, null));
+        flights.add(new Flight("F002", aircrafts.get(1), destinations.get(1), destinations.get(6), departure2, arrival2, null));
+        flights.add(new Flight("F003", aircrafts.get(2), destinations.get(2), destinations.get(7), departure3, arrival3, null));
+        flights.add(new Flight("F004", aircrafts.get(3), destinations.get(3), destinations.get(8), departure4, arrival4, null));
+        flights.add(new Flight("F005", aircrafts.get(4), destinations.get(4), destinations.get(9), departure5, arrival5, promo));
 
         flights.forEach(flight -> flightRepository.save(flight));
 
