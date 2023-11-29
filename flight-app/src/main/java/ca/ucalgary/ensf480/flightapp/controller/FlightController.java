@@ -23,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
+import ca.ucalgary.ensf480.flightapp.model.Promo;
 
 @RestController
 @RequestMapping("/api/flights")
@@ -33,7 +35,7 @@ public class FlightController {
     private final BookingService bookingService;
     private final AuthenticationService authenticationService;
 
-    @Autowired
+    // @Autowired
     public FlightController(FlightService flightService, BookingService bookingService, AuthenticationService authenticationService) {
         this.flightService = flightService;
         this.bookingService = bookingService;
@@ -47,11 +49,39 @@ public class FlightController {
         return ResponseEntity.ok(flights);
     }
 
-    // GET endpoint to retrieve seat map for a flight
+    // // GET endpoint to retrieve seat map for a flight
+    // @GetMapping("/{id}/seatMap")
+    // public ResponseEntity<List<SeatBookingDTO>> getSeatMap(@PathVariable Long id) {
+    //     List<SeatBookingDTO> seatMap = bookingService.getSeatMap(id);
+    //     return ResponseEntity.ok(seatMap);
+    // }
     @GetMapping("/{id}/seatMap")
     public ResponseEntity<List<SeatBookingDTO>> getSeatMap(@PathVariable Long id) {
         List<SeatBookingDTO> seatMap = bookingService.getSeatMap(id);
+
+        Promo promotion = flightService.getFlightById(id).get().getPromo();
+        boolean isUserRegistered = authenticationService.getCurrentUser() != null;
+
+        if (promotion != null && isUserRegistered) {
+            // Apply promotion discount to each seat
+            seatMap.forEach(seatBookingDTO -> {
+
+                double discount = promotion.getDiscount();
+                BigDecimal originalPrice = seatBookingDTO.getPrice();
+
+                BigDecimal discountedPrice = applyPromotion(originalPrice, BigDecimal.valueOf(discount));
+                seatBookingDTO.setPrice(discountedPrice);
+            });
+        }
+
         return ResponseEntity.ok(seatMap);
+    }
+
+    private BigDecimal applyPromotion(BigDecimal originalPrice, BigDecimal discount) {
+        // Apply the promotion discount to the original price
+        BigDecimal discountedPrice = originalPrice.subtract(originalPrice.multiply(discount));
+        // Ensure the discounted price is non-negative
+        return discountedPrice.max(BigDecimal.ZERO);
     }
     
     // Get a single flight by ID - accessible to all users

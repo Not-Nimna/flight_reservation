@@ -82,7 +82,7 @@ public class Flight {
     public Flight(String flightNumber, Aircraft aircraft, Destination departureDestination, 
                   Destination arrivalDestination, LocalDateTime departureTime, 
                   LocalDateTime arrivalTime, BigDecimal ordinaryPrice, 
-                  BigDecimal comfortPrice, BigDecimal businessPrice) {
+                  BigDecimal comfortPrice, BigDecimal businessPrice, Promo promo) {
         this.flightNumber = flightNumber;
         this.aircraft = aircraft;
         this.departureDestination = departureDestination;
@@ -90,6 +90,7 @@ public class Flight {
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.status = FlightStatus.ON_TIME;
+        this.promo = promo;
 
         // Initialize seat prices
         addSeatPrice(SeatClass.ORDINARY, ordinaryPrice);
@@ -195,5 +196,11 @@ public class Flight {
     public void setSeatPrices(Set<FlightSeatPrice> seatPrices) {
         this.seatPrices = seatPrices;
     }
-  
+
+    public Promo getPromo() {
+        return promo;
+    }
+    public void setPromo(Promo promo) {
+        this.promo = promo;
+    }
 }

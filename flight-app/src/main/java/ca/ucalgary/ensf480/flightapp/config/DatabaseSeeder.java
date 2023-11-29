@@ -94,14 +94,17 @@ public class DatabaseSeeder {
         BigDecimal comfortPrice = new BigDecimal(200.00);
         BigDecimal businessPrice = new BigDecimal(400.00);
 
+        Promo promo = new Promo(0.2);
+        promoRepository.save(promo);
+
 
         ArrayList<Flight> flights = new ArrayList<Flight>();
         // Add flights to the flights array
-        flights.add(new Flight("F001", aircrafts.get(0), destinations.get(0), destinations.get(5), departure1, arrival1, ordinaryPrice, comfortPrice, businessPrice));
-        flights.add(new Flight("F002", aircrafts.get(1), destinations.get(1), destinations.get(6), departure2, arrival2, ordinaryPrice, comfortPrice, businessPrice));
-        flights.add(new Flight("F003", aircrafts.get(2), destinations.get(2), destinations.get(7), departure3, arrival3, ordinaryPrice, comfortPrice, businessPrice));
-        flights.add(new Flight("F004", aircrafts.get(3), destinations.get(3), destinations.get(8), departure4, arrival4, ordinaryPrice, comfortPrice, businessPrice));
-        flights.add(new Flight("F005", aircrafts.get(4), destinations.get(4), destinations.get(9), departure5, arrival5, ordinaryPrice, comfortPrice, businessPrice));
+        flights.add(new Flight("F001", aircrafts.get(0), destinations.get(0), destinations.get(5), departure1, arrival1, ordinaryPrice, comfortPrice, businessPrice, null));
+        flights.add(new Flight("F002", aircrafts.get(1), destinations.get(1), destinations.get(6), departure2, arrival2, ordinaryPrice, comfortPrice, businessPrice, null));
+        flights.add(new Flight("F003", aircrafts.get(2), destinations.get(2), destinations.get(7), departure3, arrival3, ordinaryPrice, comfortPrice, businessPrice, null));
+        flights.add(new Flight("F004", aircrafts.get(3), destinations.get(3), destinations.get(8), departure4, arrival4, ordinaryPrice, comfortPrice, businessPrice, null));
+        flights.add(new Flight("F005", aircrafts.get(4), destinations.get(4), destinations.get(9), departure5, arrival5, ordinaryPrice, comfortPrice, businessPrice, promo));
 
         flights.forEach(flight -> flightRepository.save(flight));
 

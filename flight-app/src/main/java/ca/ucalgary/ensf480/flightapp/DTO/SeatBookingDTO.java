@@ -12,7 +12,7 @@ public class SeatBookingDTO {
     private final String seatColumn;
     private final SeatClass seatClass;
     private final boolean isBooked;
-    private final BigDecimal price;
+    private BigDecimal price;
 
     public SeatBookingDTO(Seat seat, boolean isBooked, BigDecimal price) {
         this.seatNumber = seat.getSeatNumber();
@@ -46,5 +46,8 @@ public class SeatBookingDTO {
 
     public BigDecimal getPrice() {
         return price;
+    }
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

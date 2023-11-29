@@ -22,9 +22,9 @@ public class Promo {
     public Promo() {
     }
 
-    public Promo(String promoDescription, Double discount) {
-        this.promoDescription = promoDescription;
+    public Promo(Double discount) {
         this.discount = discount;
+        setPromoDescription(discount);
     }
 
     public Long getId() {
@@ -43,9 +43,9 @@ public class Promo {
         this.id = id;
     }
 
-    public void setPromoDescription(String promoDescription) {
-        this.promoDescription = promoDescription;
-    }
+    public void setPromoDescription(Double discount) {
+        this.promoDescription = String.format("This flight is %.2f percent off!", discount * 100);
+    }    
 
     public void setDiscount(Double discount) {
         this.discount = discount;

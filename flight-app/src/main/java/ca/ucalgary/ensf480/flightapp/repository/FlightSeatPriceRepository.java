@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FlightSeatPriceRepository extends JpaRepository<FlightSeatPrice, SeatClass> {
+public interface FlightSeatPriceRepository extends JpaRepository<FlightSeatPrice, Long> {
       Optional<FlightSeatPrice> findByFlightAndSeatClass(Flight flight, SeatClass seatClass);
 
 }
