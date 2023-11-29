@@ -21,6 +21,7 @@ import ca.ucalgary.ensf480.flightapp.exception.ResourceNotFoundException;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.model.Customer;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
+import ca.ucalgary.ensf480.flightapp.model.Passenger;
 import ca.ucalgary.ensf480.flightapp.model.Payment;
 import ca.ucalgary.ensf480.flightapp.model.PaymentStatus;
 import ca.ucalgary.ensf480.flightapp.model.Seat;
@@ -77,6 +78,32 @@ public class BookingService {
 
         if (optionalSeat.isEmpty() || optionalFlight.isEmpty()) {
             throw new ResourceNotFoundException("Seat or Flight not found");
+        if (optionalSeat.isPresent() && optionalFlight.isPresent()) {
+            Seat seat = optionalSeat.get();
+            Flight flight = optionalFlight.get();
+
+            // Check if there is already a booking for this seat on this flight
+            if (bookingRepository.findBySeatAndFlight(seat, flight).isPresent()) {
+                // Return null or throw an exception as per your design decision
+                return null; // Indicates the seat is already booked
+            }
+
+            BigDecimal price = pricingService.calculatePrice(seat, flight);
+
+            Customer customer = customerService.createOrUpdateCustomer(customerEmail, userId);
+            Payment payment = paymentService.createPayment(paymentDetails, price);
+
+            Passenger passenger = new Passenger(customerEmail);
+            flight.addPassenger(passenger);
+
+            Booking booking = new Booking();
+            booking.setSeat(seat);
+            booking.setPricePaid(price); // Assuming pricePaid is the field name in Booking
+            booking.setCustomer(customer);
+            booking.setPayment(payment);
+            booking.setUser(userId != null ? userService.findById(userId).orElse(null) : null);
+
+            return bookingRepository.save(booking);
         }
 
         Seat seat = optionalSeat.get();
