@@ -18,9 +18,12 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "bookings")
+@JsonIgnoreProperties({"user", "seat", "flight", "payment"})
 public class Booking {
 
     @Id
@@ -45,11 +48,7 @@ public class Booking {
     @JoinColumn(name = "user_id", nullable = true)
     private User user; // Optionally, the user associated with this booking
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer; // The customer who made the booking
-
-    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment; // The payment associated with this booking
 
@@ -60,12 +59,13 @@ public class Booking {
         this.cancellationCode = UUID.randomUUID().toString(); // Generate a unique cancellation code
     }
 
-    public Booking(Flight flight, Seat seat, BigDecimal pricePaid, User user) {
+    public Booking(Flight flight, Seat seat, BigDecimal pricePaid, User user, Payment payment) {
         this();
         this.flight = flight;
         this.seat = seat;
         this.pricePaid = pricePaid;
         this.user = user;
+        this.payment = payment;
         generateCancellationCode();
     }
 

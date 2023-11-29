@@ -17,7 +17,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
   List<Booking> findByFlightId(Long flightId);
 
-  Optional<Seat> findBySeatAndFlight(Seat seat, Flight flight);
+  Optional<Booking> findBySeatAndFlight(Seat seat, Flight flight);
 
   List<Booking> findByFlight(Flight flight);
 

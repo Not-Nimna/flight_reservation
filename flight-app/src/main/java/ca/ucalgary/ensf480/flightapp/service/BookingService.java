@@ -13,13 +13,18 @@
 
 package ca.ucalgary.ensf480.flightapp.service;
 
+import ca.ucalgary.ensf480.flightapp.DTO.CustomerDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.PaymentDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.SeatBookingDTO;
+import ca.ucalgary.ensf480.flightapp.exception.PaymentFailedException;
+import ca.ucalgary.ensf480.flightapp.exception.ResourceNotFoundException;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.model.Customer;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
 import ca.ucalgary.ensf480.flightapp.model.Payment;
+import ca.ucalgary.ensf480.flightapp.model.PaymentStatus;
 import ca.ucalgary.ensf480.flightapp.model.Seat;
+import ca.ucalgary.ensf480.flightapp.model.User;
 import ca.ucalgary.ensf480.flightapp.repository.BookingRepository;
 import ca.ucalgary.ensf480.flightapp.repository.FlightRepository;
 import ca.ucalgary.ensf480.flightapp.repository.SeatRepository;
@@ -66,35 +71,42 @@ public class BookingService {
 
     }
 
-    public Booking makeBooking(Long flightId, Long seatId, Long userId, String customerEmail, PaymentDTO paymentDetails) {
+    public Booking makeBooking(Long flightId, Long seatId, Long userId, CustomerDTO customerDTO, PaymentDTO paymentDTO) {
         Optional<Seat> optionalSeat = seatRepository.findById(seatId);
         Optional<Flight> optionalFlight = flightRepository.findById(flightId);
 
-        if (optionalSeat.isPresent() && optionalFlight.isPresent()) {
-            Seat seat = optionalSeat.get();
-            Flight flight = optionalFlight.get();
-
-            // Check if there is already a booking for this seat on this flight
-            if (bookingRepository.findBySeatAndFlight(seat, flight).isPresent()) {
-                // Return null or throw an exception as per your design decision
-                return null; // Indicates the seat is already booked
-            }
-
-            BigDecimal price = pricingService.calculatePrice(seat, flight);
-
-            Customer customer = customerService.createOrUpdateCustomer(customerEmail, userId);
-            Payment payment = paymentService.createPayment(paymentDetails, price);
-
-            Booking booking = new Booking();
-            booking.setSeat(seat);
-            booking.setPricePaid(price); // Assuming pricePaid is the field name in Booking
-            booking.setCustomer(customer);
-            booking.setPayment(payment);
-            booking.setUser(userId != null ? userService.findById(userId).orElse(null) : null);
-
-            return bookingRepository.save(booking);
+        if (optionalSeat.isEmpty() || optionalFlight.isEmpty()) {
+            throw new ResourceNotFoundException("Seat or Flight not found");
         }
-        return null;
+
+        Seat seat = optionalSeat.get();
+        Flight flight = optionalFlight.get();
+        User user = userId != null ? userService.findById(userId).orElse(null) : null;
+
+        // Check if there is already a booking for this seat on this flight
+        if (bookingRepository.findBySeatAndFlight(seat, flight).isPresent()) {
+            return null; // Indicates the seat is already booked
+        }
+
+        BigDecimal price = pricingService.calculatePrice(seat, flight);
+
+        Customer customer = customerService.createOrUpdateCustomer(customerDTO, user);
+
+        // Create payment
+        Payment payment = paymentService.createPayment(paymentDTO, price, customer);
+
+        // Only create booking if payment is successful
+
+
+        if (payment.getPaymentStatus() != PaymentStatus.SUCCESS) {
+            throw new PaymentFailedException("Payment processing failed");
+        }
+
+        
+        Booking booking = new Booking(flight, seat, price, user, payment);
+        return bookingRepository.save(booking); // Save the successful booking
+
+
     }
 
 
