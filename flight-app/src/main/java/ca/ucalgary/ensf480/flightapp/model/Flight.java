@@ -38,6 +38,10 @@ public class Flight {
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
     private Set<Booking> bookings = new HashSet<>();
 
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<FlightSeatPrice> seatPrices = new HashSet<>();
+
+
     @ManyToMany
     @JoinTable(
         name = "flight_crew",
@@ -70,7 +74,11 @@ public class Flight {
     public Flight() {
     }
 
-    public Flight(String flightNumber, Aircraft aircraft, Destination departureDestination, Destination arrivalDestination, LocalDateTime departureTime, LocalDateTime arrivalTime) {
+    // Constructor with seat prices
+    public Flight(String flightNumber, Aircraft aircraft, Destination departureDestination, 
+                  Destination arrivalDestination, LocalDateTime departureTime, 
+                  LocalDateTime arrivalTime, BigDecimal ordinaryPrice, 
+                  BigDecimal comfortPrice, BigDecimal businessPrice) {
         this.flightNumber = flightNumber;
         this.aircraft = aircraft;
         this.departureDestination = departureDestination;
@@ -78,34 +86,19 @@ public class Flight {
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.status = FlightStatus.ON_TIME;
-        initializeBookings();
+
+        // Initialize seat prices
+        addSeatPrice(SeatClass.ORDINARY, ordinaryPrice);
+        addSeatPrice(SeatClass.COMFORT, comfortPrice);
+        addSeatPrice(SeatClass.BUSINESS_CLASS, businessPrice);
     }
 
-    // Method to initialize bookings for each seat in the aircraft
-    private void initializeBookings() {
-        if (this.aircraft != null && this.aircraft.getSeats() != null) {
-            this.aircraft.getSeats().forEach(seat -> {
-                BigDecimal price = determinePriceForSeat(seat); // Implement this method based on your pricing logic
-                Booking booking = new Booking(this, seat, price, null);
-                booking.setCancellationCode(UUID.randomUUID().toString()); // Generate unique cancellation code
-                this.bookings.add(booking);
-            });
-        }
-    }
-
-    private BigDecimal determinePriceForSeat(Seat seat) {
-        // Example pricing logic based on seat class. In more advanced scenarios,
-        // price would probably be determined each passing day.
-        switch (seat.getSeatClass()) {
-            case ECONOMY:
-                return new BigDecimal("100.00");
-            case BUSINESS:
-                return new BigDecimal("200.00");
-            case FIRST_CLASS:
-                return new BigDecimal("400.00");
-            default:
-                return new BigDecimal("100.00");
-        }
+    private void addSeatPrice(SeatClass seatClass, BigDecimal price) {
+        FlightSeatPrice flightSeatPrice = new FlightSeatPrice();
+        flightSeatPrice.setSeatClass(seatClass);
+        flightSeatPrice.setPrice(price);
+        flightSeatPrice.setFlight(this); // Link the price to this flight
+        this.seatPrices.add(flightSeatPrice);
     }
 
     // Standard getters and setters
@@ -188,6 +181,15 @@ public class Flight {
     
     public void setStatus(FlightStatus status) {
         this.status = status;
+    }
+
+    // Add getters and setters for seatPrices
+    public Set<FlightSeatPrice> getSeatPrices() {
+        return seatPrices;
+    }
+
+    public void setSeatPrices(Set<FlightSeatPrice> seatPrices) {
+        this.seatPrices = seatPrices;
     }
   
 }
