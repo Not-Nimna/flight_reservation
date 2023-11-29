@@ -1,6 +1,5 @@
 package ca.ucalgary.ensf480.flightapp.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import jakarta.persistence.*;
 

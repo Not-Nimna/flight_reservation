@@ -13,12 +13,12 @@
 
 package ca.ucalgary.ensf480.flightapp.service;
 
+import ca.ucalgary.ensf480.flightapp.DTO.PaymentDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.SeatBookingDTO;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.model.Customer;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
 import ca.ucalgary.ensf480.flightapp.model.Payment;
-import ca.ucalgary.ensf480.flightapp.model.PaymentDetails;
 import ca.ucalgary.ensf480.flightapp.model.Seat;
 import ca.ucalgary.ensf480.flightapp.repository.BookingRepository;
 import ca.ucalgary.ensf480.flightapp.repository.FlightRepository;
@@ -66,7 +66,7 @@ public class BookingService {
 
     }
 
-    public Booking makeBooking(Long flightId, Long seatId, Long userId, String customerEmail, PaymentDetails paymentDetails) {
+    public Booking makeBooking(Long flightId, Long seatId, Long userId, String customerEmail, PaymentDTO paymentDetails) {
         Optional<Seat> optionalSeat = seatRepository.findById(seatId);
         Optional<Flight> optionalFlight = flightRepository.findById(flightId);
 

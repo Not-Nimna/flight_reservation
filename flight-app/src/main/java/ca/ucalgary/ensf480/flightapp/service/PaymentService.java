@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ca.ucalgary.ensf480.flightapp.DTO.PaymentDTO;
 import ca.ucalgary.ensf480.flightapp.model.Payment;
-import ca.ucalgary.ensf480.flightapp.model.PaymentDetails;
 import ca.ucalgary.ensf480.flightapp.repository.PaymentRepository;
 
 @Service
@@ -19,7 +19,7 @@ public class PaymentService {
       this.paymentRepository = paymentRepository;
     }
 
-    public Payment createPayment(PaymentDetails paymentDetails, BigDecimal price) {
+    public Payment createPayment(PaymentDTO paymentDetails, BigDecimal price) {
       Payment payment = new Payment();
 
       payment.setAmount(price);

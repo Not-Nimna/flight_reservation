@@ -13,12 +13,10 @@
 package ca.ucalgary.ensf480.flightapp.controller;
 
 
+import ca.ucalgary.ensf480.flightapp.DTO.PaymentDTO;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
-import ca.ucalgary.ensf480.flightapp.model.PaymentDetails;
-
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +39,7 @@ public class BookingController {
     @PostMapping("/{seatId}")
     public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId, 
                                                @RequestBody BookingRequest bookingRequest) {
+        System.out.println(bookingRequest);
         Long userId = authenticationService.getCurrentUser() != null ? authenticationService.getCurrentUser().getId() : null;
         Booking booking = bookingService.makeBooking(flightId, seatId, userId, bookingRequest.getCustomerEmail(), bookingRequest.getPaymentDetails());
         return booking != null ? ResponseEntity.ok(booking) : ResponseEntity.badRequest().build();
@@ -56,7 +55,7 @@ public class BookingController {
     // Inner class for booking request data
     public static class BookingRequest {
         private String customerEmail;
-        private PaymentDetails paymentDetails;
+        private PaymentDTO paymentDetails;
     
         // Standard getters and setters
     
@@ -68,11 +67,11 @@ public class BookingController {
             this.customerEmail = customerEmail;
         }
     
-        public PaymentDetails getPaymentDetails() {
+        public PaymentDTO getPaymentDetails() {
             return paymentDetails;
         }
     
-        public void setPaymentDetails(PaymentDetails paymentDetails) {
+        public void setPaymentDetails(PaymentDTO paymentDetails) {
             this.paymentDetails = paymentDetails;
         }
     }
