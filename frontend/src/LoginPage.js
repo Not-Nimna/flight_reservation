@@ -11,16 +11,17 @@ const Login = () => {
   const handleLogin = () => {
     if (username !== "" && password !== "") {
       setLoggedIn(true);
-      const name = username;
-      const address = password;
-      const student = { name, address };
-      console.log(student);
-      fetch("http://localhost:8080/student/add", {
+      const email = username;
+      const userType = "USER";
+      const isCurrent = true;
+      const loginUser = { email, password, userType, isCurrent };
+      console.log(loginUser);
+      fetch("http://localhost:8080/api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(student),
+        body: JSON.stringify(loginUser),
       }).then((json) => {
         navigate("/booking");
         console.log(json);
@@ -42,7 +43,7 @@ const Login = () => {
                 </div>
               ) : (
                 <div>
-                  <h2 className="title">Login</h2>
+                  <h2 className="title">Create Account</h2>
                   <form>
                     <div className="field">
                       <label className="label">Username:</label>
@@ -71,8 +72,7 @@ const Login = () => {
                         <button
                           type="button"
                           onClick={handleLogin}
-                          className="button is-primary"
-                        >
+                          className="button is-primary">
                           Login
                         </button>
                       </div>

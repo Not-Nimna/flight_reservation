@@ -9,7 +9,6 @@
  * @date Nov 24, 2023
  */
 
-
 package ca.ucalgary.ensf480.flightapp.model;
 
 import jakarta.persistence.*;
@@ -33,6 +32,12 @@ public class User {
     @Column(nullable = false)
     private UserType userType;
 
+    @Column(name = "destination")
+    private String destination;
+
+    @Column(name = "is_current")
+    private Boolean isCurrent;
+
     // Constructors, Getters, and Setters
 
     public User() {
@@ -42,6 +47,8 @@ public class User {
         this.email = email;
         setPassword(password);
         this.userType = userType;
+        this.destination = "";
+        this.isCurrent = false;
     }
 
     public Long getId() {
@@ -77,6 +84,14 @@ public class User {
         this.userType = userType;
     }
 
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
     // Custom methods for user type checks can be helpful
 
     public boolean isAdmin() {
@@ -92,6 +107,15 @@ public class User {
     }
 
     public User orElse(Object object) {
-      return null;
+        return null;
     }
+
+    public Boolean getIsCurrent() {
+        return isCurrent;
+    }
+
+    public void setIsCurrent(Boolean isCurrent) {
+        this.isCurrent = isCurrent;
+    }
+
 }

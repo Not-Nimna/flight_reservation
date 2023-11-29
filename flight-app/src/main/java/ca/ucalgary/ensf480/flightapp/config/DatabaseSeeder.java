@@ -31,10 +31,8 @@ public class DatabaseSeeder {
     @Autowired
     private PromoRepository promoRepository;
 
-
     @PostConstruct
     public void seedDatabase() {
-        
 
         // Create some destinations
         ArrayList<Destination> destinations = new ArrayList<Destination>();
@@ -49,9 +47,11 @@ public class DatabaseSeeder {
         destinations.add(new Destination("Charles de Gaulle Airport", "Paris", "France", "CDG"));
         destinations.add(new Destination("Dubai International Airport", "Dubai", "United Arab Emirates", "DXB"));
         destinations.add(new Destination("Singapore Changi Airport", "Singapore", "Singapore", "SIN"));
+        destinations.add(new Destination("Los Angeles International Airport", "Los Angeles", "USA", "LAX"));
+        destinations.add(new Destination("Beijing Capital International Airport", "Beijing", "China", "PEK"));
+        destinations.add(new Destination("Rome Fiumicino Airport", "Rome", "Italy", "FCO"));
 
         destinations.forEach(destination -> destinationRepository.save(destination));
-      
 
         ArrayList<Aircraft> aircrafts = new ArrayList<Aircraft>();
 
@@ -67,6 +67,7 @@ public class DatabaseSeeder {
         }
 
         // Adding some example aircraft with their configurations
+
         aircrafts.add(new Aircraft("A1", "Boeing 737", layout1)); 
         aircrafts.add(new Aircraft("A2", "Airbus A320", layout1)); 
         aircrafts.add(new Aircraft("A3", "Boeing 777", layout1));

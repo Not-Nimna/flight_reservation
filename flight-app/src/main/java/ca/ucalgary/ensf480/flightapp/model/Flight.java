@@ -46,11 +46,7 @@ public class Flight {
 
 
     @ManyToMany
-    @JoinTable(
-        name = "flight_crew",
-        joinColumns = @JoinColumn(name = "flight_id"),
-        inverseJoinColumns = @JoinColumn(name = "crew_id")
-    )
+    @JoinTable(name = "flight_crew", joinColumns = @JoinColumn(name = "flight_id"), inverseJoinColumns = @JoinColumn(name = "crew_id"))
     private Set<Crew> crewMembers = new HashSet<>();
 
     @ManyToOne
@@ -67,7 +63,6 @@ public class Flight {
     @Column(nullable = false)
     private LocalDateTime arrivalTime;
 
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private FlightStatus status;
@@ -81,7 +76,7 @@ public class Flight {
     public Flight(String flightNumber, Aircraft aircraft, Destination departureDestination, 
                   Destination arrivalDestination, LocalDateTime departureTime, 
                   LocalDateTime arrivalTime, BigDecimal ordinaryPrice, 
-                  BigDecimal comfortPrice, BigDecimal businessPrice, Promo promo) {
+        
         this.flightNumber = flightNumber;
         this.aircraft = aircraft;
         this.departureDestination = departureDestination;
@@ -182,7 +177,7 @@ public class Flight {
     public FlightStatus getStatus() {
         return status;
     }
-    
+
     public void setStatus(FlightStatus status) {
         this.status = status;
     }
