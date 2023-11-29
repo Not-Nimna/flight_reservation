@@ -17,8 +17,11 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "payments")
+@JsonIgnoreProperties({"customer"})
 public class Payment {
 
     @Id
@@ -29,34 +32,40 @@ public class Payment {
     private BigDecimal amount; // The amount of the payment
 
     @Column(nullable = false)
-    private LocalDateTime paymentDate; // The date and time when the payment was made
+    private LocalDateTime paymentTime; // The date and time when the payment was made
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentStatus status; // The status of the payment (e.g., SUCCESS, FAILED)
 
+    @Column(nullable = true)
+    private String paymentMethod;
+
+    @Column(nullable = true)
+    private String paymentToken; // Token representing the transaction
+
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer; // The customer who made the payment
 
-    @Column(nullable = false)
-    private LocalDateTime paymentTime; // The time of the payment
-
-
-    @OneToOne
-    @JoinColumn(name = "booking_id", nullable = false)
-    private Booking booking; // The booking associated with this payment
 
     // Constructors, getters, and setters
 
     public Payment() {
+        // Default constructor
     }
 
-    public Payment(BigDecimal amount, LocalDateTime paymentDate, PaymentStatus status, Booking booking) {
+    public Payment(BigDecimal amount, 
+            LocalDateTime paymentTime, 
+            PaymentStatus status, 
+            Booking booking, 
+            String paymentToken,
+            String paymentMethod) {
         this.amount = amount;
-        this.paymentDate = paymentDate;
+        this.paymentTime = paymentTime;
         this.status = status;
-        this.booking = booking;
+        this.paymentToken = paymentToken;
+        this.paymentMethod = paymentMethod;
     }
 
     // Standard getters and setters
@@ -77,38 +86,46 @@ public class Payment {
         this.amount = amount;
     }
 
-    public LocalDateTime getPaymentDate() {
-        return paymentDate;
+    public LocalDateTime getPaymentTime() {
+        return paymentTime;
     }
 
-    public void setPaymentDate(LocalDateTime paymentDate) {
-        this.paymentDate = paymentDate;
+    public void setPaymentTime(LocalDateTime paymentTime) {
+        this.paymentTime = paymentTime;
     }
 
-    public PaymentStatus getStatus() {
+    public PaymentStatus getPaymentStatus() {
         return status;
     }
 
-    public void setStatus(PaymentStatus status) {
+    public void setPaymentStatus(PaymentStatus status) {
         this.status = status;
     }
 
-    public Booking getBooking() {
-        return booking;
+
+    public String getPaymentToken() {
+        return paymentToken;
     }
 
-    public void setBooking(Booking booking) {
-        this.booking = booking;
+    public void setPaymentToken(String paymentToken) {
+        this.paymentToken = paymentToken;
     }
 
-    // TODO:
-    public void setPaymentTime(LocalDateTime now) {
+    public String getPaymentMethod() {
+        return paymentMethod;
     }
 
-    public void setPaymentMethod(Object paymentMethod) {
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
-    public Payment orElse(Object object) {
-        return null;
-      }
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+
 }

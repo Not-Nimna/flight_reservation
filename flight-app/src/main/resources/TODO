@@ -1,0 +1,15 @@
+Browse passenger list by agent only - G
+User login
+User promos
+Match design and implementation
+Change seat classes to []
+Add endpoint for setting seat class price
+Verify booking works
+Fix seat row and columns
+Add row and column data to seatMap
+Reformat frontend
+
+Bonus:
+Payment receipt and ticket notification by email (Observer pattern?)
+Admin features:
+    Maintian aircraft, flights, crews

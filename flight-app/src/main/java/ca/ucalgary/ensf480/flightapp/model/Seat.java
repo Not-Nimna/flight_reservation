@@ -89,19 +89,11 @@ public class Seat {
         this.aircraft = aircraft;
     }
 
-    public Object getSeatRow() {
-        return this.seatRow;
+    public String getSeatRow() {
+        return seatRow;
     }
 
-    public Object getSeatColumn() {
-        return this.seatColumn;
-    }
-
-    public void setSeatRow(Object seatRow2) {
-        this.seatRow = (String) seatRow2;
-    }
-
-    public void setSeatColumn(Object seatColumn2) {
-        this.seatColumn = (String) seatColumn2;
+    public String getSeatColumn() {
+        return seatColumn;
     }
 }

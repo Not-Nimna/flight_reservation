@@ -18,8 +18,12 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
 @Entity
 @Table(name = "bookings")
+@JsonIgnoreProperties({"user", "seat", "flight", "payment"})
 public class Booking {
 
     @Id
@@ -30,11 +34,8 @@ public class Booking {
     private String cancellationCode; // Unique cancellation code for each booking
 
     @Column(nullable = false)
-    private BigDecimal price; // The price of the booking
+    private BigDecimal pricePaid; // The price paid for the booking
 
-    @Column(nullable = false)
-    private Boolean isBooked;
-    
     @ManyToOne
     @JoinColumn(name = "flight_id", nullable = false)
     private Flight flight; // The flight associated with this booking
@@ -47,13 +48,9 @@ public class Booking {
     @JoinColumn(name = "user_id", nullable = true)
     private User user; // Optionally, the user associated with this booking
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = true) // Nullable for advance booking creation
-    private Customer customer; // The customer who made the booking, if any
-
-    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
-    @JoinColumn(name = "payment_id", nullable = true) // Nullable for advance booking creation
-    private Payment payment; // The payment associated with this booking, if any
+    @OneToOne
+    @JoinColumn(name = "payment_id", nullable = false)
+    private Payment payment; // The payment associated with this booking
 
 
     // Constructors, getters, and setters
@@ -62,13 +59,13 @@ public class Booking {
         this.cancellationCode = UUID.randomUUID().toString(); // Generate a unique cancellation code
     }
 
-    public Booking(Flight flight, Seat seat, BigDecimal price, User user) {
+    public Booking(Flight flight, Seat seat, BigDecimal pricePaid, User user, Payment payment) {
         this();
-        this.isBooked = false;
         this.flight = flight;
         this.seat = seat;
-        this.price = price;
+        this.pricePaid = pricePaid;
         this.user = user;
+        this.payment = payment;
         generateCancellationCode();
     }
 
@@ -84,16 +81,7 @@ public class Booking {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Boolean isBooked() {
-        return isBooked;
-    }
-
-    public void setBooked(Boolean booked) {
-        this.isBooked = booked;
-    }
-    
+    } 
 
     public String getCancellationCode() {
         return cancellationCode;
@@ -127,12 +115,12 @@ public class Booking {
         return user;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getPricePaid() {
+        return pricePaid;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setPricePaid(BigDecimal pricePaid) {
+        this.pricePaid = pricePaid;
     }
 
     public void setCustomer(Customer customer2) {

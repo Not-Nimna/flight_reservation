@@ -1,7 +1,10 @@
 package ca.ucalgary.ensf480.flightapp.config;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,6 +27,9 @@ public class DatabaseSeeder {
 
     @Autowired
     private AircraftRepository aircraftRepository;
+
+    @Autowired
+    private PromoRepository promoRepository;
 
     @PostConstruct
     public void seedDatabase() {
@@ -48,14 +54,25 @@ public class DatabaseSeeder {
         destinations.forEach(destination -> destinationRepository.save(destination));
 
         ArrayList<Aircraft> aircrafts = new ArrayList<Aircraft>();
+
+        // Define the seat layout for each aircraft
+        Map<String, SeatClass> layout1 = new HashMap<>();
+        // Assuming first 5 rows are BUSINESS_CLASS, next 10 are COMFORT, and rest ORDINARY
+        for (int i = 1; i <= 30; i++) {
+            for (char j = 'A'; j <= 'F'; j++) {
+                String position = i + String.valueOf(j);
+                SeatClass seatClass = i <= 5 ? SeatClass.BUSINESS_CLASS : (i <= 15 ? SeatClass.COMFORT : SeatClass.ORDINARY);
+                layout1.put(position, seatClass);
+            }
+        }
+
         // Adding some example aircraft with their configurations
-        aircrafts.add(new Aircraft("A1", "Boeing 737", 30, 6)); // 30 rows, 6 seats per row
-        aircrafts.add(new Aircraft("A2", "Airbus A320", 28, 6)); // 28 rows, 6 seats per row
-        aircrafts.add(new Aircraft("A3", "Boeing 777", 50, 9)); // 50 rows, 9 seats per row
-        aircrafts.add(new Aircraft("A4", "Boeing A380", 60, 10)); // 60 rows, 10 seats per row
-        aircrafts.add(new Aircraft("A5", "Airbus A340", 45, 8)); // 45 rows, 8 seats per row
-        aircrafts.add(new Aircraft("A6", "Airbus A350", 40, 8)); // 40 rows, 8 seats per row
-        aircrafts.add(new Aircraft("A7", "Boeing 787", 35, 7)); // 35 rows, 7 seats per row
+
+        aircrafts.add(new Aircraft("A1", "Boeing 737", layout1)); 
+        aircrafts.add(new Aircraft("A2", "Airbus A320", layout1)); 
+        aircrafts.add(new Aircraft("A3", "Boeing 777", layout1));
+        aircrafts.add(new Aircraft("A4", "Boeing A380", layout1)); 
+        aircrafts.add(new Aircraft("A5", "Airbus A340", layout1)); 
 
         aircrafts.forEach(aircraft -> aircraftRepository.save(aircraft));
 
@@ -74,28 +91,21 @@ public class DatabaseSeeder {
         LocalDateTime departure5 = LocalDateTime.of(2023, 12, 5, 20, 30);
         LocalDateTime arrival5 = LocalDateTime.of(2023, 12, 5, 23, 45);
 
-        LocalDateTime departure6 = LocalDateTime.of(2023, 12, 6, 12, 0);
-        LocalDateTime arrival6 = LocalDateTime.of(2023, 12, 6, 15, 30);
+        BigDecimal ordinaryPrice = new BigDecimal(100.00);
+        BigDecimal comfortPrice = new BigDecimal(200.00);
+        BigDecimal businessPrice = new BigDecimal(400.00);
 
-        LocalDateTime departure7 = LocalDateTime.of(2023, 12, 7, 16, 45);
-        LocalDateTime arrival7 = LocalDateTime.of(2023, 12, 7, 20, 15);
+        Promo promo = new Promo(0.2);
+        promoRepository.save(promo);
+
 
         ArrayList<Flight> flights = new ArrayList<Flight>();
         // Add flights to the flights array
-        flights.add(
-                new Flight("F001", aircrafts.get(0), destinations.get(0), destinations.get(5), departure1, arrival1));
-        flights.add(
-                new Flight("F002", aircrafts.get(1), destinations.get(1), destinations.get(6), departure2, arrival2));
-        flights.add(
-                new Flight("F003", aircrafts.get(2), destinations.get(2), destinations.get(7), departure3, arrival3));
-        flights.add(
-                new Flight("F004", aircrafts.get(3), destinations.get(3), destinations.get(8), departure4, arrival4));
-        flights.add(
-                new Flight("F005", aircrafts.get(4), destinations.get(4), destinations.get(9), departure5, arrival5));
-        flights.add(
-                new Flight("F006", aircrafts.get(0), destinations.get(1), destinations.get(10), departure6, arrival6));
-        flights.add(
-                new Flight("F007", aircrafts.get(1), destinations.get(5), destinations.get(8), departure7, arrival7));
+        flights.add(new Flight("F001", aircrafts.get(0), destinations.get(0), destinations.get(5), departure1, arrival1, ordinaryPrice, comfortPrice, businessPrice, null));
+        flights.add(new Flight("F002", aircrafts.get(1), destinations.get(1), destinations.get(6), departure2, arrival2, ordinaryPrice, comfortPrice, businessPrice, null));
+        flights.add(new Flight("F003", aircrafts.get(2), destinations.get(2), destinations.get(7), departure3, arrival3, ordinaryPrice, comfortPrice, businessPrice, null));
+        flights.add(new Flight("F004", aircrafts.get(3), destinations.get(3), destinations.get(8), departure4, arrival4, ordinaryPrice, comfortPrice, businessPrice, null));
+        flights.add(new Flight("F005", aircrafts.get(4), destinations.get(4), destinations.get(9), departure5, arrival5, ordinaryPrice, comfortPrice, businessPrice, promo));
 
         flights.forEach(flight -> flightRepository.save(flight));
 
