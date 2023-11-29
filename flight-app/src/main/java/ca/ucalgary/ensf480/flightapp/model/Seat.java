@@ -88,4 +88,12 @@ public class Seat {
     public void setAircraft(Aircraft aircraft) {
         this.aircraft = aircraft;
     }
+
+    public String getSeatRow() {
+        return seatRow;
+    }
+
+    public String getSeatColumn() {
+        return seatColumn;
+    }
 }

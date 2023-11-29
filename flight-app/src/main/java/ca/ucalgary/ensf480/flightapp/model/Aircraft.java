@@ -10,12 +10,11 @@
  * @date Nov 24, 2023
  */
 
-
 package ca.ucalgary.ensf480.flightapp.model;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -35,40 +34,45 @@ public class Aircraft {
     @OneToMany(mappedBy = "aircraft", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Seat> seats = new HashSet<>(); // A set of seats in the aircraft.
 
-
-    // Constructors, getters, and setters
-
-    public Aircraft() {
+    // Default constructor
+    protected Aircraft() {
+        // Used by Hibernate
     }
 
-    public Aircraft(String code, String model, int economyRows, int seatsPerRow) {
+    // Constructor with seat layout
+    public Aircraft(String code, String model, Map<String, SeatClass> seatLayout) {
         this.code = code;
         this.model = model;
-        initializeSeats(economyRows, seatsPerRow);
+        initializeSeats(seatLayout);
     }
 
-    // Method to initialize seats
-    private void initializeSeats(int economyRows, int seatsPerRow) {
-        // Create economy seats
-        for (int row = 1; row <= economyRows; row++) {
-            for (int seatNum = 1; seatNum <= seatsPerRow; seatNum++) {
-                String seatRow = String.valueOf(row);
-                String seatColumn = getSeatColumn(seatNum);
-                this.addSeat(new Seat(seatRow, seatColumn, SeatClass.ECONOMY, this));
-            }
-        }
-
+    // Initialize seats based on the provided layout
+    private void initializeSeats(Map<String, SeatClass> seatLayout) {
+        seatLayout.forEach((position, seatClass) -> {
+            String seatRow = extractRow(position);
+            String seatColumn = extractColumn(position);
+            this.addSeat(new Seat(seatRow, seatColumn, seatClass, this));
+        });
     }
-    
 
-    // Helper method to determine the seat column based on seat number
-    private String getSeatColumn(int seatNum) {
-        // This is a basic example. Adjust the logic based on your seat layout.
-        return Character.toString((char) ('A' + seatNum - 1));
+    // Helper methods to extract row and column from the position
+    private String extractRow(String position) {
+        // Assuming the format "1A", "2B", etc., where the row is the numeric part
+        return position.replaceAll("[^0-9]", "");
+    }
+
+    private String extractColumn(String position) {
+        // Assuming the format "1A", "2B", etc., where the column is the letter part
+        return position.replaceAll("[^A-Za-z]", "");
+    }
+
+    // Method to add a seat to the aircraft
+    public void addSeat(Seat seat) {
+        seats.add(seat);
+        seat.setAircraft(this);
     }
 
     // Standard getters and setters
-
     public Long getId() {
         return id;
     }
@@ -100,11 +104,4 @@ public class Aircraft {
     public void setSeats(Set<Seat> seats) {
         this.seats = seats;
     }
-
-    // Method to add a seat to the aircraft
-    public void addSeat(Seat seat) {
-        seats.add(seat);
-        seat.setAircraft(this);
-    }
-    
 }

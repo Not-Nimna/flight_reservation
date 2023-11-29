@@ -13,7 +13,9 @@
 package ca.ucalgary.ensf480.flightapp.model;
 
 public enum SeatClass {
-    ECONOMY,
-    BUSINESS,
-    FIRST_CLASS
+    ORDINARY,
+    COMFORT,
+    BUSINESS_CLASS
+
+    
 }
