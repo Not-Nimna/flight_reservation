@@ -66,9 +66,15 @@ public class FlightController {
     }
 
     // Search flights - accessible to all users
-    @GetMapping("/search")
-    public ResponseEntity<List<Flight>> searchFlights(@RequestParam String query) {
-        return ResponseEntity.ok(flightService.searchFlights(query));
+    @GetMapping("/search/{destination}")
+    public ResponseEntity<List<FlightDTO>> searchFlights(@PathVariable String destination) {
+        List<FlightDTO> flights = flightService.searchFlights(destination);
+
+        if (flights.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(flights);
     }
 
     // Create a new flight - restricted to admins
@@ -100,6 +106,12 @@ public class FlightController {
         }
         flightService.deleteFlight(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/cities")
+    public ResponseEntity<List<String>> getAllCities() {
+        List<String> cities = flightService.getAllCities();
+        return ResponseEntity.ok(cities);
     }
 
 }

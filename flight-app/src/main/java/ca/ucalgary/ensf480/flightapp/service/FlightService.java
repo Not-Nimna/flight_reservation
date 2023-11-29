@@ -30,8 +30,11 @@ public class FlightService {
                 .collect(Collectors.toList());
     }
 
-    public List<Flight> searchFlights(String query) {
-        return null; // Replace with actual search logic
+    public List<FlightDTO> searchFlights(String query) {
+        return flightRepository.findAll().stream()
+                .filter(flight -> flight.getArrivalDestination().getCity().equalsIgnoreCase(query))
+                .map(FlightDTO::fromFlight)
+                .collect(Collectors.toList());
     }
 
     public Flight createFlight(Flight flight) {
@@ -40,15 +43,22 @@ public class FlightService {
 
     public Optional<Flight> updateFlight(Long id, Flight flightDetails) {
         return flightRepository.findById(id)
-            .map(flight -> {
-                // Map the updated details to the existing flight entity
-                flight.setFlightNumber(flightDetails.getFlightNumber());
-                // Set other fields from flightDetails to flight as needed
-                return flightRepository.save(flight);
-            });
+                .map(flight -> {
+                    // Map the updated details to the existing flight entity
+                    flight.setFlightNumber(flightDetails.getFlightNumber());
+                    // Set other fields from flightDetails to flight as needed
+                    return flightRepository.save(flight);
+                });
     }
 
     public void deleteFlight(Long id) {
         flightRepository.deleteById(id);
+    }
+
+    public List<String> getAllCities() {
+        return flightRepository.findAll().stream()
+                .map(flight -> flight.getArrivalDestination().getCity())
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

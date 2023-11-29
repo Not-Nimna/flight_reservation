@@ -15,7 +15,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
-    private final UserService userService;
+    protected final UserService userService;
     private final AuthenticationService authenticationService;
 
     @Autowired
@@ -50,6 +50,18 @@ public class UserController {
         }
 
         User createdUser = userService.createUser(user);
+        // set the current sure bool to true
+
+        // set all the others to false
+        List<User> users = userService.getAllUsers();
+        for (User u : users) {
+            if (u.getId() != createdUser.getId()) {
+                u.setIsCurrent(false);
+                userService.createUser(u);
+            }
+        }
+        createdUser.setIsCurrent(true);
         return ResponseEntity.ok(createdUser);
     }
+
 }

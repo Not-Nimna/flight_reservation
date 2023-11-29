@@ -25,10 +25,8 @@ public class DatabaseSeeder {
     @Autowired
     private AircraftRepository aircraftRepository;
 
-
     @PostConstruct
     public void seedDatabase() {
-        
 
         // Create some destinations
         ArrayList<Destination> destinations = new ArrayList<Destination>();
@@ -43,9 +41,11 @@ public class DatabaseSeeder {
         destinations.add(new Destination("Charles de Gaulle Airport", "Paris", "France", "CDG"));
         destinations.add(new Destination("Dubai International Airport", "Dubai", "United Arab Emirates", "DXB"));
         destinations.add(new Destination("Singapore Changi Airport", "Singapore", "Singapore", "SIN"));
+        destinations.add(new Destination("Los Angeles International Airport", "Los Angeles", "USA", "LAX"));
+        destinations.add(new Destination("Beijing Capital International Airport", "Beijing", "China", "PEK"));
+        destinations.add(new Destination("Rome Fiumicino Airport", "Rome", "Italy", "FCO"));
 
         destinations.forEach(destination -> destinationRepository.save(destination));
-      
 
         ArrayList<Aircraft> aircrafts = new ArrayList<Aircraft>();
         // Adding some example aircraft with their configurations
@@ -54,6 +54,8 @@ public class DatabaseSeeder {
         aircrafts.add(new Aircraft("A3", "Boeing 777", 50, 9)); // 50 rows, 9 seats per row
         aircrafts.add(new Aircraft("A4", "Boeing A380", 60, 10)); // 60 rows, 10 seats per row
         aircrafts.add(new Aircraft("A5", "Airbus A340", 45, 8)); // 45 rows, 8 seats per row
+        aircrafts.add(new Aircraft("A6", "Airbus A350", 40, 8)); // 40 rows, 8 seats per row
+        aircrafts.add(new Aircraft("A7", "Boeing 787", 35, 7)); // 35 rows, 7 seats per row
 
         aircrafts.forEach(aircraft -> aircraftRepository.save(aircraft));
 
@@ -72,13 +74,28 @@ public class DatabaseSeeder {
         LocalDateTime departure5 = LocalDateTime.of(2023, 12, 5, 20, 30);
         LocalDateTime arrival5 = LocalDateTime.of(2023, 12, 5, 23, 45);
 
+        LocalDateTime departure6 = LocalDateTime.of(2023, 12, 6, 12, 0);
+        LocalDateTime arrival6 = LocalDateTime.of(2023, 12, 6, 15, 30);
+
+        LocalDateTime departure7 = LocalDateTime.of(2023, 12, 7, 16, 45);
+        LocalDateTime arrival7 = LocalDateTime.of(2023, 12, 7, 20, 15);
+
         ArrayList<Flight> flights = new ArrayList<Flight>();
         // Add flights to the flights array
-        flights.add(new Flight("F001", aircrafts.get(0), destinations.get(0), destinations.get(5), departure1, arrival1));
-        flights.add(new Flight("F002", aircrafts.get(1), destinations.get(1), destinations.get(6), departure2, arrival2));
-        flights.add(new Flight("F003", aircrafts.get(2), destinations.get(2), destinations.get(7), departure3, arrival3));
-        flights.add(new Flight("F004", aircrafts.get(3), destinations.get(3), destinations.get(8), departure4, arrival4));
-        flights.add(new Flight("F005", aircrafts.get(4), destinations.get(4), destinations.get(9), departure5, arrival5));
+        flights.add(
+                new Flight("F001", aircrafts.get(0), destinations.get(0), destinations.get(5), departure1, arrival1));
+        flights.add(
+                new Flight("F002", aircrafts.get(1), destinations.get(1), destinations.get(6), departure2, arrival2));
+        flights.add(
+                new Flight("F003", aircrafts.get(2), destinations.get(2), destinations.get(7), departure3, arrival3));
+        flights.add(
+                new Flight("F004", aircrafts.get(3), destinations.get(3), destinations.get(8), departure4, arrival4));
+        flights.add(
+                new Flight("F005", aircrafts.get(4), destinations.get(4), destinations.get(9), departure5, arrival5));
+        flights.add(
+                new Flight("F006", aircrafts.get(0), destinations.get(1), destinations.get(10), departure6, arrival6));
+        flights.add(
+                new Flight("F007", aircrafts.get(1), destinations.get(5), destinations.get(8), departure7, arrival7));
 
         flights.forEach(flight -> flightRepository.save(flight));
 

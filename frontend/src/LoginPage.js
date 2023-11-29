@@ -13,7 +13,8 @@ const Login = () => {
       setLoggedIn(true);
       const email = username;
       const userType = "USER";
-      const loginUser = { email, password, userType };
+      const isCurrent = true;
+      const loginUser = { email, password, userType, isCurrent };
       console.log(loginUser);
       fetch("http://localhost:8080/api/users", {
         method: "POST",
