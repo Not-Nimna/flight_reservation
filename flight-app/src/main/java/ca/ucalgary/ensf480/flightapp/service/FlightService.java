@@ -2,12 +2,14 @@ package ca.ucalgary.ensf480.flightapp.service;
 
 import ca.ucalgary.ensf480.flightapp.DTO.FlightDTO;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
+import ca.ucalgary.ensf480.flightapp.model.Passenger;
 import ca.ucalgary.ensf480.flightapp.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,5 +52,10 @@ public class FlightService {
 
     public void deleteFlight(Long id) {
         flightRepository.deleteById(id);
+    }
+
+    // get all passengers on a flight
+    public Set<Passenger> getPassengers(Long id) {
+        return flightRepository.findById(id).get().getPassengers();
     }
 }

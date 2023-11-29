@@ -17,6 +17,7 @@ import ca.ucalgary.ensf480.flightapp.DTO.SeatBookingDTO;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.model.Customer;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
+import ca.ucalgary.ensf480.flightapp.model.Passenger;
 import ca.ucalgary.ensf480.flightapp.model.Payment;
 import ca.ucalgary.ensf480.flightapp.model.PaymentDetails;
 import ca.ucalgary.ensf480.flightapp.model.Seat;
@@ -84,6 +85,9 @@ public class BookingService {
 
             Customer customer = customerService.createOrUpdateCustomer(customerEmail, userId);
             Payment payment = paymentService.createPayment(paymentDetails, price);
+
+            Passenger passenger = new Passenger(customerEmail);
+            flight.addPassenger(passenger);
 
             Booking booking = new Booking();
             booking.setSeat(seat);
