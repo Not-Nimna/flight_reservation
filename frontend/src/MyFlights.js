@@ -28,21 +28,22 @@ const MyFlights = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:8080/student/getAll")
+    fetch("http://localhost:8080/api/flights")
       .then((response) => response.json())
       .then((data) => {
-        setStudent(data);
-
-        // Replace the dummy flight data with the fetched student data
+        // Assuming data is an array of flights
         setFlights(
-          data.map((student) => ({
-            id: student.id,
-            airline: student.name,
-            origin: student.address,
-            destination: "", // Set appropriate value or leave it empty based on your requirements
-            departureTime: "", // Set appropriate value or leave it empty based on your requirements
+          data.map((flight) => ({
+            id: flight.id,
+            airline: flight.aircraftCode, // You can adjust this based on your data structure
+            origin: flight.departureDestination,
+            destination: flight.arrivalDestination,
+            departureTime: new Date(flight.departureTime).toLocaleString(), // Format the date as needed
           }))
         );
+      })
+      .catch((error) => {
+        console.error("Error fetching flights:", error);
       });
   }, []);
 
@@ -62,8 +63,7 @@ const MyFlights = () => {
                   <p>Departure Time: {flight.departureTime}</p>
                   <button
                     className="button is-danger"
-                    onClick={() => handleCancel(flight.id)}
-                  >
+                    onClick={() => handleCancel(flight.id)}>
                     Cancel
                   </button>
                 </div>

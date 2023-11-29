@@ -27,6 +27,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/flights")
+@CrossOrigin(origins = "http://localhost:3000")
+
 public class FlightController {
 
     private final FlightService flightService;
@@ -34,7 +36,8 @@ public class FlightController {
     private final AuthenticationService authenticationService;
 
     @Autowired
-    public FlightController(FlightService flightService, BookingService bookingService, AuthenticationService authenticationService) {
+    public FlightController(FlightService flightService, BookingService bookingService,
+            AuthenticationService authenticationService) {
         this.flightService = flightService;
         this.bookingService = bookingService;
         this.authenticationService = authenticationService;
@@ -53,7 +56,7 @@ public class FlightController {
         List<SeatBookingDTO> seatMap = bookingService.getSeatMap(id);
         return ResponseEntity.ok(seatMap);
     }
-    
+
     // Get a single flight by ID - accessible to all users
     @GetMapping("/{id}")
     public ResponseEntity<Flight> getFlightById(@PathVariable Long id) {
