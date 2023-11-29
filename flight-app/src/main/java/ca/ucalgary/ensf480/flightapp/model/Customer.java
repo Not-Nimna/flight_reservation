@@ -12,13 +12,15 @@
 
 package ca.ucalgary.ensf480.flightapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+
 
 @Entity
 @Table(name = "customers")
+@JsonIgnoreProperties({"user"})
 public class Customer {
 
     @Id
@@ -31,28 +33,21 @@ public class Customer {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = true)
-    private String contactNumber;
-
     @OneToOne
     @JoinColumn(name = "user_id", nullable = true) // Foreign key in 'customers' table
     private User user;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Payment> payments; // List of payments made by the customer
 
-    @OneToMany(mappedBy = "customer")
-    private Set<Booking> bookings = new HashSet<>(); // Bookings made by this customer
 
     // Constructors, getters, and setters
 
     public Customer() {
     }
 
-    public Customer(String name, String email, String contactNumber) {
+    public Customer(String name, String email, User user) {
         this.name = name;
         this.email = email;
-        this.contactNumber = contactNumber;
+        this.user = user;
     }
 
     // Standard getters and setters
@@ -81,21 +76,6 @@ public class Customer {
         this.email = email;
     }
 
-    public String getContactNumber() {
-        return contactNumber;
-    }
-
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
-    }
-
-    public Set<Booking> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(Set<Booking> bookings) {
-        this.bookings = bookings;
-    }
 
     public User getUser() {
         return user;
@@ -104,11 +84,6 @@ public class Customer {
     public void setUser(User user) {
         this.user = user;
     }
-
-    public Customer orElse(Object object) {
-        return null;
-      }
-
 
 }
 
