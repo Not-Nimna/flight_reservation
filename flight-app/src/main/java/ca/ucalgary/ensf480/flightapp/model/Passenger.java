@@ -11,13 +11,13 @@ public class Passenger {
     private Long id;
 
     @Column(nullable = false)
-    private String email;
+    private String name;
 
     public Passenger() {
     }
 
-    public Passenger(String email) {
-        this.email = email;
+    public Passenger(String name) {
+        this.name = name;
     }
 
     // Standard getters and setters
@@ -26,8 +26,8 @@ public class Passenger {
         return id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getName() {
+        return name;
     }
 
     public void setId(Long id) {

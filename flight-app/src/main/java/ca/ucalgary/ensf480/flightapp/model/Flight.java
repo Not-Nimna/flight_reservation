@@ -79,7 +79,7 @@ public class Flight {
     // Constructor with seat prices
     public Flight(String flightNumber, Aircraft aircraft, Destination departureDestination, 
                   Destination arrivalDestination, LocalDateTime departureTime, 
-                  LocalDateTime arrivalTime, BigDecimal ordinaryPrice, 
+                  LocalDateTime arrivalTime, BigDecimal ordinaryPrice, BigDecimal comfortPrice, BigDecimal businessPrice,Promo promo) {
         
         this.flightNumber = flightNumber;
         this.aircraft = aircraft;
