@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import "bulma/css/bulma.min.css";
 
 const MyFlights = () => {
-  const [student, setStudent] = useState([]);
   const [flights, setFlights] = useState([]);
 
   const handleCancel = (flightId) => {
