@@ -38,10 +38,11 @@ public class BookingController {
     }
 
     // Endpoint to create a new booking
-    @PostMapping("/{bookingId}")
-    public ResponseEntity<Booking> makeBooking(@PathVariable Long bookingId, @RequestBody BookingRequest bookingRequest) {
+    @PostMapping("/{seatId}")
+    public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId, 
+                                               @RequestBody BookingRequest bookingRequest) {
         Long userId = authenticationService.getCurrentUser() != null ? authenticationService.getCurrentUser().getId() : null;
-        Booking booking = bookingService.makeBooking(bookingId, userId, bookingRequest.getCustomerEmail(), bookingRequest.getPaymentDetails());
+        Booking booking = bookingService.makeBooking(flightId, seatId, userId, bookingRequest.getCustomerEmail(), bookingRequest.getPaymentDetails());
         return booking != null ? ResponseEntity.ok(booking) : ResponseEntity.badRequest().build();
     }
 
