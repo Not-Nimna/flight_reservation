@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+// Move the logic of this service to the booking service.
+
+
 @Service
 public class PassengerService {
 
@@ -20,6 +23,7 @@ public class PassengerService {
 
     public Optional<Passenger> getPassengerById(Long id) {
         return passengerRepository.findById(id);
+        bookingRepository.findByFlight(id);
     }
 
     public List<Passenger> getAllPassengers() {

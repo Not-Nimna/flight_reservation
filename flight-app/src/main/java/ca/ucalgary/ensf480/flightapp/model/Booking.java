@@ -30,6 +30,10 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Move this here instead of having a passenger model.
+    @Column(nullable = false)
+    private String name;
+
     @Column(nullable = false, unique = true)
     private String cancellationCode; // Unique cancellation code for each booking
 

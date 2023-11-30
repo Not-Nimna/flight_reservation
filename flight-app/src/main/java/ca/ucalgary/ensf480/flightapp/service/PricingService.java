@@ -16,7 +16,11 @@ public class PricingService {
         this.flightSeatPriceRepository = flightSeatPriceRepository;
     }
 
-    public BigDecimal calculatePrice(Seat seat, Flight flight) {
+    // Update this funciton to take in the the user.
+    // It should check if there is a promo for the given flight, and if the user is not null
+    // and then apply the promo.
+    // to improve performance, it should probably take in the promo as a param to preven n+1 queries.
+    public BigDecimal calculatePrice(Seat seat, Flight flight, User user) {
         // Retrieve the base price for the seat class of this seat on this flight
         return flightSeatPriceRepository.findByFlightAndSeatClass(flight, seat.getSeatClass())
                                         .map(FlightSeatPrice::getPrice)

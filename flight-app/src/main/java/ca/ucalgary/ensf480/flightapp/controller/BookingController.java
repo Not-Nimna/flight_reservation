@@ -26,7 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/flight/{flightId}/bookings")
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000")
 public class BookingController {
 
@@ -39,8 +39,16 @@ public class BookingController {
         this.authenticationService = authenticationService;
     }
 
+    // Add these:
+
+    // Get bookings for a given user
+    // @RequestMapping("/bookings") // get request
+
+    // Get the bookings for a flight - used by agent
+    // @RequestMappin("/flight/{flightID}/bookings")
+
     // Endpoint to create a new booking
-    @PostMapping("/{seatId}")
+    @PostMapping("flight/{flightId}/bookings/{seatId}")
     public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId,
             @RequestBody BookingRequest bookingRequest) {
         try {
