@@ -21,6 +21,7 @@ import ca.ucalgary.ensf480.flightapp.exception.ResourceNotFoundException;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.model.Customer;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
+import ca.ucalgary.ensf480.flightapp.model.Passenger;
 import ca.ucalgary.ensf480.flightapp.model.Payment;
 import ca.ucalgary.ensf480.flightapp.model.PaymentStatus;
 import ca.ucalgary.ensf480.flightapp.model.Seat;
@@ -104,6 +105,10 @@ public class BookingService {
 
         
         Booking booking = new Booking(flight, seat, price, user, payment);
+
+        Passenger passenger = new Passenger(customer.getName());
+        flight.addPassenger(passenger);
+
         return bookingRepository.save(booking); // Save the successful booking
 
 

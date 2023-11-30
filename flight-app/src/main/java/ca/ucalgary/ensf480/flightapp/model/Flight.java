@@ -27,6 +27,10 @@ public class Flight {
     @JoinColumn(name = "promo_id")
     private Promo promo;
 
+    @OneToMany
+    @JoinColumn(name = "passenger_id")
+    private Set<Passenger> passengers = new HashSet<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -71,12 +75,11 @@ public class Flight {
     public Flight() {
     }
 
-    // Constructor with seat prices
-    public Flight(String flightNumber, Aircraft aircraft, Destination departureDestination,
-            Destination arrivalDestination, LocalDateTime departureTime,
-            LocalDateTime arrivalTime, BigDecimal ordinaryPrice, BigDecimal comfortPrice,
-            BigDecimal businessPrice, Promo promo) {
 
+    public Flight(String flightNumber, Aircraft aircraft, Destination departureDestination, 
+                  Destination arrivalDestination, LocalDateTime departureTime, 
+                  LocalDateTime arrivalTime, BigDecimal ordinaryPrice, BigDecimal comfortPrice, BigDecimal businessPrice,Promo promo) {
+        
         this.flightNumber = flightNumber;
         this.aircraft = aircraft;
         this.departureDestination = departureDestination;
@@ -197,5 +200,12 @@ public class Flight {
 
     public void setPromo(Promo promo) {
         this.promo = promo;
+    }
+
+    public Set<Passenger> getPassengers() {
+        return passengers;
+    }
+    public void addPassenger(Passenger passenger) {
+        this.passengers.add(passenger);
     }
 }

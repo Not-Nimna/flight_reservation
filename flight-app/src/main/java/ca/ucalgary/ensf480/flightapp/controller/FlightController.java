@@ -15,6 +15,7 @@ package ca.ucalgary.ensf480.flightapp.controller;
 import ca.ucalgary.ensf480.flightapp.DTO.FlightDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.SeatBookingDTO;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
+import ca.ucalgary.ensf480.flightapp.model.Passenger;
 import ca.ucalgary.ensf480.flightapp.service.FlightService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
+
 import ca.ucalgary.ensf480.flightapp.model.Promo;
 
 @RestController
@@ -144,4 +147,13 @@ public class FlightController {
         return ResponseEntity.ok(cities);
     }
 
+    // Get all passengers on a flight - restricted to agents
+    @GetMapping("/{id}/passengers")
+    public ResponseEntity<Set<Passenger>> getPassengers(@PathVariable Long id) {
+        if (!authenticationService.getCurrentUser().isAgent()) {
+            return ResponseEntity.status(403).build();
+        }
+        Set<Passenger> passengers = flightService.getPassengers(id);
+        return ResponseEntity.ok(passengers);
+    }
 }
