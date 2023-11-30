@@ -96,4 +96,13 @@ public class Seat {
     public String getSeatColumn() {
         return seatColumn;
     }
+
+    public void setSeatRow(String seatRow) {
+        this.seatRow = seatRow;
+    }
+
+    public void setSeatColumn(String seatColumn) {
+        this.seatColumn = seatColumn;
+    }
+
 }

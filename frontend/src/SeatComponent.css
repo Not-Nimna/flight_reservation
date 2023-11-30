@@ -1,0 +1,20 @@
+/* SeatComponent.css */
+
+.seat-card {
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.seat-card:hover {
+  background-color: #96e465; /* Set the desired hover background color */
+}
+
+.selected {
+  background-color: #66bb6a; /* Set the desired selected background color */
+  color: #fff; /* Set the desired text color for selected seats */
+}
+
+.booked {
+  background-color: #ef5350; /* Set the desired booked background color */
+  color: #fff; /* Set the desired text color for booked seats */
+}

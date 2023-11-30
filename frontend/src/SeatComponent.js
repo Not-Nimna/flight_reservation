@@ -1,27 +1,35 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios"; // Import Axios if you prefer using it for HTTP requests
+import React from "react";
+import "./SeatComponent.css"; // Import your CSS file for additional styling
 
-const SeatComponent = () => {
-  const [seats, setSeats] = useState([]);
+const SeatComponent = ({ seat, selectedSeat, confirmedSeat, onSeatClick }) => {
+  const isBooked = seat.booked;
+  const isSelected = selectedSeat === seat.seatNumber;
+  const isConfirmed = confirmedSeat === seat.seatNumber;
 
-  useEffect(() => {
-    // Fetch seats for a specific aircraft (replace 123 with the actual aircraft ID)
-    axios
-      .get("http://localhost:8080/api/seats/aircraft/2")
-      .then((response) => setSeats(response.data))
-      .catch((error) => console.error("Error fetching seats:", error));
-  }, []);
+  const getCardClassName = () => {
+    let className = "card seat-card";
+    if (isSelected) {
+      className += " selected";
+    } else if (isBooked) {
+      className += " booked";
+    }
+    return className;
+  };
 
   return (
-    <div>
-      <h3 className="title is-4">Seats for the Selected Aircraft</h3>
-      <ul>
-        {seats.map((seat) => (
-          <li key={seat.id}>
-            {seat.seatNumber} - {seat.seatClass}
-          </li>
-        ))}
-      </ul>
+    <div className="column is-2" key={seat.seatId}>
+      <div
+        className={getCardClassName()}
+        onClick={() => onSeatClick(seat.seatNumber)}>
+        <div className="card-content">
+          <p className="title">{seat.seatNumber}</p>
+          <p className="subtitle">{seat.seatClass}</p>
+          <p className="subtitle">Price: ${seat.price.toFixed(2)}</p>
+          <p className={`subtitle ${isBooked ? "booked-text" : ""}`}>
+            {isBooked ? "Booked" : "Available"}
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

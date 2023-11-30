@@ -15,6 +15,9 @@ const Login = () => {
       const userType = "USER";
       const isCurrent = true;
       const loginUser = { email, password, userType, isCurrent };
+
+      localStorage.setItem("customer", JSON.stringify(loginUser));
+
       console.log(loginUser);
       fetch("http://localhost:8080/api/users", {
         method: "POST",
