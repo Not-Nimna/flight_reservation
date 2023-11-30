@@ -35,7 +35,7 @@ const FlightList = () => {
         <div className="columns is-multiline is-centered">
           {flights.map((flight) => (
             <div className="column is-one-third" key={flight.id}>
-              <Link to={`/seatselectionpage`}>
+              <Link to={`/seatselectionpage/${flight.id}`}>
                 <div className="card">
                   <div className="card-content">
                     <p className="title">{flight.flightNumber}</p>

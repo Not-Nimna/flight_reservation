@@ -15,8 +15,14 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/booking" element={<BookingPage />} />
       <Route path="/flightlist/:destination" element={<FlightList />} />
-      <Route path="/seatselectionpage" element={<SeatSelectionPage />} />
-      <Route path="/paymentpage" element={<PaymentPage />} />
+      <Route
+        path="/seatselectionpage/:flightId"
+        element={<SeatSelectionPage />}
+      />
+      <Route
+        path="/paymentpage/:flightId/:seatNumber"
+        element={<PaymentPage />}
+      />
       <Route path="/myflights" element={<MyFlights />} />
       <Route path="/BrowsePassengers" element={<BrowsePassengers />} />
     </Routes>

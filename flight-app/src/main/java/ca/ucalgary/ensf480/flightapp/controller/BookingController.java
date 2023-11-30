@@ -12,7 +12,6 @@
 
 package ca.ucalgary.ensf480.flightapp.controller;
 
-
 import ca.ucalgary.ensf480.flightapp.DTO.CustomerDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.PaymentDTO;
 import ca.ucalgary.ensf480.flightapp.exception.PaymentFailedException;
@@ -28,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/flight/{flightId}/bookings")
+@CrossOrigin(origins = "http://localhost:3000")
 public class BookingController {
 
     private final BookingService bookingService;
@@ -40,12 +40,15 @@ public class BookingController {
     }
 
     // Endpoint to create a new booking
-@PostMapping("/{seatId}")
-    public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId, 
-                                               @RequestBody BookingRequest bookingRequest) {
+    @PostMapping("/{seatId}")
+    public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId,
+            @RequestBody BookingRequest bookingRequest) {
         try {
-            Long userId = authenticationService.getCurrentUser() != null ? authenticationService.getCurrentUser().getId() : null;
-            Booking booking = bookingService.makeBooking(flightId, seatId, userId, bookingRequest.getCustomerDetails(), bookingRequest.getPaymentDetails());
+            Long userId = authenticationService.getCurrentUser() != null
+                    ? authenticationService.getCurrentUser().getId()
+                    : null;
+            Booking booking = bookingService.makeBooking(flightId, seatId, userId, bookingRequest.getCustomerDetails(),
+                    bookingRequest.getPaymentDetails());
             return ResponseEntity.ok(booking);
         } catch (PaymentFailedException ex) {
             return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(null);
@@ -65,25 +68,24 @@ public class BookingController {
     public static class BookingRequest {
         private CustomerDTO customerDetails;
         private PaymentDTO paymentDetails;
-    
+
         // Standard getters and setters
-    
+
         public CustomerDTO getCustomerDetails() {
             return customerDetails;
         }
-    
+
         public void setCustomerDetails(CustomerDTO customerDetails) {
             this.customerDetails = customerDetails;
         }
-    
+
         public PaymentDTO getPaymentDetails() {
             return paymentDetails;
         }
-    
+
         public void setPaymentDetails(PaymentDTO paymentDetails) {
             this.paymentDetails = paymentDetails;
         }
     }
-    
-    
+
 }

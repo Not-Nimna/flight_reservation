@@ -43,8 +43,7 @@ const BrowsePassengers = () => {
             <div key={flight.id} className="column is-one-third">
               <div
                 className="card"
-                onClick={() => handleFlightSelection(flight.id)}
-              >
+                onClick={() => handleFlightSelection(flight.id)}>
                 <div className="card-content">
                   <p className="title">{flight.airline}</p>
                   <p className="subtitle">

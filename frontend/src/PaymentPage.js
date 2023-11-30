@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const PaymentPage = () => {
+  const { flightId, seatNumber } = useParams();
+  const [customerEmail, setCustomerEmail] = useState("");
   const navigate = useNavigate();
+  const customerInfo = JSON.parse(localStorage.getItem("customer"));
+
   const [creditCardInfo, setCreditCardInfo] = useState({
     cardNumber: "",
     cardHolderName: "",
@@ -32,12 +37,10 @@ const PaymentPage = () => {
     switch (name) {
       case "cardNumber":
         const cleanValue = value.replace(/-/g, "").replace(/\D/g, "");
-
-        // Format the value with hyphens every four digits
         const formattedValue = cleanValue
           .match(/.{1,4}/g)
           ?.join("-")
-          .slice(0, 19); // Limit to 19 characters (16 digits + 3 hyphens)
+          .slice(0, 19);
 
         setCreditCardInfo((prevInfo) => ({
           ...prevInfo,
@@ -81,8 +84,9 @@ const PaymentPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     // Basic validation
     const newErrors = {};
     if (!creditCardInfo.cardNumber) {
@@ -97,18 +101,61 @@ const PaymentPage = () => {
     if (!creditCardInfo.cvv) {
       newErrors.cvv = "CVV is required";
     }
+
     // Check if there are errors before submitting
     if (Object.keys(newErrors).length === 0) {
-      console.log("Credit Card Info:", creditCardInfo);
-      // You might want to send this data to a server or API for further processing
+      try {
+        // Send payment data to the server
+        const storedSeatId = localStorage.getItem("seatId");
+        const response = await fetch(
+          `http://localhost:8080/api/flight/${flightId}/bookings/${storedSeatId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              customerDetails: {
+                name: customerInfo.email,
+                email: customerEmail,
+              },
+              paymentDetails: {
+                cardNumber: creditCardInfo.cardNumber,
+                cardExpiryMonth: creditCardInfo.expirationDate.split("/")[0], // Extract MM from MM/YYYY
+                cardExpiryYear: creditCardInfo.expirationDate.split("/")[1], // Extract YYYY from MM/YYYY
+                cardCvv: creditCardInfo.cvv,
+              },
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          // Handle server error
+          throw new Error("Server error during payment");
+        }
+
+        console.log("Payment successful!");
+        navigate("/booking");
+        // Reset form fields
+        setCreditCardInfo({
+          cardNumber: "",
+          cardHolderName: "",
+          expirationDate: "",
+          cvv: "",
+        });
+        setErrors({
+          cardNumber: "",
+          cardHolderName: "",
+          expirationDate: "",
+          cvv: "",
+        });
+      } catch (error) {
+        console.error("Error during payment:", error.message);
+        // Handle the server error, show a message to the user, etc.
+      }
     } else {
       setErrors(newErrors);
     }
-  };
-
-  const handlePayment = () => {
-    alert("Payment successful!");
-    navigate("/booking");
   };
 
   const handleGoBack = () => {
@@ -121,6 +168,27 @@ const PaymentPage = () => {
         <div className="box">
           <h2 className="title">Payment Page</h2>
           <form onSubmit={handleSubmit}>
+            <div className="field">
+              <label className="label">Email</label>
+              <div className="control is-offset-2 column is-8">
+                <input
+                  className={`input ${errors.email ? "is-danger" : ""}`}
+                  type="email"
+                  name="email"
+                  value={customerEmail}
+                  onChange={(e) => {
+                    setCustomerEmail(e.target.value);
+                    handleInputChange(e);
+                  }}
+                  placeholder="Enter email address"
+                />
+              </div>
+              {errors.email && (
+                <p className="help is-danger has-text-danger-bold">
+                  {errors.email}
+                </p>
+              )}
+            </div>
             <div className="field">
               <label className="label">Card Number</label>
               <div className="control is-offset-4 column is-4 ">
@@ -136,7 +204,9 @@ const PaymentPage = () => {
                 />
               </div>
               {errors.cardNumber && (
-                <p className="help is-danger">{errors.cardNumber}</p>
+                <p className="help is-danger has-text-danger-bold">
+                  {errors.cardNumber}
+                </p>
               )}
             </div>
             <div className="field">
@@ -154,7 +224,9 @@ const PaymentPage = () => {
                 />
               </div>
               {errors.cardHolderName && (
-                <p className="help is-danger">{errors.cardHolderName}</p>
+                <p className="help is-danger has-text-danger-bold">
+                  {errors.cardHolderName}
+                </p>
               )}
             </div>
             <div className="field ">
@@ -176,7 +248,9 @@ const PaymentPage = () => {
                     />
                   </div>
                   {errors.expirationDate && (
-                    <p className="help is-danger">{errors.expirationDate}</p>
+                    <p className="help is-danger has-text-danger-bold">
+                      {errors.expirationDate}
+                    </p>
                   )}
                 </div>
               </div>
@@ -194,15 +268,18 @@ const PaymentPage = () => {
                   placeholder="Enter CVV"
                 />
               </div>
-              {errors.cvv && <p className="help is-danger ">{errors.cvv}</p>}
+              {errors.cvv && (
+                <p className="help is-danger has-text-danger-bold">
+                  {errors.cvv}
+                </p>
+              )}
             </div>
             <div className="field">
               <div className="control">
                 <button
                   className="button is-primary mx-4"
                   type="submit"
-                  onClick={handlePayment}
-                >
+                  onClick={handleSubmit}>
                   Submit Payment
                 </button>
                 <button className="button is-danger" onClick={handleGoBack}>
