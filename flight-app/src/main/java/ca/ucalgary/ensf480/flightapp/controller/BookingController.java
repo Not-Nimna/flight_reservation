@@ -20,6 +20,9 @@ import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,23 +48,33 @@ public class BookingController {
     // @RequestMapping("/bookings") // get request
 
     // Get the bookings for a flight - used by agent
-    // @RequestMappin("/flight/{flightID}/bookings")
+    @RequestMapping("/flight/{flightID}/bookings")
+    public List<Booking> getBookingsForFlight(@PathVariable Long flightID) {
+        return bookingService.getBookingsByFlight(flightID);
+
+    }
 
     // Endpoint to create a new booking
     @PostMapping("flight/{flightId}/bookings/{seatId}")
     public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId,
             @RequestBody BookingRequest bookingRequest) {
         try {
-            Long userId = authenticationService.getCurrentUser() != null
-                    ? authenticationService.getCurrentUser().getId()
-                    : null;
-            Booking booking = bookingService.makeBooking(flightId, seatId, userId, bookingRequest.getCustomerDetails(),
-                    bookingRequest.getPaymentDetails());
+            // Long userId = authenticationService.getCurrentUser() != null
+            // ? authenticationService.getCurrentUser().getId()
+            // : null;
+            // make a random userid
+            Long userId = ThreadLocalRandom.current().nextLong();
+            Booking booking = bookingService.makeBooking(flightId, seatId, userId, bookingRequest.customerDetails,
+                    bookingRequest.paymentDetails);
             return ResponseEntity.ok(booking);
-        } catch (PaymentFailedException ex) {
-            return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(null);
-        } catch (ResourceNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+            // } catch (PaymentFailedException ex) {
+            // return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(null);
+            // } catch (ResourceNotFoundException ex) {
+            // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            // }
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 

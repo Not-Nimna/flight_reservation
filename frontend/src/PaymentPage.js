@@ -6,7 +6,8 @@ const PaymentPage = () => {
   const { flightId, seatNumber } = useParams();
   const [customerEmail, setCustomerEmail] = useState("");
   const navigate = useNavigate();
-  const customerInfo = JSON.parse(localStorage.getItem("customer"));
+  const customer = JSON.parse(localStorage.getItem("customer"));
+  console.log(customer.email);
 
   const [creditCardInfo, setCreditCardInfo] = useState({
     cardNumber: "",
@@ -116,7 +117,7 @@ const PaymentPage = () => {
             },
             body: JSON.stringify({
               customerDetails: {
-                name: customerInfo.email,
+                name: customer.email,
                 email: customerEmail,
               },
               paymentDetails: {
@@ -159,12 +160,14 @@ const PaymentPage = () => {
   };
 
   const handleGoBack = () => {
-    navigate("/seatselectionpage");
+    navigate(-1);
   };
 
   return (
     <div className="container has-text-centered">
-      <section className="section">
+      <section
+        className="section has-background-primary"
+        style={{ minHeight: "100vh" }}>
         <div className="box">
           <h2 className="title">Payment Page</h2>
           <form onSubmit={handleSubmit}>

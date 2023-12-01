@@ -34,6 +34,10 @@ const SeatSelectionPage = () => {
     setSelectedSeat(seatNumber);
   };
 
+  const handleBack = () => {
+    navigate(-1); // Navigate back one step in the history
+  };
+
   const handleConfirmation = (event) => {
     event.preventDefault();
     setConfirmedSeat(selectedSeat);
@@ -88,7 +92,9 @@ const SeatSelectionPage = () => {
 
   return (
     <div className="container">
-      <section className="section">
+      <section
+        className="section has-background-primary"
+        style={{ minHeight: "100vh" }}>
         <div className="container">
           <form>
             <div className="field">
@@ -117,14 +123,14 @@ const SeatSelectionPage = () => {
           </form>
           <div>
             {confirmedSeat && (
-              <div className="notification is-success m-4 has-text-centered">
+              <div className="notification is-warning m-4 has-text-centered">
                 Seat {confirmedSeat.seatNumber} confirmed!
               </div>
             )}
             {confirmedSeat && (
               <div className="has-text-centered">
                 <button
-                  className="button is-warning mt-3"
+                  className="button is-danger mt-3"
                   onClick={handlePayment}>
                   Proceed to Payment
                 </button>

@@ -10,7 +10,6 @@ import java.util.Optional;
 
 // Move the logic of this service to the booking service.
 
-
 @Service
 public class PassengerService {
 
@@ -23,7 +22,7 @@ public class PassengerService {
 
     public Optional<Passenger> getPassengerById(Long id) {
         return passengerRepository.findById(id);
-        bookingRepository.findByFlight(id);
+
     }
 
     public List<Passenger> getAllPassengers() {
@@ -32,7 +31,7 @@ public class PassengerService {
 
     public List<Passenger> searchPassengers(String query) {
         return null; // Replace with actual search logic
-    }   
+    }
 
     public Passenger createPassenger(Passenger passenger) {
         return passengerRepository.save(passenger);

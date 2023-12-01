@@ -5,6 +5,7 @@ import "bulma/css/bulma.min.css";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("user"); // Default to "user"
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
@@ -12,13 +13,13 @@ const Login = () => {
     if (username !== "" && password !== "") {
       setLoggedIn(true);
       const email = username;
-      const userType = "USER";
       const isCurrent = true;
       const loginUser = { email, password, userType, isCurrent };
 
       localStorage.setItem("customer", JSON.stringify(loginUser));
 
-      console.log(loginUser);
+      const url = userType === "flightcrew" ? "/flightcrew" : "/booking";
+
       fetch("http://localhost:8080/api/users", {
         method: "POST",
         headers: {
@@ -26,7 +27,7 @@ const Login = () => {
         },
         body: JSON.stringify(loginUser),
       }).then((json) => {
-        navigate("/booking");
+        navigate(url);
         console.log(json);
       });
     } else {
@@ -35,7 +36,9 @@ const Login = () => {
   };
 
   return (
-    <div className="section">
+    <div
+      className="section has-background-primary"
+      style={{ minHeight: "100vh" }}>
       <div className="container">
         <div className="columns is-centered">
           <div className="column is-half">
@@ -68,6 +71,19 @@ const Login = () => {
                           onChange={(e) => setPassword(e.target.value)}
                           className="input"
                         />
+                      </div>
+                    </div>
+                    <div className="field">
+                      <label className="label">User Type:</label>
+                      <div className="control">
+                        <div className="select">
+                          <select
+                            value={userType}
+                            onChange={(e) => setUserType(e.target.value)}>
+                            <option value="user">User</option>
+                            <option value="flightcrew">Flight Crew</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
                     <div className="field">

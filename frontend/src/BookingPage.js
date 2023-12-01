@@ -37,7 +37,9 @@ const BookingPage = () => {
   };
 
   return (
-    <div className="section">
+    <div
+      className="section has-background-primary"
+      style={{ minHeight: "100vh" }}>
       <div className="container">
         <div className="card">
           <div className="card-content has-text-centered">
