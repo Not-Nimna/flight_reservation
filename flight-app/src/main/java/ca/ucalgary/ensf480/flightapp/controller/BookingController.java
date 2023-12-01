@@ -42,6 +42,29 @@ public class BookingController {
         this.authenticationService = authenticationService;
     }
 
+    public static class BookingRequest {
+        private CustomerDTO customerDetails;
+        private PaymentDTO paymentDetails;
+
+        // Standard getters and setters
+
+        public CustomerDTO getCustomerDetails() {
+            return this.customerDetails;
+        }
+
+        public void setCustomerDetails(CustomerDTO customerDetails) {
+            this.customerDetails = customerDetails;
+        }
+
+        public PaymentDTO getPaymentDetails() {
+            return this.paymentDetails;
+        }
+
+        public void setPaymentDetails(PaymentDTO paymentDetails) {
+            this.paymentDetails = paymentDetails;
+        }
+    }
+
     // Add these:
 
     // Get bookings for a given user
@@ -58,14 +81,15 @@ public class BookingController {
     @PostMapping("flight/{flightId}/bookings/{seatId}")
     public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId,
             @RequestBody BookingRequest bookingRequest) {
+
         try {
             // Long userId = authenticationService.getCurrentUser() != null
             // ? authenticationService.getCurrentUser().getId()
             // : null;
             // make a random userid
             Long userId = ThreadLocalRandom.current().nextLong();
-            Booking booking = bookingService.makeBooking(flightId, seatId, userId, bookingRequest.customerDetails,
-                    bookingRequest.paymentDetails);
+            Booking booking = bookingService.makeBooking(flightId, seatId, userId, bookingRequest.getCustomerDetails(),
+                    bookingRequest.getPaymentDetails());
             return ResponseEntity.ok(booking);
 
             // } catch (PaymentFailedException ex) {
@@ -86,27 +110,5 @@ public class BookingController {
     }
 
     // Inner class for booking request data
-    public static class BookingRequest {
-        private CustomerDTO customerDetails;
-        private PaymentDTO paymentDetails;
-
-        // Standard getters and setters
-
-        public CustomerDTO getCustomerDetails() {
-            return customerDetails;
-        }
-
-        public void setCustomerDetails(CustomerDTO customerDetails) {
-            this.customerDetails = customerDetails;
-        }
-
-        public PaymentDTO getPaymentDetails() {
-            return paymentDetails;
-        }
-
-        public void setPaymentDetails(PaymentDTO paymentDetails) {
-            this.paymentDetails = paymentDetails;
-        }
-    }
 
 }
