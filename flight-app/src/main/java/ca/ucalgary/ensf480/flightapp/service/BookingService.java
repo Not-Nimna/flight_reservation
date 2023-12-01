@@ -104,10 +104,8 @@ public class BookingService {
             throw new PaymentFailedException("Payment processing failed");
         }
 
-        
-        Booking booking = new Booking(flight, seat, price, user, payment);
-
-        Passenger passenger = new Passenger(customer.getName());
+        Passenger passenger = new Passenger(customer.getName(), customer.getEmail(), customer.getId());
+        Booking booking = new Booking(flight, seat, price, user, payment, passenger);
         flight.addPassenger(passenger);
 
         return bookingRepository.save(booking); // Save the successful booking

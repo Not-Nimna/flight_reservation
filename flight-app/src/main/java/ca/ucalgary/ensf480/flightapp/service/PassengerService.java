@@ -23,7 +23,7 @@ public class PassengerService {
 
     public Optional<Passenger> getPassengerById(Long id) {
         return passengerRepository.findById(id);
-        bookingRepository.findByFlight(id);
+ //       bookingRepository.findByFlight(id);
     }
 
     public List<Passenger> getAllPassengers() {

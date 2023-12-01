@@ -56,6 +56,11 @@ public class Booking {
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment; // The payment associated with this booking
 
+    // Passenger associated with this booking
+    @ManyToOne
+    @JoinColumn(name = "passenger_id", nullable = false)
+    private Passenger passenger;
+
 
     // Constructors, getters, and setters
 
@@ -63,13 +68,14 @@ public class Booking {
         this.cancellationCode = UUID.randomUUID().toString(); // Generate a unique cancellation code
     }
 
-    public Booking(Flight flight, Seat seat, BigDecimal pricePaid, User user, Payment payment) {
+    public Booking(Flight flight, Seat seat, BigDecimal pricePaid, User user, Payment payment, Passenger passenger) {
         this();
         this.flight = flight;
         this.seat = seat;
         this.pricePaid = pricePaid;
         this.user = user;
         this.payment = payment;
+        this.passenger = passenger;
         generateCancellationCode();
     }
 
@@ -131,5 +137,11 @@ public class Booking {
     }
 
     public void setPayment(Payment payment2) {
+    }
+    public Passenger getPassenger() {
+        return passenger;
+    }
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
     }
 }
