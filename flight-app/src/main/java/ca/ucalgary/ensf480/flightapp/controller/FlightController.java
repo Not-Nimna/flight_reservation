@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/flights")
+@RequestMapping("/api")
 public class FlightController {
 
     private final FlightService flightService;
@@ -41,21 +41,21 @@ public class FlightController {
     }
 
     // Get all flights - accessible to all users
-    @GetMapping
+    @GetMapping("/public/flights")
     public ResponseEntity<List<FlightDTO>> getAllFlights() {
         List<FlightDTO> flights = flightService.getAllFlights();
         return ResponseEntity.ok(flights);
     }
 
     // GET endpoint to retrieve seat map for a flight
-    @GetMapping("/{id}/seatMap")
+    @GetMapping("/public/flights/{id}/seatMap")
     public ResponseEntity<List<SeatBookingDTO>> getSeatMap(@PathVariable Long id) {
         List<SeatBookingDTO> seatMap = bookingService.getSeatMap(id);
         return ResponseEntity.ok(seatMap);
     }
     
     // Get a single flight by ID - accessible to all users
-    @GetMapping("/{id}")
+    @GetMapping("/public/flights/{id}")
     public ResponseEntity<Flight> getFlightById(@PathVariable Long id) {
         return flightService.getFlightById(id)
                 .map(ResponseEntity::ok)
@@ -63,38 +63,32 @@ public class FlightController {
     }
 
     // Search flights - accessible to all users
-    @GetMapping("/search")
+    @GetMapping("/public/flights/search")
     public ResponseEntity<List<Flight>> searchFlights(@RequestParam String query) {
         return ResponseEntity.ok(flightService.searchFlights(query));
     }
 
     // Create a new flight - restricted to admins
-    @PostMapping
+    @PostMapping("/admin/flights")
     public ResponseEntity<Flight> createFlight(@RequestBody Flight flight) {
-        if (!authenticationService.getCurrentUser().isAdmin()) {
-            return ResponseEntity.status(403).build();
-        }
+
         Flight createdFlight = flightService.createFlight(flight);
         return ResponseEntity.ok(createdFlight);
     }
 
     // Update an existing flight - restricted to admins
-    @PutMapping("/{id}")
+    @PutMapping("/admin/flights/{id}")
     public ResponseEntity<Flight> updateFlight(@PathVariable Long id, @RequestBody Flight flight) {
-        if (!authenticationService.getCurrentUser().isAdmin()) {
-            return ResponseEntity.status(403).build();
-        }
+
         return flightService.updateFlight(id, flight)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     // Delete a flight - restricted to admins
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/admin/flights/{id}")
     public ResponseEntity<Void> deleteFlight(@PathVariable Long id) {
-        if (!authenticationService.getCurrentUser().isAdmin()) {
-            return ResponseEntity.status(403).build();
-        }
+
         flightService.deleteFlight(id);
         return ResponseEntity.ok().build();
     }

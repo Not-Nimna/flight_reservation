@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/aircraft")
+@RequestMapping("/api/admin/aircraft")
 public class AircraftController {
 
     private final AircraftService aircraftService;
@@ -25,18 +25,14 @@ public class AircraftController {
     // Get all aircraft - restricted to admins
     @GetMapping
     public ResponseEntity<List<Aircraft>> getAllAircraft() {
-        if (!authenticationService.getCurrentUser().isAdmin()) {
-            return ResponseEntity.status(403).build();
-        }
+
         return ResponseEntity.ok(aircraftService.getAllAircraft());
     }
 
     // Get aircraft by ID - restricted to admins
     @GetMapping("/{id}")
     public ResponseEntity<Aircraft> getAircraftById(@PathVariable Long id) {
-        if (!authenticationService.getCurrentUser().isAdmin()) {
-            return ResponseEntity.status(403).build();
-        }
+
         return aircraftService.getAircraftById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -45,9 +41,7 @@ public class AircraftController {
     // Create a new aircraft - restricted to admins
     @PostMapping
     public ResponseEntity<Aircraft> createAircraft(@RequestBody Aircraft aircraft) {
-        if (!authenticationService.getCurrentUser().isAdmin()) {
-            return ResponseEntity.status(403).build();
-        }
+
         Aircraft createdAircraft = aircraftService.createAircraft(aircraft);
         return ResponseEntity.ok(createdAircraft);
     }
@@ -55,9 +49,7 @@ public class AircraftController {
     // Update an existing aircraft - restricted to admins
     @PutMapping("/{id}")
     public ResponseEntity<Aircraft> updateAircraft(@PathVariable Long id, @RequestBody Aircraft aircraft) {
-        if (!authenticationService.getCurrentUser().isAdmin()) {
-            return ResponseEntity.status(403).build();
-        }
+
         return aircraftService.updateAircraft(id, aircraft)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -66,9 +58,7 @@ public class AircraftController {
     // Delete an aircraft - restricted to admins
     @DeleteMapping("/{id}")
     public ResponseEntity<Aircraft> deleteAircraft(@PathVariable Long id) {
-        if (!authenticationService.getCurrentUser().isAdmin()) {
-            return ResponseEntity.status(403).build();
-        }
+
         aircraftService.deleteAircraft(id);
         return ResponseEntity.ok().build();
     }    

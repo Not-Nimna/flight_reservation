@@ -25,9 +25,7 @@ public class CrewController {
     // Get crew members for a specific flight (only if admin)
     @GetMapping
     public ResponseEntity<List<Crew>> getCrewByFlight(@PathVariable Long flightId) {
-        if (!authenticationService.getCurrentUser().isAdmin()) {
-            return ResponseEntity.status(403).build(); // Forbidden access
-        }
+
         List<Crew> crewMembers = crewService.getCrewByFlightId(flightId);
         return ResponseEntity.ok(crewMembers);
     }

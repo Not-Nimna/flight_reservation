@@ -13,7 +13,11 @@
 package ca.ucalgary.ensf480.flightapp.model;
 
 import jakarta.persistence.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Set;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "users")
@@ -29,9 +33,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserType userType;
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Set<Role> roles;
 
     // Constructors, Getters, and Setters
 
@@ -41,7 +45,7 @@ public class User {
     public User(String email, String password, UserType userType) {
         this.email = email;
         setPassword(password);
-        this.userType = userType;
+
     }
 
     public Long getId() {
@@ -64,31 +68,15 @@ public class User {
         return password;
     }
 
-    // Use Spring Security's BCryptPasswordEncoder to set the password securely
     public void setPassword(String password) {
-        this.password = new BCryptPasswordEncoder().encode(password);
+        this.password = password;
     }
 
-    public UserType getUserType() {
-        return userType;
+    public Set<Role> getRoles() {
+        return roles;
     }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
-    // Custom methods for user type checks can be helpful
-
-    public boolean isAdmin() {
-        return this.userType == UserType.ADMIN;
-    }
-
-    public boolean isAgent() {
-        return this.userType == UserType.AGENT;
-    }
-
-    public boolean isUser() {
-        return this.userType == UserType.USER;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public User orElse(Object object) {

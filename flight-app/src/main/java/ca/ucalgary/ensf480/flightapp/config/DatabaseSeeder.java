@@ -3,6 +3,7 @@ package ca.ucalgary.ensf480.flightapp.config;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,9 +29,31 @@ public class DatabaseSeeder {
     @Autowired
     private AircraftRepository aircraftRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
 
     @PostConstruct
     public void seedDatabase() {
+
+        Role role = new Role();
+        role.setName("ROLE_USER");
+        roleRepository.save(role);
+
+        Role role2 = new Role();
+        role2.setName("ROLE_AGENT");
+        roleRepository.save(role2);
+
+        Role role3 = new Role();
+        role3.setName("ROLE_ADMIN");
+        roleRepository.save(role3);
+
+        // Should create a User with admin role.
+        User user = new User();
+        user.setEmail("admin@example.com");
+        user.setPassword("password");
+
+        Role roles = roleRepository.findByName("ROLE_ADMIN").get();
+        user.setRoles(Collections.singleton(roles));
         
 
         // Create some destinations
