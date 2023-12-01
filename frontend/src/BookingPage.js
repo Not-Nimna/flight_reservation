@@ -28,6 +28,7 @@ const BookingPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    localStorage.setItem("destination", bookingData.destination);
     navigate(`/flightlist/${bookingData.destination}`);
     console.log(bookingData);
   };

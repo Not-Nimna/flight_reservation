@@ -97,9 +97,11 @@ public class BookingService {
 
         // Only create booking if payment is successful
 
-        // if (payment.getPaymentStatus() != PaymentStatus.SUCCESS) {
-        // throw new PaymentFailedException("Payment processing failed");
-        // }
+
+        if (payment.getPaymentStatus() != PaymentStatus.SUCCESS) {
+            throw new PaymentFailedException("Payment processing failed");
+        }
+
 
         Booking booking = new Booking(flight, seat, price, user, payment);
         return bookingRepository.save(booking); // Save the successful booking
@@ -137,6 +139,12 @@ public class BookingService {
             }).collect(Collectors.toList());
         }
         return null; // Or handle this case as per your application's requirements
+    }
+
+    public List<Booking> getBookings(long userId) {
+
+        return bookingRepository.findByUserId(userId);
+
     }
 
     public List<Booking> getBookingsByFlight(long flightId) {

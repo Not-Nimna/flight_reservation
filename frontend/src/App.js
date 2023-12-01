@@ -5,6 +5,7 @@ import BookingPage from "./BookingPage";
 import FlightCrewPage from "./FlightCrew";
 import PassengersFlight from "./PassengersFlight";
 import FlightList from "./FlightList";
+import FlightCrewPage from "./FlightCrew";
 import SeatSelectionPage from "./SeatSelectionPage";
 import PaymentPage from "./PaymentPage";
 import MyFlights from "./MyFlights";
@@ -17,6 +18,7 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/booking" element={<BookingPage />} />
       <Route path="/flightcrew" element={<FlightCrewPage />} />
+
       <Route
         path="/passengersflight/:flightId"
         element={<PassengersFlight />}

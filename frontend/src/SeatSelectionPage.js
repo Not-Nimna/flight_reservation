@@ -59,6 +59,10 @@ const SeatSelectionPage = () => {
     navigate(`/paymentpage/${flightId}/${confirmedSeat}`);
   };
 
+  const handleGoBack = () => {
+    navigate(`/flightlist/${localStorage.getItem("destination")}`);
+  };
+
   const renderSeats = () => {
     const seatsByRow = {};
 
@@ -120,10 +124,12 @@ const SeatSelectionPage = () => {
                 </button>
               </div>
             </div>
+
             <div className="field mt-4">
               <div className="control has-text-centered">
                 <button className="button is-warning" onClick={handleBack}>
                   Back
+
                 </button>
               </div>
             </div>

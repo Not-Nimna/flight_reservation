@@ -20,7 +20,6 @@ import ca.ucalgary.ensf480.flightapp.service.FlightService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
