@@ -20,10 +20,9 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 @Entity
 @Table(name = "bookings")
-@JsonIgnoreProperties({"user", "seat", "flight", "payment"})
+@JsonIgnoreProperties({ "user", "seat", "flight", "payment" })
 public class Booking {
 
     @Id
@@ -56,7 +55,6 @@ public class Booking {
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment; // The payment associated with this booking
 
-
     // Constructors, getters, and setters
 
     public Booking() {
@@ -85,7 +83,7 @@ public class Booking {
 
     public void setId(Long id) {
         this.id = id;
-    } 
+    }
 
     public String getCancellationCode() {
         return cancellationCode;

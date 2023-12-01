@@ -20,7 +20,6 @@ import ca.ucalgary.ensf480.flightapp.service.FlightService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +40,8 @@ public class FlightController {
     private final AuthenticationService authenticationService;
 
     // @Autowired
-    public FlightController(FlightService flightService, BookingService bookingService, AuthenticationService authenticationService) {
+    public FlightController(FlightService flightService, BookingService bookingService,
+            AuthenticationService authenticationService) {
 
         this.flightService = flightService;
         this.bookingService = bookingService;
@@ -57,9 +57,10 @@ public class FlightController {
 
     // // GET endpoint to retrieve seat map for a flight
     // @GetMapping("/{id}/seatMap")
-    // public ResponseEntity<List<SeatBookingDTO>> getSeatMap(@PathVariable Long id) {
-    //     List<SeatBookingDTO> seatMap = bookingService.getSeatMap(id);
-    //     return ResponseEntity.ok(seatMap);
+    // public ResponseEntity<List<SeatBookingDTO>> getSeatMap(@PathVariable Long id)
+    // {
+    // List<SeatBookingDTO> seatMap = bookingService.getSeatMap(id);
+    // return ResponseEntity.ok(seatMap);
     // }
     @GetMapping("/{id}/seatMap")
     public ResponseEntity<List<SeatBookingDTO>> getSeatMap(@PathVariable Long id) {
@@ -89,7 +90,7 @@ public class FlightController {
         // Ensure the discounted price is non-negative
         return discountedPrice.max(BigDecimal.ZERO);
     }
-    
+
     // Get a single flight by ID - accessible to all users
     @GetMapping("/{id}")
     public ResponseEntity<Flight> getFlightById(@PathVariable Long id) {

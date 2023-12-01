@@ -71,5 +71,5 @@ public class AircraftController {
         }
         aircraftService.deleteAircraft(id);
         return ResponseEntity.ok().build();
-    }    
+    }
 }

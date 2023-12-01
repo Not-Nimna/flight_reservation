@@ -10,3 +10,22 @@ EXIT;
 
 To run ther server run: 
 ./mvnw spring-boot:run
+
+
+to view tables:
+
+USE flight-app;
+
+-- Show contents of each table
+SELECT * FROM aircrafts;
+SELECT * FROM bookings;
+SELECT * FROM crew;
+SELECT * FROM customers;
+SELECT * FROM destinations;
+SELECT * FROM flight_crew;
+SELECT * FROM flights;
+SELECT * FROM payments;
+SELECT * FROM promos;
+SELECT * FROM seat_prices;
+SELECT * FROM seats;
+SELECT * FROM users;
