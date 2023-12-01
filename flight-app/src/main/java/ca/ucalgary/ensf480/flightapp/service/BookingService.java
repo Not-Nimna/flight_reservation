@@ -90,6 +90,7 @@ public class BookingService {
         }
 
         BigDecimal price = pricingService.calculatePrice(seat, flight);
+        price = pricingService.calculatePromoPrice(flight, user, price);
 
         Customer customer = customerService.createOrUpdateCustomer(customerDTO, user);
 
@@ -126,7 +127,7 @@ public class BookingService {
     }
 
     
-    public List<SeatBookingDTO> getSeatMap(Long flightId) {
+    public List<SeatBookingDTO> getSeatMap(Long flightId, User user) {
         Optional<Flight> optionalFlight = flightRepository.findById(flightId);
 
         if (optionalFlight.isPresent()) {
@@ -137,6 +138,7 @@ public class BookingService {
             return seats.stream().map(seat -> {
                 // Calculate the current price for the seat
                 BigDecimal currentPrice = pricingService.calculatePrice(seat, flight);
+                currentPrice = pricingService.calculatePromoPrice(flight, user, currentPrice);
 
                 // Check if the seat is booked
                 boolean isBooked = bookings.stream()

@@ -20,12 +20,30 @@ public class PricingService {
     // It should check if there is a promo for the given flight, and if the user is not null
     // and then apply the promo.
     // to improve performance, it should probably take in the promo as a param to preven n+1 queries.
-    public BigDecimal calculatePrice(Seat seat, Flight flight, User user) {
+    public BigDecimal calculatePrice(Seat seat, Flight flight) {
         // Retrieve the base price for the seat class of this seat on this flight
         return flightSeatPriceRepository.findByFlightAndSeatClass(flight, seat.getSeatClass())
                                         .map(FlightSeatPrice::getPrice)
                                         .orElseThrow(() -> new RuntimeException("Base price not found for seat class: " 
                                                      + seat.getSeatClass() + " on flight: " + flight.getId()));
+    }
+    public BigDecimal calculatePromoPrice(Flight flight, User user, BigDecimal currentPrice) {
+        Promo promotion = flight.getPromo();
+        boolean isUserRegistered = user != null;
+
+        if (promotion != null && isUserRegistered) {
+            double discount = promotion.getDiscount();
+
+            currentPrice = applyPromotion(currentPrice, BigDecimal.valueOf(discount));
+        }
+        return currentPrice;
+    }
+
+    public BigDecimal applyPromotion(BigDecimal originalPrice, BigDecimal discount) {
+        // Apply the promotion discount to the original price
+        BigDecimal discountedPrice = originalPrice.subtract(originalPrice.multiply(discount));
+        // Ensure the discounted price is non-negative
+        return discountedPrice.max(BigDecimal.ZERO);
     }
 
     // Additional methods as needed
