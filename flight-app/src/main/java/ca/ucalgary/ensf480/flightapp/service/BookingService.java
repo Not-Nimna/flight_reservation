@@ -139,12 +139,15 @@ public class BookingService {
         return null; // Or handle this case as per your application's requirements
     }
 
-    public Iterable<Booking> getBookings(int userId) {
-        // typecast to long
-        Long userIdLong = (long) userId;
-        {
-            return bookingRepository.findByUserId(userIdLong);
-        }
+    public List<Booking> getBookings(long userId) {
+
+        return bookingRepository.findByUserId(userId);
+
+    }
+
+    public List<Booking> getBookingsByFlight(long flightId) {
+
+        return bookingRepository.findByFlightId(flightId);
     }
 
 }

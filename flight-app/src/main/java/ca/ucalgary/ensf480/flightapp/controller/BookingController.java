@@ -20,6 +20,8 @@ import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -96,13 +98,28 @@ public class BookingController {
 
     // api endpoint to get all bookings for a given user
     @GetMapping("/bookings/{userId}")
-    public ResponseEntity<Iterable<Booking>> getBookings(@PathVariable int userId) {
+    public ResponseEntity<List<Booking>> getBookings(@PathVariable long userId) {
         try {
             // Long userId = authenticationService.getCurrentUser() != null
             // ? authenticationService.getCurrentUser().getId()
             // : null;
 
-            Iterable<Booking> bookings = bookingService.getBookings(userId);
+            List<Booking> bookings = bookingService.getBookings(userId);
+            return ResponseEntity.ok(bookings);
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    // api endpoint to get all bookings for a given flight
+    @GetMapping("/flight/{flightId}/bookings")
+    public ResponseEntity<List<Booking>> getBookingsByFlight(@PathVariable long flightId) {
+        try {
+            // Long userId = authenticationService.getCurrentUser() != null
+            // ? authenticationService.getCurrentUser().getId()
+            // : null;
+
+            List<Booking> bookings = bookingService.getBookingsByFlight(flightId);
             return ResponseEntity.ok(bookings);
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
