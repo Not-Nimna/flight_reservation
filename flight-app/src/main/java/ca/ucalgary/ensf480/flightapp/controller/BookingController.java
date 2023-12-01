@@ -20,27 +20,33 @@ import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/flight/{flightId}/bookings")
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000")
 public class BookingController {
 
     private final BookingService bookingService;
     private final AuthenticationService authenticationService;
 
-    @Autowired
     public BookingController(BookingService bookingService, AuthenticationService authenticationService) {
         this.bookingService = bookingService;
         this.authenticationService = authenticationService;
     }
 
+    // Add these:
+
+    // Get bookings for a given user
+    // @RequestMapping("/bookings") // get request
+
+    // Get the bookings for a flight - used by agent
+    // @RequestMappin("/flight/{flightID}/bookings")
+
     // Endpoint to create a new booking
-    @PostMapping("/{seatId}")
+    @PostMapping("flight/{flightId}/bookings/{seatId}")
     public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId,
             @RequestBody BookingRequest bookingRequest) {
         try {
@@ -85,6 +91,21 @@ public class BookingController {
 
         public void setPaymentDetails(PaymentDTO paymentDetails) {
             this.paymentDetails = paymentDetails;
+        }
+    }
+
+    // api endpoint to get all bookings for a given user
+    @GetMapping("/bookings/{userId}")
+    public ResponseEntity<Iterable<Booking>> getBookings(@PathVariable int userId) {
+        try {
+            // Long userId = authenticationService.getCurrentUser() != null
+            // ? authenticationService.getCurrentUser().getId()
+            // : null;
+
+            Iterable<Booking> bookings = bookingService.getBookings(userId);
+            return ResponseEntity.ok(bookings);
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 

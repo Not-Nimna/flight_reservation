@@ -159,7 +159,7 @@ const PaymentPage = () => {
   };
 
   const handleGoBack = () => {
-    navigate("/seatselectionpage");
+    navigate(-1);
   };
 
   return (

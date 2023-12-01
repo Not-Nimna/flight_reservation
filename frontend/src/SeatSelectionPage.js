@@ -55,6 +55,10 @@ const SeatSelectionPage = () => {
     navigate(`/paymentpage/${flightId}/${confirmedSeat}`);
   };
 
+  const handleGoBack = () => {
+    navigate(`/flightlist/${localStorage.getItem("destination")}`);
+  };
+
   const renderSeats = () => {
     const seatsByRow = {};
 
@@ -111,6 +115,13 @@ const SeatSelectionPage = () => {
                   onClick={handleConfirmation}
                   disabled={!selectedSeat}>
                   Confirm Selection
+                </button>
+              </div>
+            </div>
+            <div className="field mt-3">
+              <div className="control has-text-centered">
+                <button className="button is-warning" onClick={handleGoBack}>
+                  Go Back
                 </button>
               </div>
             </div>
