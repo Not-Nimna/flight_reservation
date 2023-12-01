@@ -1,10 +1,10 @@
 package ca.ucalgary.ensf480.flightapp.DTO;
 
 
-public class LoginDTO {
+public class LoginRequest {
     private String username;
     private String password;   
-    public LoginDTO() {      }   
+    public LoginRequest() {      }   
     public String getUsername() {      
         return username;   
     }   

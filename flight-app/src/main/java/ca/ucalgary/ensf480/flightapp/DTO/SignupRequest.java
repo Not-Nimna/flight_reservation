@@ -1,18 +1,16 @@
 package ca.ucalgary.ensf480.flightapp.DTO;
 
-public class SignupDTO {
-    private String name;
+import java.util.Set;
+
+public class SignupRequest {
     private String username;
     private String email;
     private String password;
-    public SignupDTO() {
+    private Set<String> role;
+    
+    public SignupRequest() {
     }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
+
     public String getUsername() {
         return username;
     }
@@ -30,5 +28,11 @@ public class SignupDTO {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+    public void setRole(Set<String> role) {
+        this.role = role;
+    }
+    public Set<String> getRole() {
+      return role;
     }
 }

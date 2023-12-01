@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import ca.ucalgary.ensf480.flightapp.model.User;
 import ca.ucalgary.ensf480.flightapp.repository.UserRepository;
-
+/** 
 @Service
 public class UserDetail implements UserDetailsService {
 @Autowired    
@@ -30,4 +30,4 @@ UserRepository userRepo;
                 .collect(Collectors.toSet());
         return new org.springframework.security.core.userdetails.User(username,user.getPassword(),authorities);
     }
-}
+}*/

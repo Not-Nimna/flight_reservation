@@ -34,19 +34,19 @@ public class DatabaseSeeder {
 
     @PostConstruct
     public void seedDatabase() {
-
+        
         Role role = new Role();
-        role.setName("ROLE_USER");
+        role.setName(ERole.ROLE_USER);
         roleRepository.save(role);
 
         Role role2 = new Role();
-        role2.setName("ROLE_AGENT");
+        role2.setName(ERole.ROLE_AGENT);
         roleRepository.save(role2);
 
         Role role3 = new Role();
-        role3.setName("ROLE_ADMIN");
+        role3.setName(ERole.ROLE_ADMIN);
         roleRepository.save(role3);
-
+/** 
         // Should create a User with admin role.
         User user = new User();
         user.setEmail("admin@example.com");
@@ -54,7 +54,7 @@ public class DatabaseSeeder {
 
         Role roles = roleRepository.findByName("ROLE_ADMIN").get();
         user.setRoles(Collections.singleton(roles));
-        
+        */
 
         // Create some destinations
         ArrayList<Destination> destinations = new ArrayList<Destination>();

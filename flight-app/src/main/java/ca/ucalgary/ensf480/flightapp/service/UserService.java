@@ -1,6 +1,6 @@
 package ca.ucalgary.ensf480.flightapp.service;
 
-import ca.ucalgary.ensf480.flightapp.DTO.LoginDTO;
+import ca.ucalgary.ensf480.flightapp.DTO.LoginRequest;
 import ca.ucalgary.ensf480.flightapp.model.User;
 import ca.ucalgary.ensf480.flightapp.repository.UserRepository;
 

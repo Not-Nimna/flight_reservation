@@ -14,18 +14,26 @@ package ca.ucalgary.ensf480.flightapp.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", 
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+    })
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String username;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -33,19 +41,21 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private Set<Role> roles;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles", 
+                joinColumns = @JoinColumn(name = "user_id"),
+                inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     // Constructors, Getters, and Setters
 
     public User() {
     }
 
-    public User(String email, String password, UserType userType) {
+    public User(String username, String email, String password) {
+        this.username = username;
         this.email = email;
-        setPassword(password);
-
+        this.password = password;
     }
 
     public Long getId() {
@@ -54,6 +64,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public String getEmail() {
@@ -75,11 +93,9 @@ public class User {
     public Set<Role> getRoles() {
         return roles;
     }
+
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
-    public User orElse(Object object) {
-      return null;
-    }
 }

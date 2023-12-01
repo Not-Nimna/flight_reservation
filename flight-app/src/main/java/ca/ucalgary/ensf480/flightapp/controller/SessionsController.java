@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import ca.ucalgary.ensf480.flightapp.DTO.LoginDTO;
+import ca.ucalgary.ensf480.flightapp.DTO.LoginRequest;
 import ca.ucalgary.ensf480.flightapp.model.User;
 import ca.ucalgary.ensf480.flightapp.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,9 +45,9 @@ public class SessionsController {
   public String getHelp() {
     return "help";
   }
-
+/** 
   @PostMapping("/login")
-  public ResponseEntity<String> authenticateUser(@RequestBody LoginDTO loginDTO) {
+  public ResponseEntity<String> authenticateUser(@RequestBody LoginRequest loginDTO) {
       //return new ResponseEntity<String>(loginDTO.getUsername() + loginDTO.getPassword(), HttpStatus.OK);
       Authentication authentication = authenticationManager
               .authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
@@ -63,7 +63,7 @@ public class SessionsController {
       securityContext.setAuthentication(null);
       return "redirect:/login";
   }
-
+*/
 
 
 

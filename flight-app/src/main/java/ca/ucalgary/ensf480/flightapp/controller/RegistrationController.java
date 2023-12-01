@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import ca.ucalgary.ensf480.flightapp.DTO.LoginDTO;
-import ca.ucalgary.ensf480.flightapp.DTO.SignupDTO;
+import ca.ucalgary.ensf480.flightapp.DTO.LoginRequest;
+import ca.ucalgary.ensf480.flightapp.DTO.SignupRequest;
 import ca.ucalgary.ensf480.flightapp.model.Role;
 import ca.ucalgary.ensf480.flightapp.model.User;
 
 import ca.ucalgary.ensf480.flightapp.repository.RoleRepository;
 import ca.ucalgary.ensf480.flightapp.repository.UserRepository;
 
-
+/** 
 @RestController
 @RequestMapping("/api/public")
 public class RegistrationController {
@@ -61,3 +61,4 @@ public class RegistrationController {
         }
 
 }
+*/
