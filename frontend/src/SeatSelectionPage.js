@@ -9,7 +9,7 @@ const SeatSelectionPage = () => {
   const [selectedSeat, setSelectedSeat] = useState("");
   const [confirmedSeat, setConfirmedSeat] = useState("");
   const navigate = useNavigate();
-  const { flightId } = useParams();
+  const { flightId, destination } = useParams();
 
   useEffect(() => {
     const fetchSeats = async () => {
@@ -35,7 +35,7 @@ const SeatSelectionPage = () => {
   };
 
   const handleBack = () => {
-    navigate(-1); // Navigate back one step in the history
+    navigate(`/flightlist/${destination}`);
   };
 
   const handleConfirmation = (event) => {
@@ -117,6 +117,13 @@ const SeatSelectionPage = () => {
                   onClick={handleConfirmation}
                   disabled={!selectedSeat}>
                   Confirm Selection
+                </button>
+              </div>
+            </div>
+            <div className="field mt-4">
+              <div className="control has-text-centered">
+                <button className="button is-warning" onClick={handleBack}>
+                  Back
                 </button>
               </div>
             </div>

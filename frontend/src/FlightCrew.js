@@ -34,7 +34,7 @@ const FlightCrewPage = () => {
         <div className="columns is-multiline is-centered">
           {flights.map((flight) => (
             <div className="column is-one-third" key={flight.id}>
-              <Link to={`/flightdetails/${flight.id}`}>
+              <Link to={`/passengersflight/${flight.id}`}>
                 <div className="card has-background-light">
                   <div className="card-content">
                     <p className="title has-text-primary">
