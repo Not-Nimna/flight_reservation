@@ -1,7 +1,6 @@
 package ca.ucalgary.ensf480.flightapp.DTO;
 
 
-
 public class LoginDTO {
     private String username;
     private String password;   

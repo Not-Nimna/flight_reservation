@@ -2,6 +2,7 @@ package ca.ucalgary.ensf480.flightapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +28,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/api/public")
+@RequestMapping("/api/auth")
 public class SessionsController {
 
     @Autowired
@@ -37,7 +38,6 @@ public class SessionsController {
     //@Autowired
     //private RoleRepository roleRepository;
     @Autowired
-
     private PasswordEncoder passwordEncoder;
 
 
@@ -48,6 +48,7 @@ public class SessionsController {
 
   @PostMapping("/login")
   public ResponseEntity<String> authenticateUser(@RequestBody LoginDTO loginDTO) {
+      //return new ResponseEntity<String>(loginDTO.getUsername() + loginDTO.getPassword(), HttpStatus.OK);
       Authentication authentication = authenticationManager
               .authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
       SecurityContextHolder.getContext().setAuthentication(authentication);
