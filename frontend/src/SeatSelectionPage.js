@@ -9,7 +9,7 @@ const SeatSelectionPage = () => {
   const [selectedSeat, setSelectedSeat] = useState("");
   const [confirmedSeat, setConfirmedSeat] = useState("");
   const navigate = useNavigate();
-  const { flightId } = useParams();
+  const { flightId, destination } = useParams();
 
   useEffect(() => {
     const fetchSeats = async () => {
@@ -32,6 +32,10 @@ const SeatSelectionPage = () => {
 
   const handleSeatChange = (seatNumber) => {
     setSelectedSeat(seatNumber);
+  };
+
+  const handleBack = () => {
+    navigate(`/flightlist/${destination}`);
   };
 
   const handleConfirmation = (event) => {
@@ -92,7 +96,9 @@ const SeatSelectionPage = () => {
 
   return (
     <div className="container">
-      <section className="section">
+      <section
+        className="section has-background-primary"
+        style={{ minHeight: "100vh" }}>
         <div className="container">
           <form>
             <div className="field">
@@ -118,24 +124,26 @@ const SeatSelectionPage = () => {
                 </button>
               </div>
             </div>
-            <div className="field mt-3">
+
+            <div className="field mt-4">
               <div className="control has-text-centered">
-                <button className="button is-warning" onClick={handleGoBack}>
-                  Go Back
+                <button className="button is-warning" onClick={handleBack}>
+                  Back
+
                 </button>
               </div>
             </div>
           </form>
           <div>
             {confirmedSeat && (
-              <div className="notification is-success m-4 has-text-centered">
+              <div className="notification is-warning m-4 has-text-centered">
                 Seat {confirmedSeat.seatNumber} confirmed!
               </div>
             )}
             {confirmedSeat && (
               <div className="has-text-centered">
                 <button
-                  className="button is-warning mt-3"
+                  className="button is-danger mt-3"
                   onClick={handlePayment}>
                   Proceed to Payment
                 </button>

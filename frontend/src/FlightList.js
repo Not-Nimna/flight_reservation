@@ -27,7 +27,9 @@ const FlightList = () => {
   }, [destination]);
 
   return (
-    <div className="section">
+    <div
+      className="section has-background-primary"
+      style={{ minHeight: "100vh" }}>
       <div className="container">
         <div className="has-text-centered">
           <h2 className="subtitle is-4">Flights to: {destination}</h2>
@@ -35,7 +37,7 @@ const FlightList = () => {
         <div className="columns is-multiline is-centered">
           {flights.map((flight) => (
             <div className="column is-one-third" key={flight.id}>
-              <Link to={`/seatselectionpage/${flight.id}`}>
+              <Link to={`/seatselectionpage/${destination}/${flight.id}`}>
                 <div className="card">
                   <div className="card-content">
                     <p className="title">{flight.flightNumber}</p>
@@ -61,7 +63,7 @@ const FlightList = () => {
             <button className="button is-danger mr-4">Logout</button>
           </Link>
           <Link to="/booking">
-            <button className="button is-primary">Back to Booking Page</button>
+            <button className="button is-warning">Back to Booking Page</button>
           </Link>
         </div>
       </div>

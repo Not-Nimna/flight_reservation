@@ -36,7 +36,9 @@ const Login = () => {
   };
 
   return (
-    <div className="section">
+    <div
+      className="section has-background-primary"
+      style={{ minHeight: "100vh" }}>
       <div className="container">
         <div className="columns is-centered">
           <div className="column is-half">

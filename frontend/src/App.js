@@ -2,6 +2,8 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Login from "./LoginPage";
 import BookingPage from "./BookingPage";
+import FlightCrewPage from "./FlightCrew";
+import PassengersFlight from "./PassengersFlight";
 import FlightList from "./FlightList";
 import FlightCrewPage from "./FlightCrew";
 import SeatSelectionPage from "./SeatSelectionPage";
@@ -16,9 +18,14 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/booking" element={<BookingPage />} />
       <Route path="/flightcrew" element={<FlightCrewPage />} />
+
+      <Route
+        path="/passengersflight/:flightId"
+        element={<PassengersFlight />}
+      />
       <Route path="/flightlist/:destination" element={<FlightList />} />
       <Route
-        path="/seatselectionpage/:flightId"
+        path="/seatselectionpage/:destination/:flightId"
         element={<SeatSelectionPage />}
       />
       <Route
