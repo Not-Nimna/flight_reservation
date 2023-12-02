@@ -1,30 +1,105 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// SeatSelectionPage.js
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "./SeatSelectionPage.css"; // Import your CSS file for additional styling
+import SeatComponent from "./SeatComponent"; // Replace with the actual path to SeatComponent
 
 const SeatSelectionPage = () => {
+  const [seats, setSeats] = useState([]);
   const [selectedSeat, setSelectedSeat] = useState("");
   const [confirmedSeat, setConfirmedSeat] = useState("");
   const navigate = useNavigate();
+  const { flightId, destination } = useParams();
 
-  const handleSeatChange = (event) => {
-    event.preventDefault();
-    setSelectedSeat(event.target.value);
+  useEffect(() => {
+    const fetchSeats = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/flights/${flightId}/seatMap`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setSeats(data);
+        } else {
+          console.error("Failed to fetch seats");
+        }
+      } catch (error) {
+        console.error("Error fetching seats:", error);
+      }
+    };
+    fetchSeats();
+  }, [flightId]);
+
+  const handleSeatChange = (seatNumber) => {
+    setSelectedSeat(seatNumber);
+  };
+
+  const handleBack = () => {
+    navigate(`/flightlist/${destination}`);
   };
 
   const handleConfirmation = (event) => {
     event.preventDefault();
     setConfirmedSeat(selectedSeat);
+    const selectedSeatObject = seats.find(
+      (seat) => seat.seatNumber === selectedSeat
+    );
+
+    if (selectedSeatObject) {
+      setConfirmedSeat(selectedSeatObject);
+      localStorage.setItem("seatId", selectedSeatObject.seatId);
+      console.log("Selected Seat ID:", selectedSeatObject.seatId);
+    } else {
+      console.error("Selected seat not found in the seat data.");
+    }
   };
+
   const handlePayment = (event) => {
     event.preventDefault();
-    navigate("/paymentpage");
+    navigate(`/paymentpage/${flightId}/${confirmedSeat}`);
+  };
+
+  const handleGoBack = () => {
+    navigate(`/flightlist/${localStorage.getItem("destination")}`);
+  };
+
+  const renderSeats = () => {
+    const seatsByRow = {};
+
+    // Group seats by row
+    seats.forEach((seat) => {
+      if (!seatsByRow[seat.seatRow]) {
+        seatsByRow[seat.seatRow] = [];
+      }
+      seatsByRow[seat.seatRow].push(seat);
+    });
+
+    // Sort each row by column
+    Object.keys(seatsByRow).forEach((row) => {
+      seatsByRow[row].sort((a, b) => a.seatColumn.localeCompare(b.seatColumn));
+    });
+
+    return Object.keys(seatsByRow).map((row) => (
+      <div key={row} className="columns is-multiline">
+        {seatsByRow[row].map((seat) => (
+          <SeatComponent
+            key={seat.seatId}
+            seat={seat}
+            selectedSeat={selectedSeat}
+            confirmedSeat={confirmedSeat}
+            onSeatClick={() => handleSeatChange(seat.seatNumber)}
+          />
+        ))}
+      </div>
+    ));
   };
 
   return (
     <div className="container">
-      <section className="section ">
-        <div className="container ">
+      <section
+        className="section has-background-primary"
+        style={{ minHeight: "100vh" }}>
+        <div className="container">
           <form>
             <div className="field">
               <label className="label has-text-centered">
@@ -35,34 +110,41 @@ const SeatSelectionPage = () => {
                   className="input is-offset-5 column is-2"
                   type="text"
                   value={selectedSeat}
-                  onChange={handleSeatChange}
+                  onChange={() => {}}
                 />
               </div>
             </div>
-            <div className="field ">
+            <div className="field">
               <div className="control has-text-centered">
                 <button
                   className="button is-info"
                   onClick={handleConfirmation}
-                  disabled={!selectedSeat}
-                >
+                  disabled={!selectedSeat}>
                   Confirm Selection
+                </button>
+              </div>
+            </div>
+
+            <div className="field mt-4">
+              <div className="control has-text-centered">
+                <button className="button is-warning" onClick={handleBack}>
+                  Back
+
                 </button>
               </div>
             </div>
           </form>
           <div>
             {confirmedSeat && (
-              <div className="notification is-success m-4 has-text-centered">
-                Seat {confirmedSeat} confirmed!
+              <div className="notification is-warning m-4 has-text-centered">
+                Seat {confirmedSeat.seatNumber} confirmed!
               </div>
             )}
             {confirmedSeat && (
               <div className="has-text-centered">
                 <button
-                  className="button is-warning mt-3"
-                  onClick={handlePayment}
-                >
+                  className="button is-danger mt-3"
+                  onClick={handlePayment}>
                   Proceed to Payment
                 </button>
               </div>
@@ -70,32 +152,8 @@ const SeatSelectionPage = () => {
           </div>
 
           <h2 className="title">Seat Selection Page</h2>
-          <div className="columns is-multiline">
-            {/* Render your seat grid here */}
-            {Array.from({ length: 6 }, (_, row) => (
-              <div key={row} className="column is-2">
-                {Array.from({ length: 32 }, (_, col) => (
-                  <div
-                    key={col}
-                    onClick={() =>
-                      setSelectedSeat(
-                        `${String.fromCharCode(65 + row)}${col + 1}`
-                      )
-                    }
-                    className={`box seat ${
-                      selectedSeat ===
-                      `${String.fromCharCode(65 + row)}${col + 1}`
-                        ? "selected"
-                        : ""
-                    }`}
-                  >
-                    {String.fromCharCode(65 + row)}
-                    {col + 1}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
+
+          <div className="columns is-multiline">{renderSeats()}</div>
         </div>
       </section>
     </div>

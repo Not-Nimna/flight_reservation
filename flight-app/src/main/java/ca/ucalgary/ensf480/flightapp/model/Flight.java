@@ -23,6 +23,14 @@ import java.util.Set;
 @Table(name = "flights")
 public class Flight {
 
+    @OneToOne
+    @JoinColumn(name = "promo_id")
+    private Promo promo;
+
+    @OneToMany
+    @JoinColumn(name = "passenger_id")
+    private Set<Passenger> passengers = new HashSet<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,13 +48,8 @@ public class Flight {
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<FlightSeatPrice> seatPrices = new HashSet<>();
 
-
     @ManyToMany
-    @JoinTable(
-        name = "flight_crew",
-        joinColumns = @JoinColumn(name = "flight_id"),
-        inverseJoinColumns = @JoinColumn(name = "crew_id")
-    )
+    @JoinTable(name = "flight_crew", joinColumns = @JoinColumn(name = "flight_id"), inverseJoinColumns = @JoinColumn(name = "crew_id"))
     private Set<Crew> crewMembers = new HashSet<>();
 
     @ManyToOne
@@ -63,7 +66,6 @@ public class Flight {
     @Column(nullable = false)
     private LocalDateTime arrivalTime;
 
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private FlightStatus status;
@@ -73,11 +75,11 @@ public class Flight {
     public Flight() {
     }
 
-    // Constructor with seat prices
+
     public Flight(String flightNumber, Aircraft aircraft, Destination departureDestination, 
                   Destination arrivalDestination, LocalDateTime departureTime, 
-                  LocalDateTime arrivalTime, BigDecimal ordinaryPrice, 
-                  BigDecimal comfortPrice, BigDecimal businessPrice) {
+                  LocalDateTime arrivalTime, BigDecimal ordinaryPrice, BigDecimal comfortPrice, BigDecimal businessPrice,Promo promo) {
+        
         this.flightNumber = flightNumber;
         this.aircraft = aircraft;
         this.departureDestination = departureDestination;
@@ -85,6 +87,7 @@ public class Flight {
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.status = FlightStatus.ON_TIME;
+        this.promo = promo;
 
         // Initialize seat prices
         addSeatPrice(SeatClass.ORDINARY, ordinaryPrice);
@@ -177,7 +180,7 @@ public class Flight {
     public FlightStatus getStatus() {
         return status;
     }
-    
+
     public void setStatus(FlightStatus status) {
         this.status = status;
     }
@@ -190,5 +193,19 @@ public class Flight {
     public void setSeatPrices(Set<FlightSeatPrice> seatPrices) {
         this.seatPrices = seatPrices;
     }
-  
+
+    public Promo getPromo() {
+        return promo;
+    }
+
+    public void setPromo(Promo promo) {
+        this.promo = promo;
+    }
+
+    public Set<Passenger> getPassengers() {
+        return passengers;
+    }
+    public void addPassenger(Passenger passenger) {
+        this.passengers.add(passenger);
+    }
 }

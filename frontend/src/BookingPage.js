@@ -1,16 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "bulma/css/bulma.min.css";
 
 const BookingPage = () => {
   const [bookingData, setBookingData] = useState({
-    origin: "",
     destination: "",
-    departureDate: "",
-    returnDate: "",
   });
-
+  const [destinationOptions, setDestinationOptions] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch the list of destinations from your API endpoint
+    fetch("http://localhost:8080/api/flights/cities")
+      .then((response) => response.json())
+      .then((data) => setDestinationOptions(data))
+      .catch((error) => console.error("Error fetching destinations:", error));
+  }, []); // Empty dependency array ensures the effect runs once on component mount
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -23,7 +28,8 @@ const BookingPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate("/flightlist");
+    localStorage.setItem("destination", bookingData.destination);
+    navigate(`/flightlist/${bookingData.destination}`);
     console.log(bookingData);
   };
 
@@ -32,72 +38,43 @@ const BookingPage = () => {
   };
 
   return (
-    <div className="section">
+    <div
+      className="section has-background-primary"
+      style={{ minHeight: "100vh" }}>
       <div className="container">
         <div className="card">
           <div className="card-content has-text-centered">
             <div className="level">
-              {/* Level is a Bulma class for horizontal alignment */}
               <div className="level-left">
                 <h1 className="title">Flight Booking System</h1>
               </div>
               <div className="level-right">
-                {/* Level-right aligns content to the right */}
                 <button
                   onClick={handleViewMyFlights}
-                  className="button is-info"
-                >
+                  className="button is-info">
                   View My Flights
                 </button>
               </div>
             </div>
             <form onSubmit={handleSubmit}>
               <div className="field">
-                <label className="label">Origin:</label>
+                <label className="label">Where would you like to fly to</label>
                 <div className="control">
-                  <input
-                    type="text"
-                    name="origin"
-                    value={bookingData.origin}
-                    onChange={handleInputChange}
-                    className="input"
-                  />
-                </div>
-              </div>
-              <div className="field">
-                <label className="label">Destination:</label>
-                <div className="control">
-                  <input
-                    type="text"
-                    name="destination"
-                    value={bookingData.destination}
-                    onChange={handleInputChange}
-                    className="input"
-                  />
-                </div>
-              </div>
-              <div className="field">
-                <label className="label">Departure Date:</label>
-                <div className="control">
-                  <input
-                    type="date"
-                    name="departureDate"
-                    value={bookingData.departureDate}
-                    onChange={handleInputChange}
-                    className="input"
-                  />
-                </div>
-              </div>
-              <div className="field">
-                <label className="label">Return Date:</label>
-                <div className="control">
-                  <input
-                    type="date"
-                    name="returnDate"
-                    value={bookingData.returnDate}
-                    onChange={handleInputChange}
-                    className="input"
-                  />
+                  <div className="select">
+                    <select
+                      name="destination"
+                      value={bookingData.destination}
+                      onChange={handleInputChange}>
+                      <option value="" disabled>
+                        Select a destination
+                      </option>
+                      {destinationOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
               <div className="field">
@@ -106,8 +83,7 @@ const BookingPage = () => {
                     onClick={handleSubmit}
                     type="submit"
                     className="button is-primary"
-                    style={{ marginTop: "10px" }}
-                  >
+                    style={{ marginTop: "10px" }}>
                     Book Flight
                   </button>
                 </div>
@@ -116,8 +92,7 @@ const BookingPage = () => {
             <button
               onClick={handleBack}
               className="button is-danger"
-              style={{ marginTop: "10px" }}
-            >
+              style={{ marginTop: "10px" }}>
               Log out
             </button>
           </div>

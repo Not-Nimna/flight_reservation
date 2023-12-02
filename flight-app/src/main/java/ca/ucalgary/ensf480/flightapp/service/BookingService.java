@@ -21,6 +21,7 @@ import ca.ucalgary.ensf480.flightapp.exception.ResourceNotFoundException;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.model.Customer;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
+import ca.ucalgary.ensf480.flightapp.model.Passenger;
 import ca.ucalgary.ensf480.flightapp.model.Payment;
 import ca.ucalgary.ensf480.flightapp.model.PaymentStatus;
 import ca.ucalgary.ensf480.flightapp.model.Seat;
@@ -28,7 +29,6 @@ import ca.ucalgary.ensf480.flightapp.model.User;
 import ca.ucalgary.ensf480.flightapp.repository.BookingRepository;
 import ca.ucalgary.ensf480.flightapp.repository.FlightRepository;
 import ca.ucalgary.ensf480.flightapp.repository.SeatRepository;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,13 +53,13 @@ public class BookingService {
 
     @Autowired
     public BookingService(
-        BookingRepository bookingRepository, 
-        CustomerService customerService, 
-        PaymentService paymentService, 
-        UserService userService,
-        FlightRepository flightRepository,
-        SeatRepository seatRepository,
-        PricingService pricingService) {
+            BookingRepository bookingRepository,
+            CustomerService customerService,
+            PaymentService paymentService,
+            UserService userService,
+            FlightRepository flightRepository,
+            SeatRepository seatRepository,
+            PricingService pricingService) {
 
         this.bookingRepository = bookingRepository;
         this.customerService = customerService;
@@ -71,7 +71,8 @@ public class BookingService {
 
     }
 
-    public Booking makeBooking(Long flightId, Long seatId, Long userId, CustomerDTO customerDTO, PaymentDTO paymentDTO) {
+    public Booking makeBooking(Long flightId, Long seatId, Long userId, CustomerDTO customerDTO,
+            PaymentDTO paymentDTO) {
         Optional<Seat> optionalSeat = seatRepository.findById(seatId);
         Optional<Flight> optionalFlight = flightRepository.findById(flightId);
 
@@ -89,6 +90,7 @@ public class BookingService {
         }
 
         BigDecimal price = pricingService.calculatePrice(seat, flight);
+        price = pricingService.calculatePromoPrice(flight, user, price);
 
         Customer customer = customerService.createOrUpdateCustomer(customerDTO, user);
 
@@ -102,13 +104,13 @@ public class BookingService {
             throw new PaymentFailedException("Payment processing failed");
         }
 
-        
-        Booking booking = new Booking(flight, seat, price, user, payment);
+        Passenger passenger = new Passenger(customer.getName(), customer.getEmail(), customer.getId());
+        Booking booking = new Booking(flight, seat, price, user, payment, passenger);
+        flight.addPassenger(passenger);
+
         return bookingRepository.save(booking); // Save the successful booking
 
-
     }
-
 
     public boolean cancelBooking(String cancellationCode) {
         Optional<Booking> optionalBooking = bookingRepository.findByCancellationCode(cancellationCode);
@@ -121,7 +123,7 @@ public class BookingService {
     }
 
     
-    public List<SeatBookingDTO> getSeatMap(Long flightId) {
+    public List<SeatBookingDTO> getSeatMap(Long flightId, User user) {
         Optional<Flight> optionalFlight = flightRepository.findById(flightId);
 
         if (optionalFlight.isPresent()) {
@@ -132,16 +134,28 @@ public class BookingService {
             return seats.stream().map(seat -> {
                 // Calculate the current price for the seat
                 BigDecimal currentPrice = pricingService.calculatePrice(seat, flight);
+                currentPrice = pricingService.calculatePromoPrice(flight, user, currentPrice);
 
                 // Check if the seat is booked
                 boolean isBooked = bookings.stream()
-                                           .anyMatch(booking -> booking.getSeat().getId().equals(seat.getId()));
+                        .anyMatch(booking -> booking.getSeat().getId().equals(seat.getId()));
 
                 // Create a new DTO with the price and booking status
                 return new SeatBookingDTO(seat, isBooked, currentPrice);
             }).collect(Collectors.toList());
         }
         return null; // Or handle this case as per your application's requirements
+    }
+
+    public List<Booking> getBookings(long userId) {
+
+        return bookingRepository.findByUserId(userId);
+
+    }
+
+    public List<Booking> getBookingsByFlight(long flightId) {
+
+        return bookingRepository.findByFlightId(flightId);
     }
 
 }

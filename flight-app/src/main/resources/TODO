@@ -1,13 +1,18 @@
-Browse passenger list by agent only - G
-User login
-User promos
-Match design and implementation
-Change seat classes to []
-Add endpoint for setting seat class price
+Combine passenger and booking - G
+
+User Authentication and authorization - M 
+
+Remove promo discount for unregistered users 
+    - Just pass in the user -- if user : discount ? dont discount...
+
 Verify booking works
-Fix seat row and columns
-Add row and column data to seatMap
-Reformat frontend
+Add endpoint for setting seat class price - M
+
+Low priority:
+
+Add promo managment for agents
+Match design and implementation
+
 
 Bonus:
 Payment receipt and ticket notification by email (Observer pattern?)

@@ -15,26 +15,35 @@ package ca.ucalgary.ensf480.flightapp.controller;
 import ca.ucalgary.ensf480.flightapp.DTO.FlightDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.SeatBookingDTO;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
+import ca.ucalgary.ensf480.flightapp.model.Passenger;
 import ca.ucalgary.ensf480.flightapp.service.FlightService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
 
+import ca.ucalgary.ensf480.flightapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
+
+import ca.ucalgary.ensf480.flightapp.model.Promo;
 
 @RestController
+
 @RequestMapping("/api")
 public class FlightController {
 
     private final FlightService flightService;
     private final BookingService bookingService;
 
-    @Autowired
-    public FlightController(FlightService flightService, BookingService bookingService, AuthenticationService authenticationService) {
+    // @Autowired
+    public FlightController(FlightService flightService, BookingService bookingService,
+            AuthenticationService authenticationService) {
+
         this.flightService = flightService;
         this.bookingService = bookingService;
     }
@@ -46,13 +55,22 @@ public class FlightController {
         return ResponseEntity.ok(flights);
     }
 
+
     // GET endpoint to retrieve seat map for a flight
     @GetMapping("/flights/{id}/seatMap")
     public ResponseEntity<List<SeatBookingDTO>> getSeatMap(@PathVariable Long id) {
-        List<SeatBookingDTO> seatMap = bookingService.getSeatMap(id);
+        User user = authenticationService.getCurrentUser();
+        List<SeatBookingDTO> seatMap = bookingService.getSeatMap(id, user);
         return ResponseEntity.ok(seatMap);
     }
-    
+
+    private BigDecimal applyPromotion(BigDecimal originalPrice, BigDecimal discount) {
+        // Apply the promotion discount to the original price
+        BigDecimal discountedPrice = originalPrice.subtract(originalPrice.multiply(discount));
+        // Ensure the discounted price is non-negative
+        return discountedPrice.max(BigDecimal.ZERO);
+    }
+
     // Get a single flight by ID - accessible to all users
     @GetMapping("/flights/{id}")
     public ResponseEntity<Flight> getFlightById(@PathVariable Long id) {
@@ -62,9 +80,15 @@ public class FlightController {
     }
 
     // Search flights - accessible to all users
-    @GetMapping("/flights/search")
-    public ResponseEntity<List<Flight>> searchFlights(@RequestParam String query) {
-        return ResponseEntity.ok(flightService.searchFlights(query));
+
+    @GetMapping("/search/{destination}")
+    public ResponseEntity<List<FlightDTO>> searchFlights(@PathVariable String destination) {
+        List<FlightDTO> flights = flightService.searchFlights(destination);
+
+        if (flights.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(flights);
     }
 
     // Examples on how authorization works
@@ -108,4 +132,19 @@ public class FlightController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/cities")
+    public ResponseEntity<List<String>> getAllCities() {
+        List<String> cities = flightService.getAllCities();
+        return ResponseEntity.ok(cities);
+    }
+
+    // Get all passengers on a flight - restricted to agents
+    @GetMapping("/{id}/passengers")
+    public ResponseEntity<Set<Passenger>> getPassengers(@PathVariable Long id) {
+        if (!authenticationService.getCurrentUser().isAgent()) {
+            return ResponseEntity.status(403).build();
+        }
+        Set<Passenger> passengers = flightService.getPassengers(id);
+        return ResponseEntity.ok(passengers);
+    }
 }

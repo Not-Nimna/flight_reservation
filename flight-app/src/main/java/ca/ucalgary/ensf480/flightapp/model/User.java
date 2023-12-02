@@ -9,7 +9,6 @@
  * @date Nov 24, 2023
  */
 
-
 package ca.ucalgary.ensf480.flightapp.model;
 
 import jakarta.persistence.*;
@@ -46,6 +45,12 @@ public class User {
                 joinColumns = @JoinColumn(name = "user_id"),
                 inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @Column(name = "destination")
+    private String destination;
+
+    @Column(name = "is_current")
+    private Boolean isCurrent;
 
     // Constructors, Getters, and Setters
 
@@ -97,5 +102,4 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
 }

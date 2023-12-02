@@ -10,8 +10,8 @@
  * @date Nov 24, 2023
  */
 
-
 package ca.ucalgary.ensf480.flightapp.model;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
@@ -96,4 +96,13 @@ public class Seat {
     public String getSeatColumn() {
         return seatColumn;
     }
+
+    public void setSeatRow(String seatRow) {
+        this.seatRow = seatRow;
+    }
+
+    public void setSeatColumn(String seatColumn) {
+        this.seatColumn = seatColumn;
+    }
+
 }

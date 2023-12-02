@@ -7,6 +7,7 @@ import ca.ucalgary.ensf480.flightapp.model.ERole;
 @Service
 public class AuthenticationService {
 
+
     // This is a placeholder.
     public User getCurrentUser() {
       User user = new User("jon", "Jon.doe@gmail.com", "12345");
@@ -14,5 +15,5 @@ public class AuthenticationService {
       return user;
         // Retrieve and return the currently authenticated user - to be completed
     }
-}
 
+}
