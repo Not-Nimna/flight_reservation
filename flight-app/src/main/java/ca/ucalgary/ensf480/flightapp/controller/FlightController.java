@@ -32,31 +32,29 @@ public class FlightController {
 
     private final FlightService flightService;
     private final BookingService bookingService;
-    private final AuthenticationService authenticationService;
 
     @Autowired
     public FlightController(FlightService flightService, BookingService bookingService, AuthenticationService authenticationService) {
         this.flightService = flightService;
         this.bookingService = bookingService;
-        this.authenticationService = authenticationService;
     }
 
     // Get all flights - accessible to all users
-    @GetMapping("/public/flights")
+    @GetMapping("/flights")
     public ResponseEntity<List<FlightDTO>> getAllFlights() {
         List<FlightDTO> flights = flightService.getAllFlights();
         return ResponseEntity.ok(flights);
     }
 
     // GET endpoint to retrieve seat map for a flight
-    @GetMapping("/public/flights/{id}/seatMap")
+    @GetMapping("/flights/{id}/seatMap")
     public ResponseEntity<List<SeatBookingDTO>> getSeatMap(@PathVariable Long id) {
         List<SeatBookingDTO> seatMap = bookingService.getSeatMap(id);
         return ResponseEntity.ok(seatMap);
     }
     
     // Get a single flight by ID - accessible to all users
-    @GetMapping("/public/flights/{id}")
+    @GetMapping("/flights/{id}")
     public ResponseEntity<Flight> getFlightById(@PathVariable Long id) {
         return flightService.getFlightById(id)
                 .map(ResponseEntity::ok)
@@ -64,11 +62,12 @@ public class FlightController {
     }
 
     // Search flights - accessible to all users
-    @GetMapping("/public/flights/search")
+    @GetMapping("/flights/search")
     public ResponseEntity<List<Flight>> searchFlights(@RequestParam String query) {
         return ResponseEntity.ok(flightService.searchFlights(query));
     }
 
+    // Examples on how authorization works
     @GetMapping("/admin/hello")
     @PreAuthorize("hasRole('ADMIN')")
     public String hello(){
@@ -82,7 +81,7 @@ public class FlightController {
     }
 
     // Create a new flight - restricted to admins
-    @PostMapping("/admin/flights")
+    @PostMapping("/flights")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Flight> createFlight(@RequestBody Flight flight) {
 
@@ -91,7 +90,8 @@ public class FlightController {
     }
 
     // Update an existing flight - restricted to admins
-    @PutMapping("/admin/flights/{id}")
+    @PutMapping("/flights/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Flight> updateFlight(@PathVariable Long id, @RequestBody Flight flight) {
 
         return flightService.updateFlight(id, flight)
@@ -100,7 +100,8 @@ public class FlightController {
     }
 
     // Delete a flight - restricted to admins
-    @DeleteMapping("/admin/flights/{id}")
+    @DeleteMapping("/flights/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteFlight(@PathVariable Long id) {
 
         flightService.deleteFlight(id);

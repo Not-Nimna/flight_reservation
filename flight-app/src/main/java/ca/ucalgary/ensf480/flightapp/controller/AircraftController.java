@@ -5,25 +5,27 @@ import ca.ucalgary.ensf480.flightapp.service.AircraftService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/aircraft")
+@RequestMapping("/api/aircraft")
 public class AircraftController {
 
     private final AircraftService aircraftService;
-    private final AuthenticationService authenticationService;
+
 
     @Autowired
     public AircraftController(AircraftService aircraftService, AuthenticationService authenticationService) {
         this.aircraftService = aircraftService;
-        this.authenticationService = authenticationService;
+
     }
 
     // Get all aircraft - restricted to admins
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Aircraft>> getAllAircraft() {
 
         return ResponseEntity.ok(aircraftService.getAllAircraft());
@@ -31,6 +33,7 @@ public class AircraftController {
 
     // Get aircraft by ID - restricted to admins
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Aircraft> getAircraftById(@PathVariable Long id) {
 
         return aircraftService.getAircraftById(id)
@@ -40,6 +43,7 @@ public class AircraftController {
 
     // Create a new aircraft - restricted to admins
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Aircraft> createAircraft(@RequestBody Aircraft aircraft) {
 
         Aircraft createdAircraft = aircraftService.createAircraft(aircraft);
@@ -48,6 +52,7 @@ public class AircraftController {
 
     // Update an existing aircraft - restricted to admins
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Aircraft> updateAircraft(@PathVariable Long id, @RequestBody Aircraft aircraft) {
 
         return aircraftService.updateAircraft(id, aircraft)
@@ -57,6 +62,7 @@ public class AircraftController {
 
     // Delete an aircraft - restricted to admins
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Aircraft> deleteAircraft(@PathVariable Long id) {
 
         aircraftService.deleteAircraft(id);

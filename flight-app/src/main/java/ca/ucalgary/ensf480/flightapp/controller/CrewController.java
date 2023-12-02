@@ -5,6 +5,7 @@ import ca.ucalgary.ensf480.flightapp.service.CrewService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,16 +15,15 @@ import java.util.List;
 public class CrewController {
 
     private final CrewService crewService;
-    private final AuthenticationService authenticationService;
 
     @Autowired
     public CrewController(CrewService crewService, AuthenticationService authenticationService) {
         this.crewService = crewService;
-        this.authenticationService = authenticationService;
     }
 
     // Get crew members for a specific flight (only if admin)
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Crew>> getCrewByFlight(@PathVariable Long flightId) {
 
         List<Crew> crewMembers = crewService.getCrewByFlightId(flightId);

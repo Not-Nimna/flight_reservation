@@ -40,7 +40,7 @@ public class BookingController {
     }
 
     // Endpoint to create a new booking
-@PostMapping("/{seatId}")
+    @PostMapping("/{seatId}")
     public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId, 
                                                @RequestBody BookingRequest bookingRequest) {
         try {
