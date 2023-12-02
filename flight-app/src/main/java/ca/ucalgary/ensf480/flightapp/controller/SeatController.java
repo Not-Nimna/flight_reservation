@@ -4,22 +4,18 @@ import ca.ucalgary.ensf480.flightapp.model.Seat;
 import ca.ucalgary.ensf480.flightapp.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/seats")
-@CrossOrigin(origins = "http://localhost:3000")
-
+@PreAuthorize("hasRole('ADMIN')")
 public class SeatController {
 
-    private final SeatService seatService;
-
     @Autowired
-    public SeatController(SeatService seatService) {
-        this.seatService = seatService;
-    }
+    SeatService seatService;
 
     // Get all seats for a specific aircraft
     @GetMapping("/aircraft/{aircraftId}")

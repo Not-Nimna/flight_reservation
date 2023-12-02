@@ -16,9 +16,6 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 @Entity
 @Table(name = "users", 
     uniqueConstraints = {

@@ -21,7 +21,7 @@ public class CrewController {
         this.crewService = crewService;
     }
 
-    // Get crew members for a specific flight (only if admin)
+    // Get crew members - restricted to admins
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Crew>> getCrewByFlight(@PathVariable Long flightId) {

@@ -42,36 +42,25 @@ import java.util.stream.Collectors;
 @Service
 public class BookingService {
 
-    private final BookingRepository bookingRepository;
-    private final CustomerService customerService;
-    private final PaymentService paymentService;
-
-    private final UserService userService;
-    private final FlightRepository flightRepository;
-    private final SeatRepository seatRepository;
-    private final PricingService pricingService;
+    @Autowired
+    BookingRepository bookingRepository;
 
     @Autowired
-    public BookingService(
-            BookingRepository bookingRepository,
-            CustomerService customerService,
-            PaymentService paymentService,
-            UserService userService,
-            FlightRepository flightRepository,
-            SeatRepository seatRepository,
-            PricingService pricingService) {
+    CustomerService customerService;
 
-        this.bookingRepository = bookingRepository;
-        this.customerService = customerService;
-        this.paymentService = paymentService;
-        this.userService = userService;
-        this.flightRepository = flightRepository;
-        this.seatRepository = seatRepository;
-        this.pricingService = pricingService;
+    @Autowired
+    PaymentService paymentService;
 
-    }
+    @Autowired
+    FlightRepository flightRepository;
 
-    public Booking makeBooking(Long flightId, Long seatId, Long userId, CustomerDTO customerDTO,
+    @Autowired
+    SeatRepository seatRepository;
+
+    @Autowired
+    PricingService pricingService;
+
+    public Booking makeBooking(Long flightId, Long seatId, User user, CustomerDTO customerDTO,
             PaymentDTO paymentDTO) {
         Optional<Seat> optionalSeat = seatRepository.findById(seatId);
         Optional<Flight> optionalFlight = flightRepository.findById(flightId);
@@ -82,15 +71,14 @@ public class BookingService {
 
         Seat seat = optionalSeat.get();
         Flight flight = optionalFlight.get();
-        User user = userId != null ? userService.findById(userId).orElse(null) : null;
 
         // Check if there is already a booking for this seat on this flight
         if (bookingRepository.findBySeatAndFlight(seat, flight).isPresent()) {
             return null; // Indicates the seat is already booked
         }
 
-        BigDecimal price = pricingService.calculatePrice(seat, flight);
-        price = pricingService.calculatePromoPrice(flight, user, price);
+        BigDecimal price = pricingService.calculatePrice(seat, flight, user);
+
 
         Customer customer = customerService.createOrUpdateCustomer(customerDTO, user);
 
@@ -133,8 +121,7 @@ public class BookingService {
 
             return seats.stream().map(seat -> {
                 // Calculate the current price for the seat
-                BigDecimal currentPrice = pricingService.calculatePrice(seat, flight);
-                currentPrice = pricingService.calculatePromoPrice(flight, user, currentPrice);
+                BigDecimal currentPrice = pricingService.calculatePrice(seat, flight, user);
 
                 // Check if the seat is booked
                 boolean isBooked = bookings.stream()

@@ -16,11 +16,9 @@ public class AircraftController {
 
     private final AircraftService aircraftService;
 
-
     @Autowired
     public AircraftController(AircraftService aircraftService, AuthenticationService authenticationService) {
         this.aircraftService = aircraftService;
-
     }
 
     // Get all aircraft - restricted to admins

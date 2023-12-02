@@ -26,62 +26,55 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-
-import ca.ucalgary.ensf480.flightapp.model.Promo;
 
 @RestController
 
 @RequestMapping("/api")
 public class FlightController {
 
-    private final FlightService flightService;
-    private final BookingService bookingService;
+    @Autowired
+    FlightService flightService;
 
-    // @Autowired
-    public FlightController(FlightService flightService, BookingService bookingService,
-            AuthenticationService authenticationService) {
+    @Autowired
+    BookingService bookingService;
 
-        this.flightService = flightService;
-        this.bookingService = bookingService;
-    }
+    @Autowired
+    AuthenticationService authenticationService;
+
 
     // Get all flights - accessible to all users
-    @GetMapping("/flights")
+    @GetMapping("/public/flights")
     public ResponseEntity<List<FlightDTO>> getAllFlights() {
         List<FlightDTO> flights = flightService.getAllFlights();
         return ResponseEntity.ok(flights);
     }
 
-
     // GET endpoint to retrieve seat map for a flight
-    @GetMapping("/flights/{id}/seatMap")
+    @GetMapping("/public/flights/{id}/seatMap")
     public ResponseEntity<List<SeatBookingDTO>> getSeatMap(@PathVariable Long id) {
         User user = authenticationService.getCurrentUser();
         List<SeatBookingDTO> seatMap = bookingService.getSeatMap(id, user);
         return ResponseEntity.ok(seatMap);
     }
 
-    private BigDecimal applyPromotion(BigDecimal originalPrice, BigDecimal discount) {
-        // Apply the promotion discount to the original price
-        BigDecimal discountedPrice = originalPrice.subtract(originalPrice.multiply(discount));
-        // Ensure the discounted price is non-negative
-        return discountedPrice.max(BigDecimal.ZERO);
-    }
-
     // Get a single flight by ID - accessible to all users
-    @GetMapping("/flights/{id}")
+    // Needs to be fixed
+    @GetMapping("/public/flights/{id}")
     public ResponseEntity<Flight> getFlightById(@PathVariable Long id) {
-        return flightService.getFlightById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Optional<Flight> optionalFlight = flightService.getFlightById(id);
+        if (optionalFlight.isPresent()) {
+            return ResponseEntity.ok(optionalFlight.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     // Search flights - accessible to all users
-
-    @GetMapping("/search/{destination}")
+    @GetMapping("/public/search/{destination}")
     public ResponseEntity<List<FlightDTO>> searchFlights(@PathVariable String destination) {
         List<FlightDTO> flights = flightService.searchFlights(destination);
 
@@ -89,19 +82,6 @@ public class FlightController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(flights);
-    }
-
-    // Examples on how authorization works
-    @GetMapping("/admin/hello")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String hello(){
-        return "Hello from admin!";
-    }
-
-    @GetMapping("/agent/hello")
-    @PreAuthorize("hasRole('AGENT')")
-    public String hello2(){
-        return "Hello from agent!";
     }
 
     // Create a new flight - restricted to admins
@@ -117,7 +97,6 @@ public class FlightController {
     @PutMapping("/flights/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Flight> updateFlight(@PathVariable Long id, @RequestBody Flight flight) {
-
         return flightService.updateFlight(id, flight)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -127,24 +106,21 @@ public class FlightController {
     @DeleteMapping("/flights/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteFlight(@PathVariable Long id) {
-
         flightService.deleteFlight(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/cities")
+    // Get all passengers on a flight - restricted to agents
+    @GetMapping("/flights/{id}/passengers")
+    @PreAuthorize("hasRole('AGENT')")
+    public ResponseEntity<Set<Passenger>> getPassengers(@PathVariable Long id) {
+        Set<Passenger> passengers = flightService.getPassengers(id);
+        return ResponseEntity.ok(passengers);
+    }
+
+    @GetMapping("/public/cities")
     public ResponseEntity<List<String>> getAllCities() {
         List<String> cities = flightService.getAllCities();
         return ResponseEntity.ok(cities);
-    }
-
-    // Get all passengers on a flight - restricted to agents
-    @GetMapping("/{id}/passengers")
-    public ResponseEntity<Set<Passenger>> getPassengers(@PathVariable Long id) {
-        if (!authenticationService.getCurrentUser().isAgent()) {
-            return ResponseEntity.status(403).build();
-        }
-        Set<Passenger> passengers = flightService.getPassengers(id);
-        return ResponseEntity.ok(passengers);
     }
 }

@@ -12,14 +12,11 @@ import ca.ucalgary.ensf480.flightapp.repository.CustomerRepository;
 @Service
 public class CustomerService {
 
-    private final CustomerRepository customerRepository;
-    private final UserService userService;
+    @Autowired
+    CustomerRepository customerRepository;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, UserService userService) {
-        this.customerRepository = customerRepository;
-        this.userService = userService;
-    }
+    UserService userService;
 
     public Customer createOrUpdateCustomer(CustomerDTO customerDTO, User user) {
         Customer customer = customerRepository.findByEmail(customerDTO.getEmail());
