@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "bulma/css/bulma.min.css";
 
 const BookingPage = () => {
@@ -46,6 +47,11 @@ const BookingPage = () => {
           <div className="card-content has-text-centered">
             <div className="level">
               <div className="level-left">
+                <Link to="/registerUser" className="button is-info">
+                  Register
+                </Link>
+              </div>
+              <div className="level-item">
                 <h1 className="title">Flight Booking System</h1>
               </div>
               <div className="level-right">
