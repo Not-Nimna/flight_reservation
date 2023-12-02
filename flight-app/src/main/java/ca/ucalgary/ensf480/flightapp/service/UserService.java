@@ -1,5 +1,6 @@
 package ca.ucalgary.ensf480.flightapp.service;
 
+import ca.ucalgary.ensf480.flightapp.DTO.LoginRequest;
 import ca.ucalgary.ensf480.flightapp.model.User;
 import ca.ucalgary.ensf480.flightapp.repository.UserRepository;
 
@@ -24,6 +25,13 @@ public class UserService {
   public Optional<User> findById(Long userId) {
     return userRepository.findById(userId);
   }
+
+
+  public User getUserByEmail(String email){
+      User user = userRepository.findByEmail(email);
+      return user;
+  }
+  
 
   public List<User> getAllUsers() {
     return userRepository.findAll();
@@ -50,4 +58,5 @@ public class UserService {
           return userRepository.save(user);
         });
   }
+
 }

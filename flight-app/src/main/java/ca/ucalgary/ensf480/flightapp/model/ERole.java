@@ -11,14 +11,14 @@
 
 package ca.ucalgary.ensf480.flightapp.model;
 
-public enum UserType {
-    USER(0),
-    AGENT(1),
-    ADMIN(2);
+public enum ERole {
+    ROLE_USER(0),
+    ROLE_AGENT(1),
+    ROLE_ADMIN(2);
 
     private final int value;
 
-    UserType(int value) {
+    ERole(int value) {
         this.value = value;
     }
 
@@ -26,8 +26,8 @@ public enum UserType {
         return value;
     }
 
-    public static UserType fromValue(int value) {
-        for (UserType type : UserType.values()) {
+    public static ERole fromValue(int value) {
+        for (ERole type : ERole.values()) {
             if (type.getValue() == value) {
                 return type;
             }

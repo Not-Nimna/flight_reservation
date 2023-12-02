@@ -5,6 +5,7 @@ import ca.ucalgary.ensf480.flightapp.service.DestinationService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,12 +15,10 @@ import java.util.List;
 public class DestinationController {
 
     private final DestinationService destinationService;
-    private final AuthenticationService authenticationService;
 
     @Autowired
     public DestinationController(DestinationService destinationService, AuthenticationService authenticationService) {
         this.destinationService = destinationService;
-        this.authenticationService = authenticationService;
     }
 
     // Get all destinations
@@ -38,20 +37,18 @@ public class DestinationController {
 
     // Create a new destination - restricted to admins
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Destination> createDestination(@RequestBody Destination destination) {
-        if (!authenticationService.getCurrentUser().isAdmin()) {
-            return ResponseEntity.status(403).build();
-        }
+
         Destination createdDestination = destinationService.createDestination(destination);
         return ResponseEntity.ok(createdDestination);
     }
 
     // Update an existing destination - restricted to admins
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Destination> updateDestination(@PathVariable Long id, @RequestBody Destination destination) {
-        if (!authenticationService.getCurrentUser().isAdmin()) {
-            return ResponseEntity.status(403).build();
-        }
+
         return destinationService.updateDestination(id, destination)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -59,10 +56,9 @@ public class DestinationController {
 
     // Delete a destination - restricted to admins
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteDestination(@PathVariable Long id) {
-        if (!authenticationService.getCurrentUser().isAdmin()) {
-            return ResponseEntity.status(403).build();
-        }
+
         destinationService.deleteDestination(id);
         return ResponseEntity.ok().build();
     }

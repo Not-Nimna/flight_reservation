@@ -12,15 +12,27 @@
 package ca.ucalgary.ensf480.flightapp.model;
 
 import jakarta.persistence.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", 
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+    })
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String username;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -28,9 +40,11 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserType userType;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles", 
+                joinColumns = @JoinColumn(name = "user_id"),
+                inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     @Column(name = "destination")
     private String destination;
@@ -43,12 +57,10 @@ public class User {
     public User() {
     }
 
-    public User(String email, String password, UserType userType) {
+    public User(String username, String email, String password) {
+        this.username = username;
         this.email = email;
-        setPassword(password);
-        this.userType = userType;
-        this.destination = "";
-        this.isCurrent = false;
+        this.password = password;
     }
 
     public Long getId() {
@@ -57,6 +69,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public String getEmail() {
@@ -71,51 +91,15 @@ public class User {
         return password;
     }
 
-    // Use Spring Security's BCryptPasswordEncoder to set the password securely
     public void setPassword(String password) {
-        this.password = new BCryptPasswordEncoder().encode(password);
+        this.password = password;
     }
 
-    public UserType getUserType() {
-        return userType;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setUserType(UserType userType) {
-        this.userType = userType;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    // Custom methods for user type checks can be helpful
-
-    public boolean isAdmin() {
-        return this.userType == UserType.ADMIN;
-    }
-
-    public boolean isAgent() {
-        return this.userType == UserType.AGENT;
-    }
-
-    public boolean isUser() {
-        return this.userType == UserType.USER;
-    }
-
-    public User orElse(Object object) {
-        return null;
-    }
-
-    public Boolean getIsCurrent() {
-        return isCurrent;
-    }
-
-    public void setIsCurrent(Boolean isCurrent) {
-        this.isCurrent = isCurrent;
-    }
-
 }

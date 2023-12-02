@@ -3,6 +3,7 @@ package ca.ucalgary.ensf480.flightapp.config;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,9 @@ public class DatabaseSeeder {
 
     // @Autowired
     // private UserRepository userRepository;
+  
+    @Autowired
+    private PromoRepository promoRepository;
 
     @Autowired
     private FlightRepository flightRepository;
@@ -29,10 +33,23 @@ public class DatabaseSeeder {
     private AircraftRepository aircraftRepository;
 
     @Autowired
-    private PromoRepository promoRepository;
+    private RoleRepository roleRepository;
 
     @PostConstruct
     public void seedDatabase() {
+        
+        Role role = new Role();
+        role.setName(ERole.ROLE_USER);
+        roleRepository.save(role);
+
+        Role role2 = new Role();
+        role2.setName(ERole.ROLE_AGENT);
+        roleRepository.save(role2);
+
+        Role role3 = new Role();
+        role3.setName(ERole.ROLE_ADMIN);
+        roleRepository.save(role3);
+
 
         // Create some destinations
         ArrayList<Destination> destinations = new ArrayList<Destination>();
@@ -97,7 +114,6 @@ public class DatabaseSeeder {
 
         Promo promo = new Promo(0.2);
         promoRepository.save(promo);
-
 
         ArrayList<Flight> flights = new ArrayList<Flight>();
         // Add flights to the flights array

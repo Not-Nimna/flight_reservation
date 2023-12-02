@@ -79,6 +79,7 @@ public class BookingController {
     }
 
     // Endpoint to create a new booking
+
     @PostMapping("flight/{flightId}/bookings/{seatId}")
     public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId,
             @RequestBody BookingRequest bookingRequest) {
@@ -93,11 +94,11 @@ public class BookingController {
                     bookingRequest.getPaymentDetails());
             return ResponseEntity.ok(booking);
 
-            // } catch (PaymentFailedException ex) {
-            // return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(null);
-            // } catch (ResourceNotFoundException ex) {
-            // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            // }
+            } catch (PaymentFailedException ex) {
+                return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(null);
+             } catch (ResourceNotFoundException ex) {
+               return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+             }
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
