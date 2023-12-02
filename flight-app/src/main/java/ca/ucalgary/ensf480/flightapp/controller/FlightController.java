@@ -15,7 +15,6 @@ package ca.ucalgary.ensf480.flightapp.controller;
 import ca.ucalgary.ensf480.flightapp.DTO.FlightDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.SeatBookingDTO;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
-import ca.ucalgary.ensf480.flightapp.model.Passenger;
 import ca.ucalgary.ensf480.flightapp.service.FlightService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
@@ -28,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 
 @RestController
 
@@ -108,14 +107,6 @@ public class FlightController {
     public ResponseEntity<Void> deleteFlight(@PathVariable Long id) {
         flightService.deleteFlight(id);
         return ResponseEntity.ok().build();
-    }
-
-    // Get all passengers on a flight - restricted to agents
-    @GetMapping("/flights/{id}/passengers")
-    @PreAuthorize("hasRole('AGENT')")
-    public ResponseEntity<Set<Passenger>> getPassengers(@PathVariable Long id) {
-        Set<Passenger> passengers = flightService.getPassengers(id);
-        return ResponseEntity.ok(passengers);
     }
 
     @GetMapping("/public/cities")

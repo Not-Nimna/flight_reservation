@@ -1,5 +1,6 @@
-package ca.ucalgary.ensf480.flightapp.service;
 
+package ca.ucalgary.ensf480.flightapp.service;
+/**
 import ca.ucalgary.ensf480.flightapp.model.Passenger;
 import ca.ucalgary.ensf480.flightapp.repository.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,3 +42,4 @@ public class PassengerService {
         passengerRepository.deleteById(id);
     }
 }
+ */

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
 import ca.ucalgary.ensf480.flightapp.model.Seat;
+import ca.ucalgary.ensf480.flightapp.model.User;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
@@ -26,5 +27,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
   List<Booking> findByUserId(Long userId);
 
+  List<Booking> findByUser(User user);
 
 }
