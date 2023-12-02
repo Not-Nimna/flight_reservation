@@ -3,7 +3,7 @@ package ca.ucalgary.ensf480.flightapp.config;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,15 +46,6 @@ public class DatabaseSeeder {
         Role role3 = new Role();
         role3.setName(ERole.ROLE_ADMIN);
         roleRepository.save(role3);
-/** 
-        // Should create a User with admin role.
-        User user = new User();
-        user.setEmail("admin@example.com");
-        user.setPassword("password");
-
-        Role roles = roleRepository.findByName("ROLE_ADMIN").get();
-        user.setRoles(Collections.singleton(roles));
-        */
 
         // Create some destinations
         ArrayList<Destination> destinations = new ArrayList<Destination>();

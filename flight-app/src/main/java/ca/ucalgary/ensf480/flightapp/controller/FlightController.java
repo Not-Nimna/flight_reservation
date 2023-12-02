@@ -21,6 +21,7 @@ import ca.ucalgary.ensf480.flightapp.service.BookingService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -68,8 +69,21 @@ public class FlightController {
         return ResponseEntity.ok(flightService.searchFlights(query));
     }
 
+    @GetMapping("/admin/hello")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String hello(){
+        return "Hello from admin!";
+    }
+
+    @GetMapping("/agent/hello")
+    @PreAuthorize("hasRole('AGENT')")
+    public String hello2(){
+        return "Hello from agent!";
+    }
+
     // Create a new flight - restricted to admins
     @PostMapping("/admin/flights")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Flight> createFlight(@RequestBody Flight flight) {
 
         Flight createdFlight = flightService.createFlight(flight);
