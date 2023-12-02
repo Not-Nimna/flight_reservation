@@ -1,5 +1,7 @@
 package ca.ucalgary.ensf480.flightapp.security;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import ca.ucalgary.ensf480.flightapp.security.jwt.AuthEntryPointJwt;
 import ca.ucalgary.ensf480.flightapp.security.jwt.AuthTokenFilter;
 import ca.ucalgary.ensf480.flightapp.security.services.UserDetailsServiceImpl;
+
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfigurationSource;
+
 
 @Configuration
 //@EnableWebSecurity
@@ -55,11 +62,25 @@ public class WebSecurityConfig {
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+      CorsConfiguration configuration = new CorsConfiguration();
+      configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Your frontend URL
+      configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+      configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+      configuration.setAllowCredentials(true);
+
+      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+      source.registerCorsConfiguration("/**", configuration); // Apply CORS configuration to all paths
+      return source;
+  }
+
   
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
-      .cors((cors) -> cors.disable())
+      .cors((cors) -> cors.configurationSource(corsConfigurationSource()))
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> 
