@@ -63,6 +63,7 @@ public class FlightService {
                 .distinct()
                 .collect(Collectors.toList());
     }
+
     // get all passengers on a flight
     public Set<Passenger> getPassengers(Long id) {
         return flightRepository.findById(id).get().getPassengers();
