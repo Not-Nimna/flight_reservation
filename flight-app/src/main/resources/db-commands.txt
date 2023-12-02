@@ -12,6 +12,9 @@ To run ther server run:
 ./mvnw spring-boot:run
 
 
+./mvnw clean install
+
+
 to view tables:
 
 USE flight-app;

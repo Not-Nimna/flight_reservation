@@ -20,6 +20,8 @@ import ca.ucalgary.ensf480.flightapp.service.FlightService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
 
+import ca.ucalgary.ensf480.flightapp.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,22 +66,23 @@ public class FlightController {
     // }
     @GetMapping("/{id}/seatMap")
     public ResponseEntity<List<SeatBookingDTO>> getSeatMap(@PathVariable Long id) {
-        List<SeatBookingDTO> seatMap = bookingService.getSeatMap(id);
+        User user = authenticationService.getCurrentUser();
+        List<SeatBookingDTO> seatMap = bookingService.getSeatMap(id, user);
 
-        Promo promotion = flightService.getFlightById(id).get().getPromo();
-        boolean isUserRegistered = authenticationService.getCurrentUser() != null;
+        // Promo promotion = flightService.getFlightById(id).get().getPromo();
+        // boolean isUserRegistered = authenticationService.getCurrentUser() != null;
 
-        if (promotion != null && isUserRegistered) {
-            // Apply promotion discount to each seat
-            seatMap.forEach(seatBookingDTO -> {
+        // if (promotion != null && isUserRegistered) {
+        //     // Apply promotion discount to each seat
+        //     seatMap.forEach(seatBookingDTO -> {
 
-                double discount = promotion.getDiscount();
-                BigDecimal originalPrice = seatBookingDTO.getPrice();
+        //         double discount = promotion.getDiscount();
+        //         BigDecimal originalPrice = seatBookingDTO.getPrice();
 
-                BigDecimal discountedPrice = applyPromotion(originalPrice, BigDecimal.valueOf(discount));
-                seatBookingDTO.setPrice(discountedPrice);
-            });
-        }
+        //         BigDecimal discountedPrice = applyPromotion(originalPrice, BigDecimal.valueOf(discount));
+        //         seatBookingDTO.setPrice(discountedPrice);
+        //     });
+        // }
 
         return ResponseEntity.ok(seatMap);
     }
