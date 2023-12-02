@@ -15,7 +15,7 @@ const SeatSelectionPage = () => {
     const fetchSeats = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/flights/${flightId}/seatMap`
+          `http://localhost:8080/api/public/flights/${flightId}/seatMap`
         );
         if (response.ok) {
           const data = await response.json();
@@ -129,7 +129,6 @@ const SeatSelectionPage = () => {
               <div className="control has-text-centered">
                 <button className="button is-warning" onClick={handleBack}>
                   Back
-
                 </button>
               </div>
             </div>

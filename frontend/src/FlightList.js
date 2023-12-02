@@ -10,7 +10,7 @@ const FlightList = () => {
     const fetchFlights = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/flights/search/${destination}`
+          `http://localhost:8080/api/public/search/${destination}`
         );
         if (response.ok) {
           const data = await response.json();

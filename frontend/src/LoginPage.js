@@ -3,36 +3,41 @@ import { useNavigate } from "react-router-dom";
 import "bulma/css/bulma.min.css";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("user"); // Default to "user"
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    if (username !== "" && password !== "") {
-      setLoggedIn(true);
-      const email = username;
-      const isCurrent = true;
-      const loginUser = { email, password, userType, isCurrent };
+    if (email !== "" && password !== "") {
+      const loginCredentials = { username: email, password, userType };
 
-      localStorage.setItem("customer", JSON.stringify(loginUser));
-
-      const url = userType === "flightcrew" ? "/flightcrew" : "/booking";
-
-      fetch("http://localhost:8080/api/users", {
+      fetch("http://localhost:8080/api/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(loginUser),
-      }).then((json) => {
-        navigate(url);
-        console.log(json);
-      });
+        body: JSON.stringify(loginCredentials),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Assuming your server returns the JWT cookie in the response headers
+          const jwtCookie = data.headers.get("Set-Cookie");
+          document.cookie = jwtCookie;
+          setLoggedIn(true);
+          navigate("/booking");
+        })
+        .catch((error) => {
+          console.error("Error during login:", error);
+        });
     } else {
-      alert("Please enter both username and password");
+      alert("Please enter both email and password");
     }
+  };
+
+  const handleSignup = () => {
+    navigate("/createnewacc");
   };
 
   return (
@@ -44,20 +49,18 @@ const Login = () => {
           <div className="column is-half">
             <div className="box">
               {loggedIn ? (
-                <div>
-                  <h2 className="title">Welcome, {username}!</h2>
-                </div>
+                navigate("/booking")
               ) : (
                 <div>
-                  <h2 className="title">Create Account</h2>
+                  <h2 className="title">Login</h2>
                   <form>
                     <div className="field">
-                      <label className="label">Username:</label>
+                      <label className="label">Email:</label>
                       <div className="control">
                         <input
-                          type="text"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
                           className="input"
                         />
                       </div>
@@ -82,6 +85,7 @@ const Login = () => {
                             onChange={(e) => setUserType(e.target.value)}>
                             <option value="user">User</option>
                             <option value="flightcrew">Flight Crew</option>
+                            <option value="admin">Admin</option>
                           </select>
                         </div>
                       </div>
@@ -93,6 +97,19 @@ const Login = () => {
                           onClick={handleLogin}
                           className="button is-primary">
                           Login
+                        </button>
+                      </div>
+                    </div>
+                    <div className="field">
+                      <h2 className="subtitle">or</h2>
+                    </div>
+                    <div className="field">
+                      <div className="control">
+                        <button
+                          type="button"
+                          onClick={handleSignup}
+                          className="button is-primary">
+                          Create New Account
                         </button>
                       </div>
                     </div>

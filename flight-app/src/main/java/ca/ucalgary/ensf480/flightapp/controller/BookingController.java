@@ -31,6 +31,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RequestMapping("/api")
 public class BookingController {
 
@@ -108,6 +109,5 @@ public class BookingController {
             this.paymentDetails = paymentDetails;
         }
     }
-
 
 }

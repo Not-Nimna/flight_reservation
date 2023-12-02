@@ -11,7 +11,7 @@ const BookingPage = () => {
 
   useEffect(() => {
     // Fetch the list of destinations from your API endpoint
-    fetch("http://localhost:8080/api/flights/cities")
+    fetch("http://localhost:8080/api/public/cities")
       .then((response) => response.json())
       .then((data) => setDestinationOptions(data))
       .catch((error) => console.error("Error fetching destinations:", error));
