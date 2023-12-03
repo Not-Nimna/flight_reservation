@@ -15,6 +15,7 @@ package ca.ucalgary.ensf480.flightapp.controller;
 import ca.ucalgary.ensf480.flightapp.DTO.BookingDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.CustomerDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.PaymentDTO;
+
 import ca.ucalgary.ensf480.flightapp.exception.PaymentFailedException;
 import ca.ucalgary.ensf480.flightapp.exception.ResourceNotFoundException;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
@@ -48,6 +49,7 @@ public class BookingController {
     @Autowired
     AuthenticationService authenticationService;
 
+
     // Endpoint to create a new booking
     @PostMapping("/public/flights/{flightId}/bookings/{seatId}")
     public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId,
@@ -58,6 +60,7 @@ public class BookingController {
             Booking booking = bookingService.makeBooking(flightId, seatId, user, bookingRequest.getCustomerDetails(),
                     bookingRequest.getPaymentDetails());
             if (booking != null) {
+                // booking success
                 return ResponseEntity.ok(booking);
             } else {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(null);

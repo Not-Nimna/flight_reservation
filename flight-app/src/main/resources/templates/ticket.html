@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Flight Ticket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+        }
+        .ticket-details {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td, th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Your Flight Ticket</h1>
+        </div>
+        <div class="ticket-details">
+            <p>Dear {{customerName}},</p>
+            <p>Here are the details of your flight ticket:</p>
+            <table>
+                <tr>
+                    <th>Flight Number</th>
+                    <td>{{flightNumber}}</td>
+                </tr>
+                <tr>
+                    <th>Seat Number</th>
+                    <td>{{seatNumber}}</td>
+                </tr>
+                <tr>
+                    <th>Seat Class</th>
+                    <td>{{seatClass}}</td>
+                </tr>
+                <tr>
+                    <th>Departure</th>
+                    <td>{{departureDestination}} at {{departureTime}}</td>
+                </tr>
+                <tr>
+                    <th>Arrival</th>
+                    <td>{{arrivalDestination}} at {{arrivalTime}}</td>
+                </tr>
+            </table>
+            <p>If you have any questions or need to make changes to your booking, please contact us.</p>
+            <p>Safe travels,</p>
+            <p>Flight App</p>
+        </div>
+    </div>
+</body>
+</html>

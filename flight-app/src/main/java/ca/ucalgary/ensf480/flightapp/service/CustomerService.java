@@ -1,3 +1,17 @@
+/**
+ * Customer Service.
+ * 
+ * Handles the creation and updating of customer records in the flight booking application. 
+ * Facilitates the synchronization of customer details with user accounts. Utilizes CustomerDTO 
+ * to map incoming data to Customer entities, ensuring accurate and up-to-date customer information.
+ * 
+ * Acts as a bridge between the application's user management and customer-specific data storage.
+ * 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 2, 2023
+ */
+
 package ca.ucalgary.ensf480.flightapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;

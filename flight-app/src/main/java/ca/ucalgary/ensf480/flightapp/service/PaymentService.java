@@ -1,3 +1,18 @@
+/**
+ * Payment Processing Service.
+ * 
+ * Manages the creation and processing of payments in the flight booking application. Simulates 
+ * payment transactions and records payment details. Upon successful payment, it collaborates 
+ * with the EmailService to send payment receipts to customers.
+ * 
+ * This service is integral to the financial transactions of the application, ensuring accurate 
+ * and reliable handling of customer payments.
+ * 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 2, 2023
+ */
+
 package ca.ucalgary.ensf480.flightapp.service;
 
 import java.math.BigDecimal;
@@ -15,12 +30,12 @@ import ca.ucalgary.ensf480.flightapp.repository.PaymentRepository;
 
 @Service
 public class PaymentService {
-    private PaymentRepository paymentRepository;
 
     @Autowired
-    public PaymentService(PaymentRepository paymentRepository) {
-      this.paymentRepository = paymentRepository;
-    }
+    PaymentRepository paymentRepository;
+
+    @Autowired
+    EmailService emailService;
 
     public Payment createPayment(PaymentDTO paymentDetails, BigDecimal price, Customer customer) {
       // Simulate interaction with payment provider
@@ -35,7 +50,12 @@ public class PaymentService {
       payment.setPaymentToken(paymentToken); // Save the payment token
       payment.setCustomer(customer);
 
-      return paymentRepository.save(payment); // Save the payment record
+      Payment res = paymentRepository.save(payment); // Save the payment record
+
+      if (res != null) {
+        emailService.sendReceiptEmail(payment);
+      }
+      return res;
     }
 
     private String processPayment(PaymentDTO paymentDetails, BigDecimal price) {
@@ -50,4 +70,6 @@ public class PaymentService {
         return null; // Simulate a failed payment
       }
     }
+
+
 }
