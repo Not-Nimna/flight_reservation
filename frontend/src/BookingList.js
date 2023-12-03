@@ -45,7 +45,9 @@ const BookingList = () => {
             <div className="card-content">
               <p className="title">ID: {booking.id}</p>
               <p className="subtitle">
-                Cancellation Code: {booking.cancellationCode}
+                Name: {booking.name}
+                <br />
+                Email: {booking.email}
               </p>
               <p>Price Paid: {booking.pricePaid}</p>
             </div>
