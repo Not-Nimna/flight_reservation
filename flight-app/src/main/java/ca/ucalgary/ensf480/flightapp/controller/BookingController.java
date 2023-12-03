@@ -46,7 +46,6 @@ public class BookingController {
     @Autowired
     AuthenticationService authenticationService;
 
-
     // Endpoint to create a new booking
     @PostMapping("/public/flights/{flightId}/bookings/{seatId}")
     public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId,
@@ -75,7 +74,7 @@ public class BookingController {
     // api endpoint to get all bookings for a given user
     @GetMapping("/user/bookings")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<Booking>> getBookings(@PathVariable long userId) {
+    public ResponseEntity<List<Booking>> getBookings() {
         try {
             User user = authenticationService.getCurrentUser();
             List<Booking> bookings = bookingService.getBookingsByUser(user);
@@ -113,7 +112,6 @@ public class BookingController {
         bookingService.deleteBooking(id);
         return ResponseEntity.ok().build();
     }
-
 
     public static class BookingRequest {
         private CustomerDTO customerDetails;
