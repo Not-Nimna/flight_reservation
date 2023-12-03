@@ -88,7 +88,7 @@ const CreateNewAccPage = () => {
                         value={userType}
                         onChange={(e) => setUserType(e.target.value)}>
                         <option value="user">User</option>
-                        <option value="flightcrew">Flight Crew</option>
+                        <option value="agent">Flight Crew</option>
                         <option value="admin">Admin</option>
                       </select>
                     </div>

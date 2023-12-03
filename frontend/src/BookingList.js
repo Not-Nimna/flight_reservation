@@ -10,8 +10,16 @@ const BookingList = () => {
     const fetchBookings = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/flight/${flightId}/bookings`
+          `http://localhost:8080/api/flights/${flightId}/bookings`,
+          {
+            method: "GET",
+            credentials: "include", // Include cookies
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
+
         if (response.ok) {
           const data = await response.json();
           setBookings(data);
@@ -24,7 +32,7 @@ const BookingList = () => {
     };
 
     fetchBookings();
-  }, []);
+  }, [flightId]);
 
   return (
     <div className="section has-background-success">
@@ -37,7 +45,9 @@ const BookingList = () => {
             <div className="card-content">
               <p className="title">ID: {booking.id}</p>
               <p className="subtitle">
-                Cancellation Code: {booking.cancellationCode}
+                Name: {booking.name}
+                <br />
+                Email: {booking.email}
               </p>
               <p>Price Paid: {booking.pricePaid}</p>
             </div>

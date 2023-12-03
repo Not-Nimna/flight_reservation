@@ -1,10 +1,16 @@
-// BookingPage.js
+// PassengersFlight.js
 import React from "react";
 import { Link } from "react-router-dom";
 import "bulma/css/bulma.min.css";
-import BookingList from "./BookingList"; // Replace with the actual path to BookingList
+import BookingList from "./BookingList";
+import { useParams } from "react-router-dom";
 
 const PassengersFlight = () => {
+  // Get the flightId from the URL
+
+  // Replace '123' with the actual flightId
+  const { flightId } = useParams();
+
   return (
     <div className="section">
       <div className="container">
@@ -15,7 +21,7 @@ const PassengersFlight = () => {
             </Link>
           </div>
         </div>
-        <BookingList />
+        <BookingList flightId={flightId} />
       </div>
     </div>
   );
