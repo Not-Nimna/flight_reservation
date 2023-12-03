@@ -19,9 +19,11 @@ import ca.ucalgary.ensf480.flightapp.exception.ResourceNotFoundException;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.model.User;
 import ca.ucalgary.ensf480.flightapp.service.BookingService;
+import ca.ucalgary.ensf480.flightapp.service.FlightService;
 import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,14 +41,11 @@ public class BookingController {
     BookingService bookingService;
 
     @Autowired
+    FlightService flightService;
+
+    @Autowired
     AuthenticationService authenticationService;
 
-    // Get the bookings for a flight - used by agent
-    @GetMapping("/flights/{flightID}/bookings")
-    @PreAuthorize("hasRole('AGENT')")
-    public List<Booking> getBookingsForFlight(@PathVariable Long flightID) {
-        return bookingService.getBookingsByFlight(flightID);
-    }
 
     // Endpoint to create a new booking
     @PostMapping("/public/flights/{flightId}/bookings/{seatId}")
@@ -78,14 +77,43 @@ public class BookingController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Booking>> getBookings(@PathVariable long userId) {
         try {
-            // Fix this
             User user = authenticationService.getCurrentUser();
-            List<Booking> bookings = bookingService.getBookings(userId);
+            List<Booking> bookings = bookingService.getBookingsByUser(user);
             return ResponseEntity.ok(bookings);
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
+    // AGENT stuff -- Passengers
+
+    // Get the bookings for a flight - restricted to agents
+    @GetMapping("/flights/{flightId}/bookings")
+    @PreAuthorize("hasRole('AGENT')")
+    public Set<Booking> getBookingsForFlight(@PathVariable Long flightId) {
+        return flightService.getBookings(flightId);
+    }
+
+    // Get passenger by ID - restricted to agents
+    @GetMapping("/flight/{flightId}/bookings/{id}")
+    @PreAuthorize("hasRole('AGENT')")
+    public ResponseEntity<Booking> getPassengerById(@PathVariable Long flightId, @PathVariable Long id) {
+        Booking booking = bookingService.getBookingById(id);
+        if (booking != null) {
+            return ResponseEntity.ok(booking);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    // Delete a passenger - restricted to agents
+    @DeleteMapping("/flight/{flightId}/bookings/{id}")
+    @PreAuthorize("hasRole('AGENT')")
+    public ResponseEntity<Booking> deletePassenger(@PathVariable Long id) {
+        bookingService.deleteBooking(id);
+        return ResponseEntity.ok().build();
+    }
+
 
     public static class BookingRequest {
         private CustomerDTO customerDetails;

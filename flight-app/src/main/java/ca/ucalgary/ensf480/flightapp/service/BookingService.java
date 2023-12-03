@@ -21,7 +21,6 @@ import ca.ucalgary.ensf480.flightapp.exception.ResourceNotFoundException;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
 import ca.ucalgary.ensf480.flightapp.model.Customer;
 import ca.ucalgary.ensf480.flightapp.model.Flight;
-import ca.ucalgary.ensf480.flightapp.model.Passenger;
 import ca.ucalgary.ensf480.flightapp.model.Payment;
 import ca.ucalgary.ensf480.flightapp.model.PaymentStatus;
 import ca.ucalgary.ensf480.flightapp.model.Seat;
@@ -29,6 +28,7 @@ import ca.ucalgary.ensf480.flightapp.model.User;
 import ca.ucalgary.ensf480.flightapp.repository.BookingRepository;
 import ca.ucalgary.ensf480.flightapp.repository.FlightRepository;
 import ca.ucalgary.ensf480.flightapp.repository.SeatRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,7 +79,6 @@ public class BookingService {
 
         BigDecimal price = pricingService.calculatePrice(seat, flight, user);
 
-
         Customer customer = customerService.createOrUpdateCustomer(customerDTO, user);
 
         // Create payment
@@ -92,9 +91,7 @@ public class BookingService {
             throw new PaymentFailedException("Payment processing failed");
         }
 
-        Passenger passenger = new Passenger(customer.getName(), customer.getEmail(), customer.getId());
-        Booking booking = new Booking(flight, seat, price, user, payment, passenger);
-        flight.addPassenger(passenger);
+        Booking booking = new Booking(customer.getName(), customer.getEmail(), flight, seat, price, user, payment);
 
         return bookingRepository.save(booking); // Save the successful booking
 
@@ -145,4 +142,19 @@ public class BookingService {
         return bookingRepository.findByFlightId(flightId);
     }
 
+    public Booking getBookingById(Long id) {
+        return bookingRepository.findById(id).orElseThrow(() -> 
+            new EntityNotFoundException("Booking not found with id: " + id));
+    }
+
+
+    public void deleteBooking(Long id) {
+        bookingRepository.deleteById(id);
+    }
+    
+
+    public List<Booking> getBookingsByUser(User user) {
+        return bookingRepository.findByUser(user);
+    }
+    
 }

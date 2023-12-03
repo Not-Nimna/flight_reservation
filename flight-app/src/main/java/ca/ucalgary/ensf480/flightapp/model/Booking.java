@@ -33,6 +33,9 @@ public class Booking {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String email;
+
     @Column(nullable = false, unique = true)
     private String cancellationCode; // Unique cancellation code for each booking
 
@@ -55,26 +58,21 @@ public class Booking {
     @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment; // The payment associated with this booking
 
-    // Passenger associated with this booking
-    @ManyToOne
-    @JoinColumn(name = "passenger_id", nullable = false)
-    private Passenger passenger;
-
-
     // Constructors, getters, and setters
 
     public Booking() {
         this.cancellationCode = UUID.randomUUID().toString(); // Generate a unique cancellation code
     }
 
-    public Booking(Flight flight, Seat seat, BigDecimal pricePaid, User user, Payment payment, Passenger passenger) {
+    public Booking(String name, String email, Flight flight, Seat seat, BigDecimal pricePaid, User user, Payment payment) {
         this();
+        this.name = name;
+        this.email = email;
         this.flight = flight;
         this.seat = seat;
         this.pricePaid = pricePaid;
         this.user = user;
         this.payment = payment;
-        this.passenger = passenger;
         generateCancellationCode();
     }
 
@@ -90,6 +88,22 @@ public class Booking {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getCancellationCode() {
@@ -132,15 +146,12 @@ public class Booking {
         this.pricePaid = pricePaid;
     }
 
-    public void setCustomer(Customer customer2) {
+    public Payment getPayment() {
+        return payment;
     }
 
     public void setPayment(Payment payment2) {
+        this.payment = payment2;
     }
-    public Passenger getPassenger() {
-        return passenger;
-    }
-    public void setPassenger(Passenger passenger) {
-        this.passenger = passenger;
-    }
+
 }
