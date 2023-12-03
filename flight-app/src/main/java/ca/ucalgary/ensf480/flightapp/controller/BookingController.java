@@ -12,6 +12,7 @@
 
 package ca.ucalgary.ensf480.flightapp.controller;
 
+import ca.ucalgary.ensf480.flightapp.DTO.BookingDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.CustomerDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.PaymentDTO;
 import ca.ucalgary.ensf480.flightapp.exception.PaymentFailedException;
@@ -24,6 +25,8 @@ import ca.ucalgary.ensf480.flightapp.service.AuthenticationService;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -56,7 +59,11 @@ public class BookingController {
             User user = authenticationService.getCurrentUser();
             Booking booking = bookingService.makeBooking(flightId, seatId, user, bookingRequest.getCustomerDetails(),
                     bookingRequest.getPaymentDetails());
-            return ResponseEntity.ok(booking);
+            if (booking != null) {
+                return ResponseEntity.ok(booking);
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            }
 
         } catch (PaymentFailedException ex) {
             return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(null);
@@ -75,13 +82,19 @@ public class BookingController {
     // api endpoint to get all bookings for a given user
     @GetMapping("/user/bookings")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<Booking>> getBookings(@PathVariable long userId) {
+    public ResponseEntity<List<BookingDTO>> getBookings() {
         try {
             User user = authenticationService.getCurrentUser();
             List<Booking> bookings = bookingService.getBookingsByUser(user);
-            return ResponseEntity.ok(bookings);
+            List<BookingDTO> bookingDTOS = bookings.stream()
+                                                .map(booking -> new BookingDTO(booking)) // Assuming BookingDTO has a constructor that takes a Booking object
+                                                .collect(Collectors.toList()); // Corrected line
+            return ResponseEntity.ok(bookingDTOS); // Return the DTO list, not the entity list
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception ex) {
+            ex.printStackTrace(); // For debugging
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
