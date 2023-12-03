@@ -158,7 +158,7 @@ const PaymentPage = () => {
         }
 
         console.log("Payment successful!");
-        
+
         navigate("/booking");
         // Reset form fields
         setCreditCardInfo({
@@ -185,7 +185,8 @@ const PaymentPage = () => {
   };
 
   const handleGoBack = () => {
-    navigate(-1);
+    alert("Payment cancelled");
+    navigate("/booking");
   };
 
   return (
