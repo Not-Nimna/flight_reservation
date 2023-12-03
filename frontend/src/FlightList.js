@@ -59,9 +59,6 @@ const FlightList = () => {
           ))}
         </div>
         <div className="has-text-centered mt-4">
-          <Link to="/">
-            <button className="button is-danger mr-4">Logout</button>
-          </Link>
           <Link to="/booking">
             <button className="button is-warning">Back to Booking Page</button>
           </Link>
