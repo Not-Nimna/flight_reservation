@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "bulma/css/bulma.min.css";
+import { UserContext } from './UserContext'; 
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("user"); // Default to "user"
   const [loggedIn, setLoggedIn] = useState(false);
+  const { setIsLoggedIn } = useContext(UserContext); // Use the UserContext
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -30,6 +33,7 @@ const Login = () => {
           return response.json(); // Parse the JSON data if available
         })
         .then((data) => {
+          setIsLoggedIn(true);
           // Log the response from the server
           console.log(data);
           // if flight crew, navigate to flight crew page

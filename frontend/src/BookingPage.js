@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "bulma/css/bulma.min.css";
+import { UserContext } from './UserContext'; 
 
-const BookingPage = () => {
+
+const BookingPage = ({}) => {
+
+  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
+
   const [bookingData, setBookingData] = useState({
     destination: "",
   });
@@ -23,9 +28,20 @@ const BookingPage = () => {
     setBookingData({ ...bookingData, [name]: value });
   };
 
-  const handleBack = () => {
+  const handleLogIn = () => {
+    setIsLoggedIn(true);
+    navigate("/");
+  }
+
+  const handleLogOut = () => {
+    setIsLoggedIn(false);
+    signout();
+    navigate("/");
+  }
+
+  const signout = () => {
     // Call the /signout endpoint to sign out the user
-    fetch("http://localhost:8080/signout", {
+    fetch("http://localhost:8080/api/auth/signout", {
       method: "POST",
       credentials: "include",
     })
@@ -117,12 +133,17 @@ const BookingPage = () => {
                 </div>
               </div>
             </form>
-            <button
-              onClick={handleBack}
-              className="button is-danger"
-              style={{ marginTop: "10px" }}>
-              Log out
-            </button>
+
+            {isLoggedIn ? 
+              <button onClick={handleLogOut} className="button is-danger" style={{ marginTop: "10px" }}>
+                Log out
+              </button>
+              : 
+              <button onClick={handleLogIn} className="button is-info" style={{ marginTop: "10px" }}>
+                Log In
+              </button>
+            }
+            
           </div>
         </div>
       </div>
