@@ -38,6 +38,7 @@ const MyFlights = () => {
       })
       //refresh the page
       .then(() => {
+        alert('Cancellation successful')
         window.location.reload();
       });
   };

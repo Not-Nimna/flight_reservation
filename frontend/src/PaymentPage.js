@@ -158,6 +158,7 @@ const PaymentPage = () => {
         }
 
         console.log("Payment successful!");
+        
         navigate("/booking");
         // Reset form fields
         setCreditCardInfo({
