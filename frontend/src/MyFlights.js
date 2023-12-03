@@ -41,6 +41,7 @@ const MyFlights = () => {
         alert('Cancellation successful')
         window.location.reload();
       });
+    alert("Flight Cancelled");
   };
 
   useEffect(() => {
@@ -97,7 +98,7 @@ const MyFlights = () => {
             Book More Flights
           </Link>
           <Link to="/" className="button is-danger m-2">
-            Logout
+            GoBack
           </Link>
         </div>
       </div>

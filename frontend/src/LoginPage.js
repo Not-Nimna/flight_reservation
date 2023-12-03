@@ -57,6 +57,7 @@ const Login = () => {
     } else {
       alert("Please enter both email and password");
     }
+    localStorage.setItem("userLoggedIn", true);
   };
 
   const handleSignup = () => {

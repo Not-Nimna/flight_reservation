@@ -20,10 +20,10 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<BookingPage />} />
       <Route path="/createnewacc" element={<CreateNewAccPage />} />
       <Route path="/booking" element={<BookingPage />} />
-      <Route path="/registeruser" element={<RegisterUser />} />
+      <Route path="/registeruser" element={<Login />} />
       <Route path="/flightcrew" element={<FlightCrewPage />} />
 
       <Route

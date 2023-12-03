@@ -13,20 +13,35 @@ const BookingPage = ({}) => {
     destination: "",
   });
   const [destinationOptions, setDestinationOptions] = useState([]);
+  const [promotions, setPromotions] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check if the user is logged in
+    const userLoggedIn = localStorage.getItem("userLoggedIn") === "true";
+    setIsLoggedIn(userLoggedIn);
+
     // Fetch the list of destinations from your API endpoint
     fetch("http://localhost:8080/api/public/cities")
       .then((response) => response.json())
       .then((data) => setDestinationOptions(data))
       .catch((error) => console.error("Error fetching destinations:", error));
-  }, []); // Empty dependency array ensures the effect runs once on component mount
+
+    // Fetch promotions only if the user is logged in
+    if (userLoggedIn) {
+      fetch("http://localhost:8080/api/public/promos")
+        .then((response) => response.json())
+        .then((data) => setPromotions(data))
+        .catch((error) => console.error("Error fetching promotions:", error));
+    }
+  }, []);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setBookingData({ ...bookingData, [name]: value });
   };
+
 
   const handleLogIn = () => {
     setIsLoggedIn(true);
@@ -40,23 +55,22 @@ const BookingPage = ({}) => {
   }
 
   const signout = () => {
-    // Call the /signout endpoint to sign out the user
+
     fetch("http://localhost:8080/api/auth/signout", {
       method: "POST",
       credentials: "include",
     })
       .then((response) => {
         if (!response.ok) {
-          // If the response status is not OK, log the response
           console.error("Error signing out. Status:", response.status);
           return Promise.reject("Sign-out failed");
         }
-        return response.json(); // Parse the JSON data if available
+        return response.json();
       })
       .then((data) => {
-        // Log the response from the server
         console.log(data);
-        // Redirect to the home page
+        localStorage.setItem("userLoggedIn", "false");
+        setIsLoggedIn(false);
         navigate("/");
       })
       .catch((error) => {
@@ -124,7 +138,6 @@ const BookingPage = ({}) => {
               <div className="field">
                 <div className="control" style={{ alignItems: "center" }}>
                   <button
-                    onClick={handleSubmit}
                     type="submit"
                     className="button is-primary"
                     style={{ marginTop: "10px" }}>
@@ -143,6 +156,16 @@ const BookingPage = ({}) => {
                 Log In
               </button>
             }
+            {isLoggedIn && (
+              <div>
+                <h2>Promotions:</h2>
+                <ul>
+                  {promotions.map((promo) => (
+                    <li key={promo.id}>{promo.promoDescription}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             
           </div>
         </div>
