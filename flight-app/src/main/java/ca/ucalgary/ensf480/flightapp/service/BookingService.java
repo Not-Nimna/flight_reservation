@@ -13,9 +13,11 @@
 
 package ca.ucalgary.ensf480.flightapp.service;
 
+import ca.ucalgary.ensf480.flightapp.DTO.BookingDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.CustomerDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.PaymentDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.SeatBookingDTO;
+import ca.ucalgary.ensf480.flightapp.email.services.EmailService;
 import ca.ucalgary.ensf480.flightapp.exception.PaymentFailedException;
 import ca.ucalgary.ensf480.flightapp.exception.ResourceNotFoundException;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
@@ -60,6 +62,9 @@ public class BookingService {
     @Autowired
     PricingService pricingService;
 
+    @Autowired
+    EmailService emailService;
+
     public Booking makeBooking(Long flightId, Long seatId, User user, CustomerDTO customerDTO,
             PaymentDTO paymentDTO) {
         Optional<Seat> optionalSeat = seatRepository.findById(seatId);
@@ -81,11 +86,10 @@ public class BookingService {
 
         Customer customer = customerService.createOrUpdateCustomer(customerDTO, user);
 
-        // Create payment
+        // Create payment - this will send the recipt
         Payment payment = paymentService.createPayment(paymentDTO, price, customer);
 
         // Only create booking if payment is successful
-
 
         if (payment.getPaymentStatus() != PaymentStatus.SUCCESS) {
             throw new PaymentFailedException("Payment processing failed");
@@ -93,7 +97,15 @@ public class BookingService {
 
         Booking booking = new Booking(customer.getName(), customer.getEmail(), flight, seat, price, user, payment);
 
-        return bookingRepository.save(booking); // Save the successful booking
+        Booking booking_saved = bookingRepository.save(booking); // Save the successful booking
+
+        if (booking != null) {
+            // Send ticket
+            BookingDTO bookingDTO = new BookingDTO(booking_saved);
+            emailService.sendTicketEmail(bookingDTO);
+
+        }
+        return booking_saved;
 
     }
 

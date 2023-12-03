@@ -2,19 +2,29 @@ package ca.ucalgary.ensf480.flightapp.DTO;
 
 
 public class ReceiptEmailDTO {
-    private String recipient;
+    private String name;
+    private String email;
     private String amountPaid;
     private String paymentDate;
-    // ... possibly other fields
 
     // Constructor
     public ReceiptEmailDTO() {
-        // default constructor
+    }
+
+    public ReceiptEmailDTO(String name, String email, String amountPaid, String paymentDate) {
+        this.name = name;
+        this.email = email;
+        this.amountPaid = amountPaid;
+        this.paymentDate = paymentDate;
     }
 
     // Getters
-    public String getRecipient() {
-        return recipient;
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getAmountPaid() {
@@ -27,10 +37,6 @@ public class ReceiptEmailDTO {
 
     // ... getters for other fields if added
 
-    // Setters
-    public void setRecipient(String recipient) {
-        this.recipient = recipient;
-    }
 
     public void setAmountPaid(String amountPaid) {
         this.amountPaid = amountPaid;

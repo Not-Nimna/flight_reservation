@@ -8,19 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ca.ucalgary.ensf480.flightapp.DTO.PaymentDTO;
+import ca.ucalgary.ensf480.flightapp.DTO.ReceiptEmailDTO;
+import ca.ucalgary.ensf480.flightapp.email.services.EmailService;
 import ca.ucalgary.ensf480.flightapp.model.Customer;
 import ca.ucalgary.ensf480.flightapp.model.Payment;
 import ca.ucalgary.ensf480.flightapp.model.PaymentStatus;
 import ca.ucalgary.ensf480.flightapp.repository.PaymentRepository;
+import jakarta.validation.constraints.Email;
 
 @Service
 public class PaymentService {
-    private PaymentRepository paymentRepository;
 
     @Autowired
-    public PaymentService(PaymentRepository paymentRepository) {
-      this.paymentRepository = paymentRepository;
-    }
+    PaymentRepository paymentRepository;
+
+    @Autowired
+    EmailService emailService;
 
     public Payment createPayment(PaymentDTO paymentDetails, BigDecimal price, Customer customer) {
       // Simulate interaction with payment provider
@@ -35,7 +38,12 @@ public class PaymentService {
       payment.setPaymentToken(paymentToken); // Save the payment token
       payment.setCustomer(customer);
 
-      return paymentRepository.save(payment); // Save the payment record
+      Payment res = paymentRepository.save(payment); // Save the payment record
+
+      if (res != null) {
+        emailService.sendReceiptEmail(payment);
+      }
+      return res;
     }
 
     private String processPayment(PaymentDTO paymentDetails, BigDecimal price) {
@@ -50,4 +58,6 @@ public class PaymentService {
         return null; // Simulate a failed payment
       }
     }
+
+
 }
