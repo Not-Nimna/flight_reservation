@@ -4,10 +4,16 @@ import { useParams } from "react-router-dom";
 
 const PaymentPage = () => {
   const { flightId, seatNumber } = useParams();
-  const [customerEmail, setCustomerEmail] = useState("");
+
   const navigate = useNavigate();
-  const customer = JSON.parse(localStorage.getItem("customer"));
-  console.log(customer.email);
+  const [customer, setCustomer] = useState({
+    name: "",
+    email: "",
+  });
+  const storedSeatId = localStorage.getItem("seatId");
+  console.log("seatNumber", storedSeatId);
+  console.log("flightId", flightId);
+  console.log("customer", customer);
 
   const [creditCardInfo, setCreditCardInfo] = useState({
     cardNumber: "",
@@ -15,6 +21,7 @@ const PaymentPage = () => {
     expirationDate: "",
     cvv: "",
   });
+  console.log("creditCardInfo", creditCardInfo);
 
   const [errors, setErrors] = useState({
     cardNumber: "",
@@ -29,9 +36,16 @@ const PaymentPage = () => {
       ...prevInfo,
       [name]: value,
     }));
+
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: "", // Clear error when user starts typing
+    }));
+
+    // setcustomer info using credit card info
+    setCustomer((prevInfo) => ({
+      ...prevInfo,
+      [name]: value,
     }));
 
     // Validation checks
@@ -106,19 +120,27 @@ const PaymentPage = () => {
     // Check if there are errors before submitting
     if (Object.keys(newErrors).length === 0) {
       try {
+        // set customer info
+        setCustomer((prevInfo) => ({
+          ...prevInfo,
+          name: creditCardInfo.cardHolderName,
+        }));
+
         // Send payment data to the server
-        const storedSeatId = localStorage.getItem("seatId");
+
         const response = await fetch(
-          `http://localhost:8080/api/flight/${flightId}/bookings/${storedSeatId}`,
+          `http://localhost:8080/api/public/flighs/${flightId}/bookings/${storedSeatId}`,
           {
             method: "POST",
+            // include cookies in the request
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
               customerDetails: {
-                name: customer.email,
-                email: customerEmail,
+                name: customer.name,
+                email: customer.email,
               },
               paymentDetails: {
                 cardNumber: creditCardInfo.cardNumber,
@@ -178,9 +200,13 @@ const PaymentPage = () => {
                   className={`input ${errors.email ? "is-danger" : ""}`}
                   type="email"
                   name="email"
-                  value={customerEmail}
+                  value={customer.email}
                   onChange={(e) => {
-                    setCustomerEmail(e.target.value);
+                    setCustomer((prevInfo) => ({
+                      ...prevInfo,
+                      email: e.target.value,
+                    }));
+
                     handleInputChange(e);
                   }}
                   placeholder="Enter email address"

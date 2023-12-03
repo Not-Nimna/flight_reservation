@@ -27,18 +27,14 @@ const FlightCrewPage = () => {
     <div className="section">
       <div className="container">
         <div className="has-text-centered">
-
           <h2 className="title is-4 has-text-info">
             Flights for Airline Staff
           </h2>
-
         </div>
         <div className="columns is-multiline is-centered">
           {flights.map((flight) => (
             <div className="column is-one-third" key={flight.id}>
-
               <Link to={`/passengersflight/${flight.id}`}>
-
                 <div className="card has-background-light">
                   <div className="card-content">
                     <p className="title has-text-primary">
@@ -69,7 +65,6 @@ const FlightCrewPage = () => {
           <Link to="/booking">
             <button className="button is-primary">Back to Booking Page</button>
           </Link>
-
         </div>
       </div>
     </div>

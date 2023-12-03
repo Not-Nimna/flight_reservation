@@ -18,8 +18,8 @@ public class AuthenticationService {
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || !authentication.isAuthenticated() || 
-            authentication.getPrincipal() instanceof String) {
+        if (authentication == null || !authentication.isAuthenticated() ||
+                authentication.getPrincipal() instanceof String) {
             return null;
         }
 
@@ -28,7 +28,7 @@ public class AuthenticationService {
         if (principal instanceof UserDetailsImpl) {
             UserDetailsImpl userDetails = (UserDetailsImpl) principal;
             return userRepository.findByUsername(userDetails.getUsername())
-                                 .orElse(null);
+                    .orElse(null);
         } else {
             return null;
         }

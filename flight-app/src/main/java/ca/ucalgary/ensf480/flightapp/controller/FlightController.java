@@ -30,7 +30,7 @@ import java.util.Optional;
 
 
 @RestController
-
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RequestMapping("/api")
 public class FlightController {
 
@@ -42,7 +42,6 @@ public class FlightController {
 
     @Autowired
     AuthenticationService authenticationService;
-
 
     // Get all flights - accessible to all users
     @GetMapping("/public/flights")

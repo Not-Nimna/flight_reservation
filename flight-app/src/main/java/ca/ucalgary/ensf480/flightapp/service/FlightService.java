@@ -64,8 +64,10 @@ public class FlightService {
                 .distinct()
                 .collect(Collectors.toList());
     }
+
     // get all bookings on a flight
     public Set<Booking> getBookings(Long id) {
         return flightRepository.findById(id).get().getBookings();
+
     }
 }

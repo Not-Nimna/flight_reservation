@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "bulma/css/bulma.min.css";
 
 const BookingPage = () => {
@@ -11,7 +12,7 @@ const BookingPage = () => {
 
   useEffect(() => {
     // Fetch the list of destinations from your API endpoint
-    fetch("http://localhost:8080/api/flights/cities")
+    fetch("http://localhost:8080/api/public/cities")
       .then((response) => response.json())
       .then((data) => setDestinationOptions(data))
       .catch((error) => console.error("Error fetching destinations:", error));
@@ -46,6 +47,11 @@ const BookingPage = () => {
           <div className="card-content has-text-centered">
             <div className="level">
               <div className="level-left">
+                <Link to="/registerUser" className="button is-info">
+                  Register
+                </Link>
+              </div>
+              <div className="level-item">
                 <h1 className="title">Flight Booking System</h1>
               </div>
               <div className="level-right">
