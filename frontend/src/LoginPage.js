@@ -22,21 +22,8 @@ const Login = () => {
         body: JSON.stringify(loginCredentials),
       })
         .then((response) => {
-          // Check if the response contains the 'Set-Cookie' header
-          console.log("Response headers:", response.headers);
-          const jwtCookieHeader = response.headers.get("Set-Cookie");
-          console.log("JWT cookie header:", jwtCookieHeader);
-          if (jwtCookieHeader) {
-            // Extract the cookie value from the 'Set-Cookie' header
-            const jwtCookie = jwtCookieHeader.split(";")[0];
-            document.cookie = jwtCookie;
-            setLoggedIn(true);
-            navigate("/booking");
-          } else {
-            // Handle the case where the server doesn't set the cookie
-            console.error("JWT cookie not found in response headers");
-          }
-          return response.json();
+          navigate("/booking");
+          setLoggedIn(true);
         })
         .catch((error) => {
           console.error("Error during login:", error);

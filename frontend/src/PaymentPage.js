@@ -132,6 +132,8 @@ const PaymentPage = () => {
           `http://localhost:8080/api/public/flighs/${flightId}/bookings/${storedSeatId}`,
           {
             method: "POST",
+            // include cookies in the request
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
             },

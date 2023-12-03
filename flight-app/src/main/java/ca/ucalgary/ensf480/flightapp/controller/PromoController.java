@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", methods = { RequestMethod.GET,
+        RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT })
 @RequestMapping("/api")
 public class PromoController {
 
