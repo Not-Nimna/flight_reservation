@@ -6,38 +6,59 @@ const MyFlights = () => {
   const [flights, setFlights] = useState([]);
 
   const handleCancel = (flightId) => {
+    // Find the flight by id
+    const flightToCancel = flights.find((flight) => flight.id === flightId);
+
+    if (!flightToCancel) {
+      console.error(`Flight with id ${flightId} not found.`);
+      return;
+    }
+
     // Make a DELETE request to cancel the flight
-    fetch(`http://localhost:8080/student/delete/${flightId}`, {
-      method: "DELETE",
-    })
+    fetch(
+      `http://localhost:8080/api/public/bookings/${flightToCancel.cancellationCode}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data); // Log the response from the server
+        alert(data.message);
 
-        // If the flight was deleted successfully, update the state
-        if (data.startsWith("Student with ID")) {
+        // If the cancellation was successful, update the state
+        if (data.success) {
           setFlights((prevFlights) =>
             prevFlights.filter((flight) => flight.id !== flightId)
           );
         }
       })
       .catch((error) => {
-        console.error("Error canceling flight:", error);
+        console.error("Error cancelling flight:", error);
+      })
+      //refresh the page
+      .then(() => {
+        window.location.reload();
       });
   };
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/flights")
+    fetch("http://localhost:8080/api/user/bookings", {
+      credentials: "include", // Include credentials (cookies) with the request
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         // Assuming data is an array of flights
         setFlights(
           data.map((flight) => ({
             id: flight.id,
-            airline: flight.aircraftCode, // You can adjust this based on your data structure
-            origin: flight.departureDestination,
-            destination: flight.arrivalDestination,
-            departureTime: new Date(flight.departureTime).toLocaleString(), // Format the date as needed
+            name: flight.name,
+            email: flight.email,
+            cancellationCode: flight.cancellationCode,
+            pricePaid: flight.pricePaid,
           }))
         );
       })
@@ -47,7 +68,9 @@ const MyFlights = () => {
   }, []);
 
   return (
-    <div className="section">
+    <div
+      className="section has-background-primary "
+      style={{ minHeight: "100vh" }}>
       <div className="container">
         <h2 className="title has-text-centered">My Flights</h2>
         <div className="columns is-multiline is-centered">
@@ -55,11 +78,9 @@ const MyFlights = () => {
             <div key={flight.id} className="column is-one-third">
               <div className="card">
                 <div className="card-content">
-                  <p className="title">{flight.airline}</p>
-                  <p className="subtitle">
-                    {flight.origin} to {flight.destination}
-                  </p>
-                  <p>Departure Time: {flight.departureTime}</p>
+                  <p className="title">{flight.name}</p>
+                  <p className="subtitle">{flight.email}</p>
+                  <p>Price Paid: {flight.pricePaid}</p>
                   <button
                     className="button is-danger"
                     onClick={() => handleCancel(flight.id)}>
@@ -71,7 +92,7 @@ const MyFlights = () => {
           ))}
         </div>
         <div className="has-text-centered">
-          <Link to="/booking" className="button is-primary m-2">
+          <Link to="/booking" className="button is-info m-2">
             Book More Flights
           </Link>
           <Link to="/" className="button is-danger m-2">

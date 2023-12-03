@@ -179,6 +179,8 @@ const PaymentPage = () => {
     } else {
       setErrors(newErrors);
     }
+
+    alert("Booking successful!");
   };
 
   const handleGoBack = () => {

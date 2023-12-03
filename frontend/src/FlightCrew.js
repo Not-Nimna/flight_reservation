@@ -8,7 +8,9 @@ const FlightCrewPage = () => {
   useEffect(() => {
     const fetchFlights = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/flights");
+        const response = await fetch(
+          "http://localhost:8080/api/public/flights"
+        );
         if (response.ok) {
           const data = await response.json();
           setFlights(data);
@@ -24,10 +26,12 @@ const FlightCrewPage = () => {
   }, []);
 
   return (
-    <div className="section">
+    <div
+      className="section has-background-primary has-text-white"
+      style={{ minHeight: "100vh" }}>
       <div className="container">
         <div className="has-text-centered">
-          <h2 className="title is-4 has-text-info">
+          <h2 className="title is-2 has-text-info">
             Flights for Airline Staff
           </h2>
         </div>
@@ -63,7 +67,7 @@ const FlightCrewPage = () => {
           </Link>
 
           <Link to="/booking">
-            <button className="button is-primary">Back to Booking Page</button>
+            <button className="button is-info">Back to Booking Page</button>
           </Link>
         </div>
       </div>
