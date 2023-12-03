@@ -24,7 +24,28 @@ const BookingPage = () => {
   };
 
   const handleBack = () => {
-    navigate("/");
+    // Call the /signout endpoint to sign out the user
+    fetch("http://localhost:8080/signout", {
+      method: "POST",
+      credentials: "include",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          // If the response status is not OK, log the response
+          console.error("Error signing out. Status:", response.status);
+          return Promise.reject("Sign-out failed");
+        }
+        return response.json(); // Parse the JSON data if available
+      })
+      .then((data) => {
+        // Log the response from the server
+        console.log(data);
+        // Redirect to the home page
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+      });
   };
 
   const handleSubmit = (event) => {
