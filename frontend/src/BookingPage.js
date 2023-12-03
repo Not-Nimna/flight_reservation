@@ -46,6 +46,7 @@ const BookingPage = () => {
       .catch((error) => {
         console.error("Error signing out:", error);
       });
+    navigate("/");
   };
 
   const handleSubmit = (event) => {

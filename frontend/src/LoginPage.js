@@ -22,7 +22,28 @@ const Login = () => {
         body: JSON.stringify(loginCredentials),
       })
         .then((response) => {
-          navigate("/booking");
+          if (!response.ok) {
+            // If the response status is not OK, log the response
+            console.error("Error during login. Status:", response.status);
+            return Promise.reject("Login failed");
+          }
+          return response.json(); // Parse the JSON data if available
+        })
+        .then((data) => {
+          // Log the response from the server
+          console.log(data);
+          // if flight crew, navigate to flight crew page
+          if (userType === "flightcrew") {
+            navigate("/flightcrew");
+          }
+          // if admin, navigate to admin page
+          else if (userType === "admin") {
+            navigate("/admin");
+          }
+          // if user, navigate to booking page
+          else {
+            navigate("/booking");
+          }
           setLoggedIn(true);
         })
         .catch((error) => {
