@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "promos")
 public class Promo {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,8 +44,17 @@ public class Promo {
     }
 
     public void setPromoDescription(Double discount) {
-        this.promoDescription = String.format("This flight is %.2f percent off!", discount * 100);
-    }    
+        String[] promoDescriptions = {
+                "Save big on this flight to london with a discount of %.2f percent!",
+                "Limited-time offer: %.2f percent off on your next flight!",
+                "Enjoy a special discount of %.2f percent on the flight to Singapre!",
+                "Book now and get %.2f percent off on your Comfort ticket!",
+                "Unbelievable savings: %.2f percent discount on fam,ily bookings!"
+        };
+
+        int randomIndex = (int) (Math.random() * promoDescriptions.length);
+        this.promoDescription = String.format(promoDescriptions[randomIndex], discount * 100);
+    }
 
     public void setDiscount(Double discount) {
         this.discount = discount;
