@@ -49,7 +49,6 @@ public class BookingController {
     @Autowired
     AuthenticationService authenticationService;
 
-
     // Endpoint to create a new booking
     @PostMapping("/public/flights/{flightId}/bookings/{seatId}")
     public ResponseEntity<Booking> makeBooking(@PathVariable Long flightId, @PathVariable Long seatId,
@@ -87,8 +86,9 @@ public class BookingController {
             User user = authenticationService.getCurrentUser();
             List<Booking> bookings = bookingService.getBookingsByUser(user);
             List<BookingDTO> bookingDTOS = bookings.stream()
-                                                .map(booking -> new BookingDTO(booking)) // Assuming BookingDTO has a constructor that takes a Booking object
-                                                .collect(Collectors.toList()); // Corrected line
+                    .map(booking -> new BookingDTO(booking)) // Assuming BookingDTO has a constructor that takes a
+                                                             // Booking object
+                    .collect(Collectors.toList()); // Corrected line
             return ResponseEntity.ok(bookingDTOS); // Return the DTO list, not the entity list
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -126,7 +126,6 @@ public class BookingController {
         bookingService.deleteBooking(id);
         return ResponseEntity.ok().build();
     }
-
 
     public static class BookingRequest {
         private CustomerDTO customerDetails;

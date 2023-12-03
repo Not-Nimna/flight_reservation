@@ -129,7 +129,7 @@ const PaymentPage = () => {
         // Send payment data to the server
 
         const response = await fetch(
-          `http://localhost:8080/api/public/flighs/${flightId}/bookings/${storedSeatId}`,
+          `http://localhost:8080/api/public/flights/${flightId}/bookings/${storedSeatId}`,
           {
             method: "POST",
             // include cookies in the request
@@ -179,6 +179,8 @@ const PaymentPage = () => {
     } else {
       setErrors(newErrors);
     }
+
+    alert("Booking successful!");
   };
 
   const handleGoBack = () => {
