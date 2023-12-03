@@ -1,3 +1,18 @@
+/**
+ * Payment Processing Service.
+ * 
+ * Manages the creation and processing of payments in the flight booking application. Simulates 
+ * payment transactions and records payment details. Upon successful payment, it collaborates 
+ * with the EmailService to send payment receipts to customers.
+ * 
+ * This service is integral to the financial transactions of the application, ensuring accurate 
+ * and reliable handling of customer payments.
+ * 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 2, 2023
+ */
+
 package ca.ucalgary.ensf480.flightapp.service;
 
 import java.math.BigDecimal;
@@ -8,13 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ca.ucalgary.ensf480.flightapp.DTO.PaymentDTO;
-import ca.ucalgary.ensf480.flightapp.DTO.ReceiptEmailDTO;
-import ca.ucalgary.ensf480.flightapp.email.services.EmailService;
 import ca.ucalgary.ensf480.flightapp.model.Customer;
 import ca.ucalgary.ensf480.flightapp.model.Payment;
 import ca.ucalgary.ensf480.flightapp.model.PaymentStatus;
 import ca.ucalgary.ensf480.flightapp.repository.PaymentRepository;
-import jakarta.validation.constraints.Email;
 
 @Service
 public class PaymentService {

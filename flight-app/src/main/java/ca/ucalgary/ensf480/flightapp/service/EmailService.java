@@ -1,4 +1,20 @@
-package ca.ucalgary.ensf480.flightapp.email.services;
+/**
+ * Email Service.
+ * 
+ * Handles email operations for the flight booking application. Capable of sending ticket and 
+ * payment receipt emails to customers. Utilizes HTML templates for email content, filling in 
+ * placeholders with booking and payment details. Relies on Spring's JavaMailSender for email 
+ * dispatch.
+ * 
+ * Essential for communication with customers, providing them with crucial information about 
+ * their bookings and payments.
+ * 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 2, 2023
+ */
+
+package ca.ucalgary.ensf480.flightapp.service;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

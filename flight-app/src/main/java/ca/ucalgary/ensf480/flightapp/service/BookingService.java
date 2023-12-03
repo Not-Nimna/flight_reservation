@@ -17,7 +17,6 @@ import ca.ucalgary.ensf480.flightapp.DTO.BookingDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.CustomerDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.PaymentDTO;
 import ca.ucalgary.ensf480.flightapp.DTO.SeatBookingDTO;
-import ca.ucalgary.ensf480.flightapp.email.services.EmailService;
 import ca.ucalgary.ensf480.flightapp.exception.PaymentFailedException;
 import ca.ucalgary.ensf480.flightapp.exception.ResourceNotFoundException;
 import ca.ucalgary.ensf480.flightapp.model.Booking;
