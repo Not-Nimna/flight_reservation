@@ -1,3 +1,15 @@
+/**
+ * Custom User Details Implementation.
+ * 
+ * This class implements the UserDetails interface, providing a way to store user information 
+ * which is later encapsulated into Authentication objects. It is used by Spring Security 
+ * for handling user information including username, password, authorities, and other attributes.
+ * 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 1, 2023
+ */
+
 package ca.ucalgary.ensf480.flightapp.security.services;
 
 import java.util.Collection;

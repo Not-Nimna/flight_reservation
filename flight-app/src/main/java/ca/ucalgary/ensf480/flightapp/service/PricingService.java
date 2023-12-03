@@ -1,3 +1,15 @@
+/**
+ * Payment Service.
+ * 
+ * Manages the processing of payments for the flight booking application. Simulates interaction 
+ * with a payment provider and handles creation of payment records. Provides methods to create 
+ * a new payment instance based on payment details, price, and customer information.
+ * 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 1, 2023
+ */
+
 package ca.ucalgary.ensf480.flightapp.service;
 
 import ca.ucalgary.ensf480.flightapp.model.*;

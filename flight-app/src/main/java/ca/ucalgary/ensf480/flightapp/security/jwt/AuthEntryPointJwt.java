@@ -1,3 +1,15 @@
+/**
+ * JWT Authentication Entry Point.
+ * 
+ * Manages authentication exceptions in the flight booking application. Logs unauthorized 
+ * access attempts and sends an HTTP 401 Unauthorized response, ensuring secure access.
+ * 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 1, 2023
+ */
+
+
 package ca.ucalgary.ensf480.flightapp.security.jwt;
 
 import java.io.IOException;

@@ -1,3 +1,19 @@
+/**
+ * JWT Authentication Token Filter.
+ * 
+ * This filter is applied to each HTTP request to validate JWT tokens for user authentication.
+ * It extracts and verifies the JWT from the request, setting the security context with the
+ * authenticated user's details if the token is valid. This ensures secure and authenticated
+ * access within the flight booking application.
+ * 
+ * Exception handling is included to manage cases where the JWT cannot be parsed or validated,
+ * logging any such issues encountered during the authentication process.
+ * 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 1, 2023
+ */
+
 package ca.ucalgary.ensf480.flightapp.security.jwt;
 
 import java.io.IOException;

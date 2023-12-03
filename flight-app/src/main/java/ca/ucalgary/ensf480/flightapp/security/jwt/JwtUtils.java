@@ -1,3 +1,21 @@
+/**
+ * JWT Utility Class.
+ * 
+ * This class provides essential utilities for handling JSON Web Tokens (JWT) in the flight 
+ * booking application. It includes methods for generating JWTs, extracting them from cookies, 
+ * validating their integrity and expiration, and handling cookie creation and deletion for JWT.
+ * 
+ * The JWTs are used for secure authentication and authorization, ensuring that users' credentials 
+ * are verified and the application's endpoints are protected against unauthorized access.
+ * 
+ * Exception handling is integrated to manage various JWT-related errors, such as malformed tokens 
+ * or expired credentials, maintaining the overall security of the system.
+ * 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 1, 2023
+ */
+
 package ca.ucalgary.ensf480.flightapp.security.jwt;
 
 import java.security.Key;

@@ -1,3 +1,18 @@
+/**
+ * Security Configuration for the Application.
+ * 
+ * Configures security aspects of the flight booking application, including authentication, 
+ * CORS policies, and session management. Utilizes JWT for secure authentication and 
+ * establishes rules for user access to various endpoints.
+ * 
+ * Defines beans for password encoding, authentication manager, and authentication filters, 
+ * ensuring a robust and secure environment for user operations within the application.
+ * 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 1, 2023
+ */
+
 package ca.ucalgary.ensf480.flightapp.security;
 
 import java.util.Arrays;

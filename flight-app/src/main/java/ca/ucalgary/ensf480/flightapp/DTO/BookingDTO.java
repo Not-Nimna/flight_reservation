@@ -1,3 +1,9 @@
+ /** 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 1, 2023
+ */
+
 package ca.ucalgary.ensf480.flightapp.DTO;
 
 import ca.ucalgary.ensf480.flightapp.model.Booking;

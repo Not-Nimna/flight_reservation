@@ -1,3 +1,16 @@
+/**
+ * Service Implementation for User Details.
+ * 
+ * Implements the UserDetailsService interface from Spring Security. This service is responsible 
+ * for retrieving user data from the database through the UserRepository. It loads a user's 
+ * data given their username and constructs UserDetails objects, essential for authentication 
+ * and authorization processes in the flight booking application.
+ * 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 1, 2023
+ */
+
 package ca.ucalgary.ensf480.flightapp.security.services;
 
 import org.springframework.beans.factory.annotation.Autowired;

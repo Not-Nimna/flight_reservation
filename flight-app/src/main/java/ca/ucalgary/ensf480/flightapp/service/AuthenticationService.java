@@ -1,3 +1,18 @@
+/**
+ * Authentication Service.
+ * 
+ * Provides functionality to retrieve the currently authenticated user from the security context.
+ * Utilizes Spring Security's Authentication object to identify the current user and fetch their 
+ * details from the UserRepository. Primarily used to integrate authentication information with 
+ * user-specific operations within the flight booking application.
+ * 
+ * Returns null if no authenticated user is found, ensuring the integrity of user-specific actions.
+ * 
+ * @author Marshal Kalynchuk
+ * @ucid 30153895
+ * @date Dec 2, 2023
+ */
+
 package ca.ucalgary.ensf480.flightapp.service;
 
 import ca.ucalgary.ensf480.flightapp.model.User;
