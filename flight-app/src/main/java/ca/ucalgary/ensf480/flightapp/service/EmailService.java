@@ -60,7 +60,7 @@ public class EmailService {
         String formattedArrivalTime = bookingDTO.getFlightDTO().getArrivalTime().format(formatter);
 
 
-        content = content.replace("{{name}}", bookingDTO.getName());
+        content = content.replace("{{customerName}}", bookingDTO.getName());
         content = content.replace("{{seatNumber}}", bookingDTO.getSeatNumber());
         content = content.replace("{{seatClass}}", bookingDTO.getSeatClass().toString());
         content = content.replace("{{flightNumber}}", bookingDTO.getFlightDTO().getFlightNumber());
